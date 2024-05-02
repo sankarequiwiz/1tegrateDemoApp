@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Checkbox, Space, Typography } from 'antd';
+import { Button, ButtonProps, Checkbox, ListProps, Space, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 
 import API from '../../../services/index'
-import { OrganizationTypes } from './type';
+import { OrganizationTypes, Payload } from './type';
 import { List } from 'antd';
 
 import mock from './mock.json';
 
 export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-      const { setCurrentStep, current, setSelectedOrganization, selectedOrganization } = React.useContext(AppContext);
+      const { setCurrentStep, current, selectedOrganization } = React.useContext(AppContext);
 
-      const [organization] = React.useState<Array<OrganizationTypes>>(mock.data);
+      const [organization, setOrganization] = React.useState<Array<OrganizationTypes>>(mock.data);
 
       const getOrganization = async () => {
             try {
@@ -23,9 +23,6 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
             }
       }
 
-      const handleSelect = (selected: string) => {
-            setSelectedOrganization(selectedOrganization === selected ? '' : selected)
-      }
 
       React.useEffect(() => {
             getOrganization()
@@ -43,22 +40,81 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                                     <Typography.Text strong >Select organization</Typography.Text>
                               </div>
                         </div>
-                        <List
-                              dataSource={organization}
-                              renderItem={(item) => (
-                                    <List.Item
-                                          actions={[<Button type='link' key={1}>Create Watch</Button>]}
-                                    >
-                                          <List.Item.Meta
-                                                avatar={<Checkbox checked={selectedOrganization == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
-                                                title={<a >{item.login}</a>}
-                                                description={item.description}
-                                          />
-                                    </List.Item>
-                              )}
-                        />
+                        <ListComp dataSource={organization} setOrganization={setOrganization} />
                   </Space>
                   <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={() => setCurrentStep(current + 1)} onOkProps={onOkProps} />
             </Space>
       )
 })
+
+type ListTypes = {
+      dataSource: Array<OrganizationTypes>
+      setOrganization?: React.Dispatch<React.SetStateAction<Array<OrganizationTypes>>>
+} & ListProps<unknown>
+
+const ListComp = ({ dataSource, setOrganization, ...props }: ListTypes) => {
+      const { setSelectedOrganization, selectedOrganization, integration } = React.useContext(AppContext);
+
+      const handleSelect = (selected: string) => {
+            setSelectedOrganization(selectedOrganization === selected ? '' : selected)
+      }
+
+      const makeLoad = (selectedData: OrganizationTypes, isLoading: boolean) => {
+            setOrganization((prev) => {
+                  return prev.map((item) => {
+                        if (item.id === selectedData.id) {
+                              /* load the spinner when api call happens for each single items */
+                              item = { ...item, isLoading }
+                        }
+                        return item;
+                  })
+            })
+      }
+
+      const handleCreateWatch = async (selectedData: OrganizationTypes) => {
+            makeLoad(selectedData, true)
+            const fullBodySelected = dataSource.find((item) => item.id === selectedOrganization);
+
+            const payload: Payload = {
+                  "name": `web-gateway-service-${fullBodySelected?.login}`,
+                  "description": `Watch for ${fullBodySelected.login} repository`,
+                  "type": "HOOK",
+                  "resource": {
+                        "type": "ORGANIZATION",
+                        "organization": {
+                              "id": selectedOrganization
+                        }
+                  }
+            }
+            try {
+                  await API.services.createWatch(payload, integration.id)
+            } catch (error) {
+                  console.log(error);
+            } finally {
+                  makeLoad(selectedData, false)
+            }
+      }
+
+      return (
+            <List
+                  {...props}
+                  dataSource={dataSource}
+                  renderItem={(item: OrganizationTypes) => (
+                        <List.Item
+                              actions={[<Button loading={item?.isLoading} onClick={() => handleCreateWatch(item)} type='link' key={1}>Create Watch</Button>]}
+                        >
+                              <List.Item.Meta
+                                    avatar={
+                                          <Checkbox
+                                                checked={selectedOrganization == item.id.toString()}
+                                                value={item.id} onChange={(e) => handleSelect(e.target.value)}
+                                          />
+                                    }
+                                    title={<a >{item.login}</a>}
+                                    description={item.description}
+                              />
+                        </List.Item>
+                  )}
+            />
+      )
+};

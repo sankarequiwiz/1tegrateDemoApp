@@ -9,6 +9,7 @@ export type OrganizationTypes = {
       members_can_create_public_repositories: string,
       created_at: string,
       updated_at: string,
+      isLoading?: boolean
       native_response: {
             login: string,
             id: number,
@@ -22,5 +23,20 @@ export type OrganizationTypes = {
             public_members_url: string,
             avatar_url: string,
             description: string
+      }
+}
+
+export type Payload = {
+      name?: string,
+      description?: string,
+      type: "HOOK",
+      resource: {
+            type: "ORGANIZATION" | "REPOSITORY",
+            organization: {
+                  id: string
+            },
+            repository?: {
+                  id: string
+            },
       }
 }
