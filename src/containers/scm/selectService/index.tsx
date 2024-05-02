@@ -8,18 +8,17 @@ import './style.scss';
 import mock from './mock.json';
 import { AppContext } from '../../../context/AppProvider';
 import { Footer } from '../../../components/footer';
-import { Payload, ServiceProfileDataTypes } from './types';
+import { Payload, ServiceTypes } from './types';
 import services from '../../../services';
 
 type VoidFunction = () => void
 
 export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-      const [services, setServices] = React.useState<Array<ServiceProfileDataTypes>>([]);
+      const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
       const [loading, setLoading] = React.useState<boolean>(false);
-      const [selected, setSelected] = React.useState<ServiceProfileDataTypes>(undefined);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void }>();
 
-      const { setCurrentStep, current } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
@@ -49,7 +48,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       }, [])
 
       const onOkProps: ButtonProps = {
-            disabled: !selected?.id
+            disabled: !selected
       };
 
       return (
@@ -69,20 +68,20 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                                                   <Card
                                                                         bordered
                                                                         rootClassName='card'
-                                                                        aria-selected={selected?.id === item.id}
-                                                                        onClick={() => selectHandler(item)}
+                                                                        aria-selected={selected === item.id}
+                                                                        onClick={() => selectHandler(item.id)}
                                                                   >
                                                                         <Space align='start'>
-                                                                              <img alt='services_images' src={item.image.original} />
+                                                                              <img alt='services_images' src={item.serviceProfile.image.original} />
                                                                               <Space direction='vertical'>
                                                                                     {
-                                                                                          item.name && (
-                                                                                                <Typography.Text strong>{item.name}</Typography.Text>
+                                                                                          item.serviceProfile.name && (
+                                                                                                <Typography.Text strong>{item.serviceProfile.name}</Typography.Text>
                                                                                           )
                                                                                     }
                                                                                     {
-                                                                                          item.description && (
-                                                                                                <Typography.Text type='secondary'>{item.description}</Typography.Text>
+                                                                                          item.serviceProfile.description && (
+                                                                                                <Typography.Text type='secondary'>{item.serviceProfile.description}</Typography.Text>
                                                                                           )
                                                                                     }
                                                                               </Space>
@@ -94,7 +93,10 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                           }
                                     </Row>
                               }
-                              <FormArea ref={childRef as any} selected={selected as any} />
+                              <FormArea
+                                    ref={childRef as any}
+                                    selected={services.find((item) => item.id === selected) as any}
+                              />
                         </div>
                   </div>
                   <Footer onSubmit={handleNext} onOkProps={onOkProps} />
@@ -110,7 +112,7 @@ type fieldTypeConfigTypes = {
 }
 
 type FormAreaTypes = {
-      selected: ServiceProfileDataTypes
+      selected: ServiceTypes
 }
 
 const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & FormAreaTypes>(
@@ -124,7 +126,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
 
             const fields = React.useMemo(() => {
                   if (selected) {
-                        return selected.accessPointConfigs
+                        return selected.serviceProfile.accessPointConfigs
                   }
                   return [];
             }, [selected]);
@@ -199,7 +201,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             return (
                   <div {...props} ref={ref}>
                         {contextHolder}
-                        <Card title={`Enter details for the ${selected.name}`}>
+                        <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
                               <Space direction='vertical' >
                                     <Space direction='vertical'>
                                           <Typography.Text strong>

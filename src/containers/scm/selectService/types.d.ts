@@ -34,7 +34,7 @@ export type AccessPointConfigsTypes = {
       ]
 }
 
-type ServiceProfileTypes = {
+type ServiceTypes = {
       href: string,
       type: string,
       id: string,
