@@ -1,0 +1,10 @@
+#stepper {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+
+      .ant-steps ,.ant-steps-vertical {
+            max-width: 400px;
+            padding: 0rem 1rem;
+      }
+}

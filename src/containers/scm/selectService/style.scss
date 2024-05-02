@@ -1,0 +1,14 @@
+#service_profile {
+      .card {
+            border: 1.5px solid transparent;
+            border-radius: 4px !important;
+            cursor: pointer;
+
+            &[aria-selected='true'] {
+                  background-color: #2782f3 !important;
+                  .ant-typography {
+                        color: white !important;
+                  }
+            }
+      }
+}
