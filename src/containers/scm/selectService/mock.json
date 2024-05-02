@@ -1,317 +1,233 @@
 {
       "data": [
             {
-                  "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                  "href": "http://api.platform.com/api/v1/service/2ee03f03-e5b8-4a1e-87b2-f2a2a8e46ab9",
                   "type": "SCM",
-                  "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717wdwdw",
-                  "name": "Github_SP",
-                  "description": "Github_SP scm provider",
+                  "id": "2ee03f03-e5b8-4a1e-87b2-f2a2a8e46ab9wdwdwdwdw",
                   "state": "ACTIVE",
-                  "visibility": "PUBLIC",
-                  "image": {
-                        "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
-                  },
-                  "accessPointConfigs": [
-                        {
-                              "type": "APIKEY_FLW",
-                              "label": "Use my API key or Access Token",
-                              "recommended": true,
-                              "isBeta": true,
-                              "apiConfig": {
-                                    "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
-                              },
-                              "assistanceInfo": {
-                                    "processSteps": [
+                  "serviceProfile": {
+                        "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                        "type": "SCM",
+                        "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                        "name": "Github_SP",
+                        "description": "Github_SP scm provider",
+                        "state": "ACTIVE",
+                        "visibility": "PUBLIC",
+                        "image": {
+                              "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
+                        },
+                        "accessPointConfigs": [
+                              {
+                                    "type": "APIKEY_FLW",
+                                    "label": "Use my API key or Access Token",
+                                    "recommended": true,
+                                    "isBeta": true,
+                                    "apiConfig": {
+                                          "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
+                                    },
+                                    "assistanceInfo": {
+                                          "processSteps": [
+                                                {
+                                                      "title": "How to identify api key in Github_SP",
+                                                      "subTitle": "Steps to identify api key in Github_SP",
+                                                      "description": "In Settings, go to developer settings page and click on private access tokens"
+                                                }
+                                          ]
+                                    },
+                                    "links": [
                                           {
-                                                "title": "How to identify api key in Github_SP",
-                                                "subTitle": "Steps to identify api key in Github_SP",
-                                                "description": "In Settings, go to developer settings page and click on private access tokens"
+                                                "rel": "doc",
+                                                "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
+                                                "method": "GET",
+                                                "contentType": "application/json",
+                                                "authenticate": true
+                                          }
+                                    ],
+                                    "fieldTypeConfigs": [
+                                          {
+                                                "type": "API_KEY",
+                                                "label": "Github_SP-api-key",
+                                                "name": "Github_SP-api-key",
+                                                "required": true
                                           }
                                     ]
-                              },
-                              "links": [
-                                    {
-                                          "rel": "doc",
-                                          "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
-                                          "method": "GET",
-                                          "contentType": "application/json",
-                                          "authenticate": true
-                                    }
-                              ],
-                              "fieldTypeConfigs": [
-                                    {
-                                          "type": "API_KEY",
-                                          "label": "Github_SP-api-key",
-                                          "name": "Github_SP-api-key",
-                                          "required": true
-                                    }
-                              ]
-                        }
-                  ],
-                  "notifications": [],
-                  "tags": [],
-                  "attributes": [],
-                  "organization": {
-                        "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
-                        "type": "STANDARD",
-                        "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
-                        "name": "Org_kousar"
+                              }
+                        ],
+                        "notifications": [],
+                        "tags": [],
+                        "attributes": [],
+                        "organization": {
+                              "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
+                              "type": "STANDARD",
+                              "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
+                              "name": "Org_kousar"
+                        },
+                        "changeLog": {
+                              "createdDateTime": "2024-04-29T07:22:52.488+00:00",
+                              "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
+                        },
+                        "links": []
                   },
+                  "notifications": [],
+                  "attributes": [],
+                  "tags": [],
                   "changeLog": {
                         "createdDateTime": "2024-04-29T07:22:52.488+00:00",
-                        "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
+                        "lastUpdatedDateTime": "2024-04-30T15:24:13.848+00:00"
                   },
                   "links": []
             },
             {
-                  "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                  "href": "http://api.platform.com/api/v1/service/2ee03f03-e5b8-4a1e-87b2-f2a2a8e46ab9",
                   "type": "SCM",
-                  "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717bwdwd",
-                  "name": "Github_SP",
-                  "description": "Github_SP scm provider",
+                  "id": "2ee03f03-e5b8-4a1e-87b2-f2a2a8e46ab9wdwd",
                   "state": "ACTIVE",
-                  "visibility": "PUBLIC",
-                  "image": {
-                        "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
-                  },
-                  "accessPointConfigs": [
-                        {
-                              "type": "APIKEY_FLW",
-                              "label": "Use my API key or Access Token",
-                              "recommended": true,
-                              "isBeta": true,
-                              "apiConfig": {
-                                    "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
-                              },
-                              "assistanceInfo": {
-                                    "processSteps": [
+                  "serviceProfile": {
+                        "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                        "type": "SCM",
+                        "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                        "name": "Github_SP",
+                        "description": "Github_SP scm provider",
+                        "state": "ACTIVE",
+                        "visibility": "PUBLIC",
+                        "image": {
+                              "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
+                        },
+                        "accessPointConfigs": [
+                              {
+                                    "type": "APIKEY_FLW",
+                                    "label": "Use my API key or Access Token",
+                                    "recommended": true,
+                                    "isBeta": true,
+                                    "apiConfig": {
+                                          "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
+                                    },
+                                    "assistanceInfo": {
+                                          "processSteps": [
+                                                {
+                                                      "title": "How to identify api key in Github_SP",
+                                                      "subTitle": "Steps to identify api key in Github_SP",
+                                                      "description": "In Settings, go to developer settings page and click on private access tokens"
+                                                }
+                                          ]
+                                    },
+                                    "links": [
                                           {
-                                                "title": "How to identify api key in Github_SP",
-                                                "subTitle": "Steps to identify api key in Github_SP",
-                                                "description": "In Settings, go to developer settings page and click on private access tokens"
+                                                "rel": "doc",
+                                                "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
+                                                "method": "GET",
+                                                "contentType": "application/json",
+                                                "authenticate": true
+                                          }
+                                    ],
+                                    "fieldTypeConfigs": [
+                                          {
+                                                "type": "API_KEY",
+                                                "label": "Github_SP-api-key",
+                                                "name": "Github_SP-api-key",
+                                                "required": true
                                           }
                                     ]
-                              },
-                              "links": [
-                                    {
-                                          "rel": "doc",
-                                          "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
-                                          "method": "GET",
-                                          "contentType": "application/json",
-                                          "authenticate": true
-                                    }
-                              ],
-                              "fieldTypeConfigs": [
-                                    {
-                                          "type": "API_KEY",
-                                          "label": "Github_SP-api-key",
-                                          "name": "Github_SP-api-key",
-                                          "required": true
-                                    }
-                              ]
-                        }
-                  ],
-                  "notifications": [],
-                  "tags": [],
-                  "attributes": [],
-                  "organization": {
-                        "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
-                        "type": "STANDARD",
-                        "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
-                        "name": "Org_kousar"
+                              }
+                        ],
+                        "notifications": [],
+                        "tags": [],
+                        "attributes": [],
+                        "organization": {
+                              "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
+                              "type": "STANDARD",
+                              "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
+                              "name": "Org_kousar"
+                        },
+                        "changeLog": {
+                              "createdDateTime": "2024-04-29T07:22:52.488+00:00",
+                              "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
+                        },
+                        "links": []
                   },
+                  "notifications": [],
+                  "attributes": [],
+                  "tags": [],
                   "changeLog": {
                         "createdDateTime": "2024-04-29T07:22:52.488+00:00",
-                        "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
+                        "lastUpdatedDateTime": "2024-04-30T15:24:13.848+00:00"
                   },
                   "links": []
             },
             {
-                  "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                  "href": "http://api.platform.com/api/v1/service/2ee03f03-e5b8-4a1e-87b2-f2a2a8e46ab9",
                   "type": "SCM",
-                  "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717bddd",
-                  "name": "Github_SP",
-                  "description": "Github_SP scm provider",
+                  "id": "2ee03f03-e5b8-4a1e-87b2-f2a2a8e46ab9wdwdwdwdwd",
                   "state": "ACTIVE",
-                  "visibility": "PUBLIC",
-                  "image": {
-                        "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
-                  },
-                  "accessPointConfigs": [
-                        {
-                              "type": "APIKEY_FLW",
-                              "label": "Use my API key or Access Token",
-                              "recommended": true,
-                              "isBeta": true,
-                              "apiConfig": {
-                                    "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
-                              },
-                              "assistanceInfo": {
-                                    "processSteps": [
+                  "serviceProfile": {
+                        "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                        "type": "SCM",
+                        "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
+                        "name": "Github_SP",
+                        "description": "Github_SP scm provider",
+                        "state": "ACTIVE",
+                        "visibility": "PUBLIC",
+                        "image": {
+                              "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
+                        },
+                        "accessPointConfigs": [
+                              {
+                                    "type": "APIKEY_FLW",
+                                    "label": "Use my API key or Access Token",
+                                    "recommended": true,
+                                    "isBeta": true,
+                                    "apiConfig": {
+                                          "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
+                                    },
+                                    "assistanceInfo": {
+                                          "processSteps": [
+                                                {
+                                                      "title": "How to identify api key in Github_SP",
+                                                      "subTitle": "Steps to identify api key in Github_SP",
+                                                      "description": "In Settings, go to developer settings page and click on private access tokens"
+                                                }
+                                          ]
+                                    },
+                                    "links": [
                                           {
-                                                "title": "How to identify api key in Github_SP",
-                                                "subTitle": "Steps to identify api key in Github_SP",
-                                                "description": "In Settings, go to developer settings page and click on private access tokens"
+                                                "rel": "doc",
+                                                "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
+                                                "method": "GET",
+                                                "contentType": "application/json",
+                                                "authenticate": true
+                                          }
+                                    ],
+                                    "fieldTypeConfigs": [
+                                          {
+                                                "type": "API_KEY",
+                                                "label": "Github_SP-api-key",
+                                                "name": "Github_SP-api-key",
+                                                "required": true
                                           }
                                     ]
-                              },
-                              "links": [
-                                    {
-                                          "rel": "doc",
-                                          "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
-                                          "method": "GET",
-                                          "contentType": "application/json",
-                                          "authenticate": true
-                                    }
-                              ],
-                              "fieldTypeConfigs": [
-                                    {
-                                          "type": "API_KEY",
-                                          "label": "Github_SP-api-key",
-                                          "name": "Github_SP-api-key",
-                                          "required": true
-                                    }
-                              ]
-                        }
-                  ],
-                  "notifications": [],
-                  "tags": [],
-                  "attributes": [],
-                  "organization": {
-                        "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
-                        "type": "STANDARD",
-                        "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
-                        "name": "Org_kousar"
+                              }
+                        ],
+                        "notifications": [],
+                        "tags": [],
+                        "attributes": [],
+                        "organization": {
+                              "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
+                              "type": "STANDARD",
+                              "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
+                              "name": "Org_kousar"
+                        },
+                        "changeLog": {
+                              "createdDateTime": "2024-04-29T07:22:52.488+00:00",
+                              "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
+                        },
+                        "links": []
                   },
+                  "notifications": [],
+                  "attributes": [],
+                  "tags": [],
                   "changeLog": {
                         "createdDateTime": "2024-04-29T07:22:52.488+00:00",
-                        "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
-                  },
-                  "links": []
-            },
-            {
-                  "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
-                  "type": "SCM",
-                  "id": "4d6780cf-9c8a-49bb-b58b-ef341bcf717ddddb",
-                  "name": "Github_SP",
-                  "description": "Github_SP scm provider",
-                  "state": "ACTIVE",
-                  "visibility": "PUBLIC",
-                  "image": {
-                        "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
-                  },
-                  "accessPointConfigs": [
-                        {
-                              "type": "APIKEY_FLW",
-                              "label": "Use my API key or Access Token",
-                              "recommended": true,
-                              "isBeta": true,
-                              "apiConfig": {
-                                    "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
-                              },
-                              "assistanceInfo": {
-                                    "processSteps": [
-                                          {
-                                                "title": "How to identify api key in Github_SP",
-                                                "subTitle": "Steps to identify api key in Github_SP",
-                                                "description": "In Settings, go to developer settings page and click on private access tokens"
-                                          }
-                                    ]
-                              },
-                              "links": [
-                                    {
-                                          "rel": "doc",
-                                          "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
-                                          "method": "GET",
-                                          "contentType": "application/json",
-                                          "authenticate": true
-                                    }
-                              ],
-                              "fieldTypeConfigs": [
-                                    {
-                                          "type": "API_KEY",
-                                          "label": "Github_SP-api-key",
-                                          "name": "Github_SP-api-key",
-                                          "required": true
-                                    }
-                              ]
-                        }
-                  ],
-                  "notifications": [],
-                  "tags": [],
-                  "attributes": [],
-                  "organization": {
-                        "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
-                        "type": "STANDARD",
-                        "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
-                        "name": "Org_kousar"
-                  },
-                  "changeLog": {
-                        "createdDateTime": "2024-04-29T07:22:52.488+00:00",
-                        "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
-                  },
-                  "links": []
-            },
-            {
-                  "href": "http://api.platform.com/api/v1/serviceProfiles/4d6780cf-9c8a-49bb-b58b-ef341bcf717b",
-                  "type": "SCM",
-                  "id": "4d6780cf-dd9c8a-49bb-b58b-ef341bcf717ddddb",
-                  "name": "Github_SP",
-                  "description": "Github_SP scm provider",
-                  "state": "ACTIVE",
-                  "visibility": "PUBLIC",
-                  "image": {
-                        "original": "https://integrations.lambdatest.com/assets/images/integration-jira.svg"
-                  },
-                  "accessPointConfigs": [
-                        {
-                              "type": "APIKEY_FLW",
-                              "label": "Use my API key or Access Token",
-                              "recommended": true,
-                              "isBeta": true,
-                              "apiConfig": {
-                                    "workflowKey": "7a899025-a00a-4299-9352-8039508b759b"
-                              },
-                              "assistanceInfo": {
-                                    "processSteps": [
-                                          {
-                                                "title": "How to identify api key in Github_SP",
-                                                "subTitle": "Steps to identify api key in Github_SP",
-                                                "description": "In Settings, go to developer settings page and click on private access tokens"
-                                          }
-                                    ]
-                              },
-                              "links": [
-                                    {
-                                          "rel": "doc",
-                                          "href": "https://docs.1tegrate.com/GitLab/integration-readmore",
-                                          "method": "GET",
-                                          "contentType": "application/json",
-                                          "authenticate": true
-                                    }
-                              ],
-                              "fieldTypeConfigs": [
-                                    {
-                                          "type": "API_KEY",
-                                          "label": "Github_SP-api-key",
-                                          "name": "Github_SP-api-key",
-                                          "required": true
-                                    }
-                              ]
-                        }
-                  ],
-                  "notifications": [],
-                  "tags": [],
-                  "attributes": [],
-                  "organization": {
-                        "href": "http://api.platform.com/api/v1/organizations/266b6cdb-e34d-4a8d-8be6-ca30b8b09998",
-                        "type": "STANDARD",
-                        "id": "4a321a7d-ee19-4e4a-b096-7de51c9e279e",
-                        "name": "Org_kousar"
-                  },
-                  "changeLog": {
-                        "createdDateTime": "2024-04-29T07:22:52.488+00:00",
-                        "lastUpdatedDateTime": "2024-04-29T07:22:52.488+00:00"
+                        "lastUpdatedDateTime": "2024-04-30T15:24:13.848+00:00"
                   },
                   "links": []
             }

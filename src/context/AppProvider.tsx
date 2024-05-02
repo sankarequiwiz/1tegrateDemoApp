@@ -1,7 +1,7 @@
 import React from 'react';
 import { DomainTypes } from '../types/type';
-import { ServiceProfileTypes } from '../containers/scm/selectService/types';
 import { useSearchParams } from 'react-router-dom';
+import { ServiceTypes } from '../containers/scm/selectService/types';
 
 export const AppContext = React.createContext<ContextTypes>(null);
 
@@ -10,12 +10,16 @@ type ContextTypes = {
       accessKey?: string
       organization?: string
       current?: number
+      selectedService?: string;
+      setSelectedService?: (selectedSP: string) => void;
       setCurrentStep?: (newCurrent: number) => void;
       setOrganization?: React.Dispatch<React.SetStateAction<string>>
       setAccessKey?: React.Dispatch<React.SetStateAction<string>>
       setDomain?: React.Dispatch<React.SetStateAction<DomainTypes>>
-      setIntegration?: (serviceProfileTypes: ServiceProfileTypes) => void
-      integration?: ServiceProfileTypes
+      setIntegration?: (serviceProfileTypes: ServiceTypes) => void
+
+
+      integration?: ServiceTypes
 }
 
 type ProviderTypes = {
@@ -37,6 +41,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
+      const setSelectedService = (arg) => {
+            setSearch((prev) => {
+                  prev.set('service', arg)
+                  return prev;
+            })
+      }
+
       const setCurrentStep = (newCurrent: number) => {
             setSearch((prev) => {
                   prev.set('current', newCurrent.toString())
@@ -50,7 +61,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
             setIntegration: setIntegrationDetails,
             setOrganization,
             setCurrentStep,
+            setSelectedService,
             organization,
+            selectedService: search.get('service'),
             current: +search.get('current'),
             integration: search.get('integration') ? JSON.parse(search.get('integration')) : undefined,
             domain,

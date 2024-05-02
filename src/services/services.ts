@@ -97,3 +97,7 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
             }
       }
 }
+
+export const getOrganization = async (payload: { [key: string]: unknown }) => {
+      return await fetch.post('/api/v1/services/search', payload)
+}
