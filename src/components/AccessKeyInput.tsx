@@ -78,12 +78,12 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 type="info"
                                                 closable
                                           />
-                                          <Form style={{ width: '100%' }} form={form}>
-                                                <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }}>
+                                          <Form  form={form} layout='vertical'>
+                                                <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Access Name'}>
                                                       <Input placeholder="Enter the access key" />
                                                 </Form.Item>
-                                                <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }}>
-                                                      <Input placeholder="Enter the organization name" />
+                                                <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }} label={'Customer Name'}>
+                                                      <Input placeholder="Enter the customer name" />
                                                 </Form.Item>
                                           </Form>
                                     </div>

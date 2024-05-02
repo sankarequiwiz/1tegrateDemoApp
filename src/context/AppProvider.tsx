@@ -12,8 +12,11 @@ type ContextTypes = {
       current?: number
       selectedService?: string;
       selectedOrganization?: string;
+      selectedRepo?: string;
+
       setSelectedOrganization?: (selectedOrganization: string) => void;
       setSelectedService?: (selectedService: string) => void;
+      setSelectedRepo?: (selectedOrganization: string) => void;
       setCurrentStep?: (newCurrent: number) => void;
       setOrganization?: React.Dispatch<React.SetStateAction<string>>
       setAccessKey?: React.Dispatch<React.SetStateAction<string>>
@@ -57,6 +60,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
+      const setSelectedRepo = (arg) => {
+            setSearch((prev) => {
+                  prev.set('selectedRepo', arg)
+                  return prev;
+            })
+      }
+
 
       const setCurrentStep = (newCurrent: number) => {
             setSearch((prev) => {
@@ -73,8 +83,10 @@ export function AppProvider({ children, value }: ProviderTypes) {
             setCurrentStep,
             setSelectedService,
             setSelectedOrganization,
+            setSelectedRepo,
             organization,
             selectedService: search.get('service'),
+            selectedRepo: search.get("selectedRepo"),
             current: +search.get('current'),
             selectedOrganization: search.get('selectedOrganization'),
             integration: search.get('integration') ? JSON.parse(search.get('integration')) : undefined,
