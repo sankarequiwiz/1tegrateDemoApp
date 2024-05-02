@@ -106,7 +106,7 @@ const ListComp = ({ dataSource, setOrganization, ...props }: ListTypes) => {
                               <List.Item.Meta
                                     avatar={
                                           <Checkbox
-                                                checked={selectedOrganization == item.id.toString()}
+                                                checked={selectedOrganization === item.id.toString()}
                                                 value={item.id} onChange={(e) => handleSelect(e.target.value)}
                                           />
                                     }
