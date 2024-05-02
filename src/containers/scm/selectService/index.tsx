@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { HTMLProps } from 'react';
 import API from '../../../services';
-import { ButtonProps, Card, Col, Form, Input, Radio, RadioChangeEvent, Row, Skeleton, Space, Typography, message } from 'antd';
+import { ButtonProps, Card, Col, Form, Input, Radio, Row, Skeleton, Space, Typography, message } from 'antd';
 import './style.scss';
 
 // mock
@@ -10,6 +10,7 @@ import { AppContext } from '../../../context/AppProvider';
 import { Footer } from '../../../components/footer';
 import { Payload, ServiceTypes } from './types';
 import services from '../../../services';
+import FormItem from 'antd/es/form/FormItem';
 
 type VoidFunction = () => void
 
@@ -119,10 +120,10 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
       ({ selected, ...props }, ref) => {
             const { organization, setIntegration } = React.useContext(AppContext);
 
-            const [integrationType, setIntegrationType] = React.useState<'APIKEY_FLW' | 'EMAIL' | ''>();
             const [messageApi, contextHolder] = message.useMessage();
 
             const [form] = Form.useForm();
+            const integrationType  = Form.useWatch('integrationType', form)
 
             const fields = React.useMemo(() => {
                   if (selected) {
@@ -130,10 +131,6 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                   }
                   return [];
             }, [selected]);
-
-            const handleSelectIntegrateType = (event: RadioChangeEvent) => {
-                  setIntegrationType(event.target.value);
-            }
 
             const onIntegrate = (callback) => {
                   if (organization) {
@@ -151,12 +148,11 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                 }
                                           },
                                           accessPointConfig: {
-                                                type: integrationType
+                                                type: resp.integrationType
                                           },
                                           apiKey: resp[fieldConfigs[0].name]
                                     }
                               };
-
 
                               try {
                                     const resp = await services.services.createIntegrations(formValues);
@@ -193,46 +189,48 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             }, [integrationType, fields])
 
             React.useEffect(() => {
-                  setIntegrationType('');
+                  form.resetFields();
             }, [selected])
 
             if (!selected) return null;
 
             return (
                   <div {...props} ref={ref}>
-                        {contextHolder}
-                        <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
-                              <Space direction='vertical' >
-                                    <Space direction='vertical'>
-                                          <Typography.Text strong>
-                                                Integration name
-                                          </Typography.Text>
-                                          <Form.Item name={'name'} rules={[{ required: true }]} >
-                                                {
-                                                      <Input placeholder={'Enter integration name'} />
-                                                }
-                                          </Form.Item>
-                                    </Space>
-                                    <Space direction='vertical'>
-                                          <div >
+                        <Form layout='vertical' form={form}>
+                              {contextHolder}
+                              <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
+                                    <Space direction='vertical' >
+                                          <Space direction='vertical'>
                                                 <Typography.Text strong>
-                                                      Select the integration type
+                                                      Integration name
                                                 </Typography.Text>
-                                          </div>
-                                          <Radio.Group onChange={handleSelectIntegrateType} value={integrationType}>
-                                                <Space direction="vertical">
+                                                <Form.Item name={'name'} rules={[{ required: true }]} >
                                                       {
-                                                            fields.map((field, index) => {
-                                                                  return (
-                                                                        <Radio value={field.type} key={index}>{field.label}</Radio>
-                                                                  )
-                                                            })
+                                                            <Input placeholder={'Enter integration name'} />
                                                       }
-                                                </Space>
-                                          </Radio.Group>
-                                    </Space>
-                                    <Space direction='vertical' className='w-full'>
-                                          <Form layout='vertical' form={form}>
+                                                </Form.Item>
+                                          </Space>
+                                          <Space direction='vertical'>
+                                                <div >
+                                                      <Typography.Text strong>
+                                                            Select the integration type
+                                                      </Typography.Text>
+                                                </div>
+                                                <FormItem name={'integrationType'} rules={[{ required: true }]}>
+                                                      <Radio.Group >
+                                                            <Space direction="vertical">
+                                                                  {
+                                                                        fields.map((field, index) => {
+                                                                              return (
+                                                                                    <Radio value={field.type} key={index}>{field.label}</Radio>
+                                                                              )
+                                                                        })
+                                                                  }
+                                                            </Space>
+                                                      </Radio.Group>
+                                                </FormItem>
+                                          </Space>
+                                          <Space direction='vertical' className='w-full'>
                                                 {
                                                       fieldConfigs && fieldConfigs.map(({ ...field }, index) => {
                                                             return (
@@ -251,10 +249,10 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                             )
                                                       })
                                                 }
-                                          </Form>
+                                          </Space>
                                     </Space>
-                              </Space>
-                        </Card>
+                              </Card>
+                        </Form>
                   </div>
             )
       })
