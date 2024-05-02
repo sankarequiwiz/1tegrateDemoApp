@@ -1,5 +1,6 @@
 import { StepperItemsTypes } from "../components/stepper";
 import { SelectOrganization } from "../containers/scm/selectOrg";
+import { SelectRepo } from "../containers/scm/selectRepo";
 import { SelectService } from "../containers/scm/selectService";
 
 export function getStepItems(): { [key: string]: StepperItemsTypes[] } {
@@ -15,7 +16,7 @@ export function getStepItems(): { [key: string]: StepperItemsTypes[] } {
                   },
                   {
                         title: 'Select Repository',
-                        container: <p>kh21dkh</p>,
+                        container: <SelectRepo />,
                   },
                   {
                         title: 'Select Branch',

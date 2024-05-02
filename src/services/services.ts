@@ -6,6 +6,10 @@ export const getServices = async (payload: { [key: string]: unknown }) => {
       return await fetch.post('/api/v1/services/search', payload)
 }
 
+export const getRepo= async ()=>{
+      return await fetch.get('/api/v1/scm/organizations/EQ-IPaaS/repositories/shared-services-api')
+}
+
 export const createIntegrations = async (payload: CreateIntegrationType) => {
       console.log(payload)
       return {
