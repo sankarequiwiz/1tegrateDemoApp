@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Card, Checkbox, Space, Typography } from 'antd';
+import { Button, ButtonProps, Checkbox, Space, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -11,12 +11,9 @@ import { List } from 'antd';
 import mock from './mock.json';
 
 export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-      const { setCurrentStep, current } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedOrganization, selectedOrganization } = React.useContext(AppContext);
 
-      const [organization] = React.useState<Array<OrganizationTypes>>(mock.data as any);
-
-      const onOkProps: ButtonProps = {}
-
+      const [organization] = React.useState<Array<OrganizationTypes>>(mock.data);
 
       const getOrganization = async () => {
             try {
@@ -26,9 +23,17 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
             }
       }
 
+      const handleSelect = (selected: string) => {
+            setSelectedOrganization(selected)
+      }
+
       React.useEffect(() => {
             getOrganization()
       }, [])
+
+      const onOkProps: ButtonProps = {
+            disabled: !selectedOrganization
+      }
 
       return (
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
@@ -45,8 +50,8 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                                           actions={[<Button type='link' key={1}>Create Watch</Button>]}
                                     >
                                           <List.Item.Meta
-                                                avatar={<Checkbox />}
-                                                title={<a href="https://ant.design">{item.fullName}</a>}
+                                                avatar={<Checkbox checked={selectedOrganization == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
+                                                title={<a >{item.fullName}</a>}
                                                 description={item.description}
                                           />
                                     </List.Item>
