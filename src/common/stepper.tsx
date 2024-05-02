@@ -14,33 +14,21 @@ export function getStepItems(): { [key: string]: StepperItemsTypes[] } {
                         container: <SelectOrganization />,
                   },
                   {
-                        title: 'Select Service Profile',
+                        title: 'Select Repository',
                         container: <p>kh21dkh</p>,
                   },
                   {
-                        title: 'Select Organization',
+                        title: 'Select Branch',
                         container: <p>org select</p>,
                   },
                   {
-                        title: 'Select Service Profile',
+                        title: 'Pull Request',
                         container: <p>kh21dkh</p>,
-                  },
-                  {
-                        title: 'Select Organization',
-                        container: <p>org select</p>,
                   }
             ],
             BTS: [
                   {
                         title: 'Select Profile',
-                        container: <p>kh21dkh</p>,
-                  },
-                  {
-                        title: 'Select Organization',
-                        container: <p>org select</p>,
-                  },
-                  {
-                        title: 'Select Service Profile',
                         container: <p>kh21dkh</p>,
                   },
                   {

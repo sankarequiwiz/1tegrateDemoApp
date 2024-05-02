@@ -8,7 +8,6 @@ import './style.scss';
 import mock from './mock.json';
 import { AppContext } from '../../../context/AppProvider';
 import { Footer } from '../../../components/footer';
-import { StepContext } from '../../../context/StepCompProvider';
 import { Payload, ServiceProfileDataTypes } from './types';
 import services from '../../../services';
 
@@ -20,7 +19,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       const [selected, setSelected] = React.useState<ServiceProfileDataTypes>(undefined);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void }>();
 
-      const { setCurrentStep, current } = React.useContext(StepContext);
+      const { setCurrentStep, current } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
@@ -152,7 +151,6 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                           accessPointConfig: {
                                                 type: integrationType
                                           },
-                                          emailAddress: '',
                                           apiKey: resp[fieldConfigs[0].name]
                                     }
                               };
@@ -202,7 +200,17 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                   <div {...props} ref={ref}>
                         {contextHolder}
                         <Card title={`Enter details for the ${selected.name}`}>
-                              <Space direction='vertical' style={{ margin: '.5rem 0' }}>
+                              <Space direction='vertical' >
+                                    <Space direction='vertical'>
+                                          <Typography.Text strong>
+                                                Integration name
+                                          </Typography.Text>
+                                          <Form.Item name={'name'} rules={[{ required: true }]} >
+                                                {
+                                                      <Input placeholder={'Enter integration name'} />
+                                                }
+                                          </Form.Item>
+                                    </Space>
                                     <Space direction='vertical'>
                                           <div >
                                                 <Typography.Text strong>
@@ -223,18 +231,6 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                     </Space>
                                     <Space direction='vertical' className='w-full'>
                                           <Form layout='vertical' form={form}>
-                                                <div >
-                                                      <div style={{ margin: '.5rem 0' }}>
-                                                            <Typography.Text strong>
-                                                                  Integration name
-                                                            </Typography.Text>
-                                                      </div>
-                                                      <Form.Item name={'name'} rules={[{ required: true }]} >
-                                                            {
-                                                                  <Input placeholder={'Enter integration name'} />
-                                                            }
-                                                      </Form.Item>
-                                                </div>
                                                 {
                                                       fieldConfigs && fieldConfigs.map(({ ...field }, index) => {
                                                             return (

@@ -1,7 +1,7 @@
 import React, { HTMLProps } from 'react';
 import { Steps, StepsProps, StepProps, Layout } from 'antd';
 import './style.scss';
-import { StepContext } from '../../context/StepCompProvider';
+import { AppContext } from '../../context/AppProvider';
 
 export type StepperItemsTypes = StepProps & {
       container?: React.ReactElement;
@@ -15,7 +15,7 @@ export type StepperProps = {
 
 export const Stepper = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & StepperProps>(
       ({ name, direction, items = [], ...props }, ref) => {
-            const { current } = React.useContext(StepContext)
+            const { current } = React.useContext(AppContext)
             return (
                         <Layout id='stepper' aria-label={name} {...props} ref={ref}>
                               <Steps items={items} current={current} direction={direction} />

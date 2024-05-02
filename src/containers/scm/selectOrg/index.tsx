@@ -1,12 +1,10 @@
 import { ButtonProps, Space, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
-import { StepContext } from '../../../context/StepCompProvider';
-
-
+import { AppContext } from '../../../context/AppProvider';
 
 export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-      const { setCurrentStep, current } = React.useContext(StepContext);
+      const { setCurrentStep, current } = React.useContext(AppContext);
 
       const onOkProps: ButtonProps = {}
 
