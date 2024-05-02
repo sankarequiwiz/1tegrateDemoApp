@@ -24,7 +24,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
       }
 
       const handleSelect = (selected: string) => {
-            setSelectedOrganization(selected)
+            setSelectedOrganization(selectedOrganization === selected ? '' : selected)
       }
 
       React.useEffect(() => {
@@ -51,7 +51,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                                     >
                                           <List.Item.Meta
                                                 avatar={<Checkbox checked={selectedOrganization == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
-                                                title={<a >{item.fullName}</a>}
+                                                title={<a >{item.login}</a>}
                                                 description={item.description}
                                           />
                                     </List.Item>
