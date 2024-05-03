@@ -41,7 +41,7 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
                   <Space direction='vertical' style={{ width: '100%' }}>
                         <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    <Typography.Text strong >Select organization</Typography.Text>
+                                    <Typography.Text strong >Select branch</Typography.Text>
                               </div>
                         </div>
                         <ListComp dataSource={branches} />

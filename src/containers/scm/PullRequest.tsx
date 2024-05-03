@@ -81,7 +81,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: PullRequestTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} loading={item?.isLoading} type='link' key={1}>Download</Button>]}
+                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />}  type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={
