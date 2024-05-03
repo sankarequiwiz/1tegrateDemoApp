@@ -5,6 +5,9 @@ import { Stepper } from "../components/stepper";
 import { FloatingActionComp } from "../components/AccessKeyInput";
 import { StepTypes, getStepItems } from "../common/stepper";
 import { AppContext } from "../context/AppProvider";
+import { Commits } from "./scm/Commit";
+import { PullRequest } from "./scm/PullRequest";
+import { Branch } from "./scm/Branch";
 
 export function Main() {
       const { domain, conclusion } = React.useContext(AppContext);
@@ -16,11 +19,11 @@ export function Main() {
 
             switch (conclusion) {
                   case 'commit':
-                        return { title: 'Commit', container: <p>Commit</p>, ...baseProperties }
+                        return { title: 'Commit', container: <Commits />, ...baseProperties }
                   case 'pullRequest':
-                        return { title: 'Pull Request', container: <p>Pull Request</p>, ...baseProperties }
+                        return { title: 'Pull Request', container: <PullRequest />, ...baseProperties }
                   case 'branch':
-                        return { title: 'Branch', container: <p>Branch</p>, ...baseProperties }
+                        return { title: 'Branch', container: <Branch />, ...baseProperties }
                   default:
                         return { title: 'Resource', container: null, ...baseProperties }
             }
