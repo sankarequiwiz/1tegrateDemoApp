@@ -1,4 +1,5 @@
-import { ButtonProps, Space, Typography, Button, Checkbox } from 'antd';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ButtonProps, Space, Typography, Button, Checkbox, Modal, ModalProps, Radio } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -7,12 +8,38 @@ import { ReposTypes } from './type';
 import { List } from 'antd';
 
 
-import mock from "./mock.json"
+import mock from "./mock.json";
+import { conclusionOption } from '../../../common/stepper';
+
+
+const ModalStepOptions = React.forwardRef(({ ...props }: ModalProps, ref: React.RefObject<HTMLDivElement>) => {
+    const { setConclusion, conclusion } = React.useContext(AppContext);
+
+    return (
+        <Modal {...props} title='Select an options'>
+            <div ref={ref}>
+                <Space direction='vertical'>
+                    <Space direction='vertical'>
+                        <Typography.Text type='secondary'>
+                            Please select an option where you want to download the project
+                        </Typography.Text>
+                    </Space>
+                    <Radio.Group
+                        value={conclusion}
+                        onChange={e => setConclusion(e.target.value)}
+                        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+                        options={conclusionOption}
+                    />
+                </Space>
+            </div>
+        </Modal>
+    )
+})
 
 export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-    const { setCurrentStep, current, setSelectedRepo, selectedRepo } = React.useContext(AppContext);
+    const { setCurrentStep, current, setSelectedRepo, selectedRepo, setConclusion } = React.useContext(AppContext);
     const [Repositories] = React.useState<Array<ReposTypes>>(mock.data as any);
-
+    const [open, setOpen] = React.useState<boolean>(false);
 
     const getRepos = async () => {
         try {
@@ -25,6 +52,20 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
     const handleSelect = (selected: string) => {
         setSelectedRepo(selected === selectedRepo ? '' : selected)
     }
+
+    const handleNext = () => {
+        setOpen(true)
+    }
+
+    const handleOk = () => {
+        setCurrentStep(current + 1)
+    }
+
+    const closeHandler = () => {
+        setConclusion('')
+        setOpen(false);
+    }
+
     React.useEffect(() => {
         getRepos()
     }, [])
@@ -56,7 +97,8 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                     )}
                 />
             </Space>
-            <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={() => setCurrentStep(current + 1)} onOkProps={onOkProps} />
+            <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={handleNext} onOkProps={onOkProps} />
+            <ModalStepOptions onOk={handleOk} open={open} onCancel={closeHandler} />
         </Space>
     )
 })

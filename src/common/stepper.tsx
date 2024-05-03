@@ -3,46 +3,66 @@ import { SelectOrganization } from "../containers/scm/selectOrg";
 import { SelectRepo } from "../containers/scm/selectRepo";
 import { SelectService } from "../containers/scm/selectService";
 
-export function getStepItems(): { [key: string]: StepperItemsTypes[] } {
+export const conclusionOption = [
+      {
+          label: 'Commit',
+          value: 'commit'
+      },
+      {
+          label: 'Pull request',
+          value: 'pullRequest'
+      },
+      {
+          label: 'Branch',
+          value: 'branch'
+      }
+  ]
+
+export type StepTypes = StepperItemsTypes & {
+      key: string
+}
+
+export function getStepItems(args: Array<StepTypes> = []): { [key: string]: StepTypes[] } {
+
       return {
             SCM: [
                   {
                         title: 'Select Service Profile',
                         container: <SelectService />,
+                        key: '1'
                   },
                   {
                         title: 'Select Organization',
                         container: <SelectOrganization />,
+                        key: '2'
                   },
                   {
                         title: 'Select Repository',
                         container: <SelectRepo />,
+                        key: '3'
                   },
-                  {
-                        title: 'Select Branch',
-                        container: <p>org select</p>,
-                  },
-                  {
-                        title: 'Pull Request',
-                        container: <p>kh21dkh</p>,
-                  }
+                  ...args,
             ],
             BTS: [
                   {
                         title: 'Select Profile',
                         container: <p>kh21dkh</p>,
+                        key: '1'
                   },
                   {
                         title: 'Select Organization',
                         container: <p>org select</p>,
+                        key: '2'
                   },
                   {
                         title: 'Select Service Profile',
                         container: <p>kh21dkh</p>,
+                        key: '3'
                   },
                   {
                         title: 'Select Organization',
                         container: <p>org select</p>,
+                        key: '4'
                   }
             ]
       }
