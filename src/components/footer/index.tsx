@@ -31,7 +31,7 @@ export const Footer = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
                         <div></div>
                         <div style={mergedStyle.right} >
                               <Button onClick={onCancel}>Previous</Button>
-                              <Button onClick={onSubmit} icon={<ArrowRightOutlined />} {...onOkProps} type='primary' >Next</Button>
+                              <Button onClick={onSubmit} icon={<ArrowRightOutlined />} children='Next' {...onOkProps} type='primary' />
                         </div>
                   </div>
             )

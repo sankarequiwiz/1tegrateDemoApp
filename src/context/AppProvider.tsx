@@ -48,14 +48,12 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
-
       const setConclusion = (arg) => {
             setSearch((prev) => {
                   prev.set('conclusion', arg)
                   return prev;
             })
       }
-
 
       const setSelectedService = (arg) => {
             setSearch((prev) => {
