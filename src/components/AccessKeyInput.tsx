@@ -124,7 +124,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
             <Fragment>
                   <FloatButton {...props} ref={ref} onClick={handleOpen} icon={<KeyOutlined />} />
                   <Modal
-                        title='Enter the access key of your organization'
+                        title='Please enter 1tegrate Access key for your organization'
                         open={isOpen}
                         onCancel={handleClose}
                         onOk={() => {

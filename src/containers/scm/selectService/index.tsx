@@ -4,32 +4,47 @@ import API from '../../../services';
 import { ButtonProps, Card, Col, Form, Input, Radio, Row, Skeleton, Space, Typography, message } from 'antd';
 import './style.scss';
 
-// mock
-import mock from './mock.json';
 import { AppContext } from '../../../context/AppProvider';
 import { Footer } from '../../../components/footer';
 import { Payload, ServiceTypes } from './types';
 import services from '../../../services';
 import FormItem from 'antd/es/form/FormItem';
 
-type VoidFunction = () => void
+type VoidFunction = () => void;
+
+const serviceImage = 'https://integrations.lambdatest.com/assets/images/integration-jira.svg';
 
 export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
       const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
       const [loading, setLoading] = React.useState<boolean>(false);
-      const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void }>();
+      const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void, loading: boolean }>();
 
-      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
+            const payload = {
+                  filter: {
+                        and: [
+                              {
+                                    "property": "/state",
+                                    "operator": "=",
+                                    "values": ["ACTIVE"]
+                              }
+                        ]
+                  },
+                  pagination: {
+                        limit: 20,
+                        offset: 0
+                  }
+            }
+            const headers = { apiKey }
             try {
-                  const resp = await API.services.getServices({})
-                  console.log(resp);
+                  const resp = await API.services.getServices(payload, headers)
+                  setServices(resp.data.data);
             } catch (error) {
                   console.log(error);
             } finally {
-                  setServices(mock.data as any);
                   setLoading(false);
             }
       }
@@ -49,13 +64,15 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       }, [])
 
       const onOkProps: ButtonProps = {
-            disabled: !selected
+            disabled: !selected,
+            loading: childRef.current?.loading
       };
 
       return (
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                              <Typography.Text strong >Available services</Typography.Text>
                               {
                                     loading && <Skeleton />
                               }
@@ -72,7 +89,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                                                         onClick={() => selectHandler(item.id)}
                                                                   >
                                                                         <Space align='start'>
-                                                                              <img alt='services_images' src={item.serviceProfile.image.original} />
+                                                                              <img alt='services_images' src={item.serviceProfile.image.original || serviceImage} />
                                                                               <Space direction='vertical'>
                                                                                     {
                                                                                           item.serviceProfile.name && (
@@ -118,6 +135,7 @@ type FormAreaTypes = {
 const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & FormAreaTypes>(
       ({ selected, ...props }, ref) => {
             const { organization, setIntegration } = React.useContext(AppContext);
+            const [loading, setLoading] = React.useState<boolean>(false);
 
             const [messageApi, contextHolder] = message.useMessage();
 
@@ -134,8 +152,9 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             const onIntegrate = (callback) => {
                   if (organization) {
                         form.validateFields().then(async (resp) => {
+                              const key = resp[fieldConfigs[0].name];
                               const formValues: Payload = {
-                                    name: resp.name,
+                                    name: `${key} integration`,
                                     subOrganization: {
                                           name: organization,
                                     },
@@ -143,27 +162,41 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                           accessPoint: {
                                                 type: 'SP',
                                                 serviceProfile: {
-                                                      id: selected?.id
+                                                      id: selected?.serviceProfile.id
                                                 }
                                           },
                                           accessPointConfig: {
                                                 type: resp.integrationType
                                           },
-                                          apiKey: resp[fieldConfigs[0].name]
+                                          apiKey: key
                                     }
                               };
-
+                              setLoading(true);
                               try {
                                     const resp = await services.services.createIntegrations(formValues);
                                     const { data } = resp;
                                     setIntegration(data as any)
                                     messageApi.open({
                                           type: 'success',
-                                          content: `Integration created successfully for ${organization}`,
+                                          content: `Integration created successfully`,
                                     });
                                     setTimeout(callback, 1000)
                               } catch (error) {
-                                    console.log(error);
+                                    let errorMessage: string = 'Something went wrong';
+                                    if (error.response.status === 400) {
+                                          const data = error.response.data;
+                                          if (data && Array.isArray(data) && data.length) {
+                                                errorMessage = data[0]?.errorMessage;
+                                          } else {
+                                                errorMessage = data.error;
+                                          }
+                                    }
+                                    messageApi.open({
+                                          type: 'error',
+                                          content: errorMessage,
+                                    });
+                              } finally {
+                                    setLoading(false);
                               }
 
                         }).catch(() => { })
@@ -176,7 +209,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             }
 
             React.useImperativeHandle(ref, (): any => {
-                  return { onIntegrate }
+                  return { onIntegrate, loading }
             });
 
             const fieldConfigs: Array<fieldTypeConfigTypes> = React.useMemo(() => {

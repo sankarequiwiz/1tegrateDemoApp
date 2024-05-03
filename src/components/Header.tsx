@@ -23,11 +23,11 @@ const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
 
 const domain = [
       {
-            label: 'Source control management (SCM)',
+            label: 'SCM Integrations Demo',
             key: 'SCM',
       },
       {
-            label: 'Bug tracking system (BTS)',
+            label: 'Ticketing Integrations Demo',
             key: 'BTS',
       }
 ]
