@@ -1,9 +1,8 @@
 import axios from 'axios';
-declare let process: { env: { 'ITEGRATE_BASE_URL': string } };
 
 // Create an instance of Axios
 const axiosInstance = axios.create({
-      baseURL: process.env.ITEGRATE_BASE_URL,
+      baseURL: import.meta.env.VITE_ITEGRATE_BASE_URL,
       timeout: 5000, // Timeout in milliseconds
 });
 
