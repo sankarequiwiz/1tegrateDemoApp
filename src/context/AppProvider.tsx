@@ -19,6 +19,11 @@ type ContextTypes = {
 
       setUserName?: (userName: string) => void;
       setAccessKey?: (accessKey: string) => void
+      selectedPullReq?: string;
+      selectedCommit? :string;
+
+      setSelectedCommit?: (selectedCommit :string) =>void;
+      setSelectedPullReq?: (selectedPullReq :string) => void;
       setSelectedBranch?: (selectedBranch: string) => void;
       setConclusion?: (option?: string) => void;
       setSelectedOrganization?: (selectedOrganization: string) => void;
@@ -112,6 +117,19 @@ export function AppProvider({ children, value }: ProviderTypes) {
                   return prev;
             })
       }
+      const setSelectedPullReq = (newPullrequest: string) => {
+            setSearch((prev) => {
+                  prev.set('selectedPullReq', newPullrequest.toString())
+                  return prev;
+            })
+      }
+
+      const setSelectedCommit = (newCommit: string) => {
+            setSearch((prev) => {
+                  prev.set('selectedCommit', newCommit.toString())
+                  return prev;
+            })
+      }
 
       const contextValues: ContextTypes = {
             setAccessKey,
@@ -128,6 +146,10 @@ export function AppProvider({ children, value }: ProviderTypes) {
             organization: search.get('organization'),
             userName: search.get("userName"),
             accessKey: search.get('accessKey'),
+            setSelectedPullReq,
+            setSelectedCommit,
+            selectedCommit: search.get("selectedCommit"),
+            selectedPullReq: search.get('selectedPullReq'),
             selectedBranch: search.get('selectedBranch'),
             conclusion: search.get('conclusion'),
             selectedService: search.get('service'),
