@@ -105,6 +105,12 @@ export const getOrganization = async (payload: { [key: string]: unknown }) => {
 export const getAllBranches = async (payload: { [key: string]: unknown }) => {
       return await fetch.post('/api/v1/services/search', payload)
 }
+export const getAllPullRequest = async (payload: { [key: string]: unknown }) => {
+      return await fetch.post('/api/v1/services/search', payload)
+}
+export const getAllCommit = async (payload: { [key: string]: unknown }) => {
+      return await fetch.post('/api/v1/services/search', payload)
+}
 
 export const downloadBranch = async (payload: { [key: string]: unknown }) => {
       return await fetch.post('/api/v1/services/search', payload)
