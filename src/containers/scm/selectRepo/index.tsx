@@ -79,7 +79,6 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
             <Space direction='vertical' style={{ width: '100%' }}>
                 <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <Typography.Text strong >Select Repository</Typography.Text>
                     </div>
                 </div>
                 <List

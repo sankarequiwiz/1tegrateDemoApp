@@ -27,7 +27,7 @@ export function getStepItems(args: Array<StepTypes> = []): { [key: string]: Step
       return {
             SCM: [
                   {
-                        title: 'Select Service Profile',
+                        title: 'Select Services',
                         container: <SelectService />,
                         key: '1'
                   },
