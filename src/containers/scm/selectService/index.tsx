@@ -65,7 +65,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                           {
                                                 Array.isArray(services) && services.map((item, index) => {
                                                       return (
-                                                            <Col className='w-full' span={24} md={12} xl={10}  xxl={6} key={index}>
+                                                            <Col className='w-full' span={24} md={12} xl={10} xxl={6} key={index}>
                                                                   <Card
                                                                         bordered
                                                                         rootClassName='card'
@@ -123,7 +123,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             const [messageApi, contextHolder] = message.useMessage();
 
             const [form] = Form.useForm();
-            const integrationType  = Form.useWatch('integrationType', form)
+            const integrationType = Form.useWatch('integrationType', form)
 
             const fields = React.useMemo(() => {
                   if (selected) {
@@ -181,11 +181,16 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             });
 
             const fieldConfigs: Array<fieldTypeConfigTypes> = React.useMemo(() => {
-                  const fieldConfig = fields.find((item) => item.type === integrationType)
-                  if (fieldConfig) {
-                        return fieldConfig.fieldTypeConfigs;
+                  if (fields && fields.length === 1) {
+                        const [field] = fields;
+                        return field.fieldTypeConfigs;
+                  } else {
+                        const fieldConfig = fields.find((item) => item.type === integrationType)
+                        if (fieldConfig) {
+                              return fieldConfig.fieldTypeConfigs;
+                        }
+                        return undefined;
                   }
-                  return undefined;
             }, [integrationType, fields])
 
             React.useEffect(() => {
@@ -200,26 +205,28 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                               {contextHolder}
                               <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
                                     <Space direction='vertical' >
-                                          <Space direction='vertical'>
-                                                <div >
-                                                      <Typography.Text strong>
-                                                            Select the integration type
-                                                      </Typography.Text>
-                                                </div>
-                                                <FormItem name={'integrationType'} rules={[{ required: true }]}>
-                                                      <Radio.Group >
-                                                            <Space direction="vertical">
-                                                                  {
-                                                                        fields.map((field, index) => {
-                                                                              return (
-                                                                                    <Radio value={field.type} key={index}>{field.label}</Radio>
-                                                                              )
-                                                                        })
-                                                                  }
-                                                            </Space>
-                                                      </Radio.Group>
-                                                </FormItem>
-                                          </Space>
+                                          {
+                                                fields.length > 1 && <Space direction='vertical'>
+                                                      <div >
+                                                            <Typography.Text strong>
+                                                                  Select the integration type
+                                                            </Typography.Text>
+                                                      </div>
+                                                      <FormItem name={'integrationType'} rules={[{ required: true }]}>
+                                                            <Radio.Group >
+                                                                  <Space direction="vertical">
+                                                                        {
+                                                                              fields.map((field, index) => {
+                                                                                    return (
+                                                                                          <Radio value={field.type} key={index}>{field.label}</Radio>
+                                                                                    )
+                                                                              })
+                                                                        }
+                                                                  </Space>
+                                                            </Radio.Group>
+                                                      </FormItem>
+                                                </Space>
+                                          }
                                           <Space direction='vertical' className='w-full'>
                                                 {
                                                       fieldConfigs && fieldConfigs.map(({ ...field }, index) => {
