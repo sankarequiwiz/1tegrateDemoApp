@@ -19,7 +19,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       const [loading, setLoading] = React.useState<boolean>(false);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void, loading: boolean }>();
 
-      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey, domain } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
@@ -30,6 +30,11 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                     "property": "/state",
                                     "operator": "=",
                                     "values": ["ACTIVE"]
+                              },
+                              {
+                                    "property": "/type",
+                                    "operator": "=",
+                                    "values": [domain]
                               }
                         ]
                   },
@@ -175,7 +180,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                               try {
                                     const resp = await services.services.createIntegrations(formValues);
                                     const { data } = resp;
-                                    setIntegration(data as any)
+                                    setIntegration(data)
                                     messageApi.open({
                                           type: 'success',
                                           content: `Integration created successfully`,

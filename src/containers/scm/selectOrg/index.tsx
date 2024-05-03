@@ -11,18 +11,24 @@ import { List } from 'antd';
 import mock from './mock.json';
 
 export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-      const { setCurrentStep, current, selectedOrganization } = React.useContext(AppContext);
+      const { setCurrentStep, current, selectedOrganization, integration } = React.useContext(AppContext);
 
       const [organization] = React.useState<Array<OrganizationTypes>>(mock.data);
 
+      const headers = {
+            integrationId: integration?.id
+      };
+
       const getOrganization = async () => {
             try {
-                  await API.services.getOrganization({});
+                  const resp = await API.services.getSCMOrganization(headers as any);
+                  const { data } = resp.data;
+                  console.log(data);
+                  // todo
             } catch (error) {
                   console.log(error);
             }
       }
-
 
       React.useEffect(() => {
             getOrganization()

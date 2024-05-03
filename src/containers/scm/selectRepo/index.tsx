@@ -37,13 +37,13 @@ const ModalStepOptions = React.forwardRef(({ ...props }: ModalProps, ref: React.
 })
 
 export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-    const { setCurrentStep, current, setSelectedRepo, selectedRepo, setConclusion } = React.useContext(AppContext);
+    const { setCurrentStep, current, setSelectedRepo, selectedRepo, setConclusion, selectedOrganization, integration } = React.useContext(AppContext);
     const [Repositories] = React.useState<Array<ReposTypes>>(mock.data as any);
     const [open, setOpen] = React.useState<boolean>(false);
 
     const getRepos = async () => {
         try {
-            await API.services.getRepo;
+            await API.services.getRepo(selectedOrganization, { integrationId: integration?.id });
         } catch (error) {
             console.log(error)
         }

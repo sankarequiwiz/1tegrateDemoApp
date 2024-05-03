@@ -1,3 +1,4 @@
+import { AxiosHeaders } from 'axios';
 import { Payload as CreateIntegrationType } from '../containers/scm/selectService/types';
 import fetch from '../utils/API/fetchInstance';
 
@@ -12,12 +13,13 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
       return fetch.post('/api/v1/integrations', payload)
 }
 
-export const getRepo = async () => {
-      return await fetch.get('/api/v1/scm/organizations/EQ-IPaaS/repositories/shared-services-api')
+/* get all organization */
+export const getSCMOrganization = async (headers: AxiosHeaders) => {
+      return await fetch.get('/api/v1/scm/organizations ', { headers })
 }
 
-export const getOrganization = async (payload: { [key: string]: unknown }) => {
-      return await fetch.post('/api/v1/services/search', payload)
+export const getRepo = async (organizationId: string, headers: { [key: string]: string }) => {
+      return await fetch.get(`/api/v1/scm/organizations/${organizationId}/repositories`, { headers })
 }
 
 export const getAllBranches = async (payload: { [key: string]: unknown }) => {
@@ -33,7 +35,6 @@ export const getAllCommit = async (payload: { [key: string]: unknown }) => {
 export const downloadBranch = async (payload: { [key: string]: unknown }) => {
       return await fetch.post('/api/v1/services/search', payload)
 }
-
 
 export const createWatch = async (payload: { [key: string]: unknown }, integrationId: string) => {
       return await fetch.post(`api/v1/integrations/${integrationId}/watches`, payload)
