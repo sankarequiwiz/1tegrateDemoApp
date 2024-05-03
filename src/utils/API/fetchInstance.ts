@@ -1,4 +1,5 @@
 import axios from 'axios';
+declare let process: { env: { 'ITEGRATE_BASE_URL': string } };
 
 // Create an instance of Axios
 const axiosInstance = axios.create({

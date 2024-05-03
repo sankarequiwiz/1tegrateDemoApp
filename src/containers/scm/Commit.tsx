@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
@@ -11,7 +12,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
       const { setCurrentStep, current } = React.useContext(AppContext);
 
-      const [commits] = React.useState<Array<CommitTypes>>(mock.data);
+      const [commits] = React.useState<Array<CommitTypes>>(mock.data as any);
 
       const okButtonProps: ButtonProps = {
             children: 'Done',

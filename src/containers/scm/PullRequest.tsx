@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';
@@ -40,7 +40,7 @@ export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <Space direction='vertical' style={{ width: '100%' }}>
                         <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-                             
+
                         </div>
                         <ListComp dataSource={pullRequest} />
                   </Space>
