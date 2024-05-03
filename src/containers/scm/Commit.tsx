@@ -10,7 +10,7 @@ import mock from './commits.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current } = React.useContext(AppContext);
+      const { setCurrentStep, current, integration } = React.useContext(AppContext);
 
       const [commits] = React.useState<Array<CommitTypes>>(mock.data as any);
 
@@ -27,7 +27,7 @@ export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
 
       const getAllCommit = async () => {
             try {
-                  await API.services.getAllCommit({})
+                  await API.services.getAllCommit({ integrationId: integration?.id })
             } catch (error) {
                   console.log(error);
             }
@@ -67,7 +67,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
       const downloadHandler = async () => {
             setDownloading(true);
             try {
-                  await API.services.downloadBranch({})
+                  await API.services.downloadCodeBase({})
             } catch (error) {
                   console.error(error)
             } finally {

@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin} from 'antd';
+import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';
@@ -9,7 +9,7 @@ import mock from './branc.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current } = React.useContext(AppContext);
+      const { setCurrentStep, current, integration, selectedOrganization } = React.useContext(AppContext);
 
       const [branches] = React.useState<Array<BranchTypes>>(mock.data);
 
@@ -26,7 +26,7 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
 
       const getAllBranches = async () => {
             try {
-                  await API.services.getAllBranches({})
+                  await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id })
             } catch (error) {
                   console.log(error);
             }
@@ -40,7 +40,7 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <Space direction='vertical' style={{ width: '100%' }}>
                         <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-                              
+
                         </div>
                         <ListComp dataSource={branches} />
                   </Space>
@@ -64,7 +64,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
       const downloadHandler = async () => {
             setDownloading(true);
             try {
-                  await API.services.downloadBranch({})
+                  await API.services.downloadCodeBase({})
             } catch (error) {
                   console.error(error)
             } finally {
@@ -79,7 +79,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: BranchTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />}  type='link' key={1}>Download</Button>]}
+                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={

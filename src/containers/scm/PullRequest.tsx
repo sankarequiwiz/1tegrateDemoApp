@@ -9,7 +9,7 @@ import mock from './pullreq.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current } = React.useContext(AppContext);
+      const { setCurrentStep, current, integration } = React.useContext(AppContext);
 
       const [pullRequest] = React.useState<Array<PullRequestTypes>>(mock.data);
 
@@ -26,7 +26,7 @@ export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
 
       const getAllPullRequest = async () => {
             try {
-                  await API.services.getAllPullRequest({})
+                  await API.services.getAllPullRequest({ integrationId: integration?.id })
             } catch (error) {
                   console.log(error);
             }
@@ -64,7 +64,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
       const downloadHandler = async () => {
             setDownloading(true);
             try {
-                  await API.services.downloadBranch({})
+                  await API.services.downloadCodeBase({})
             } catch (error) {
                   console.error(error)
             } finally {
