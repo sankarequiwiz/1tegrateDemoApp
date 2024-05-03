@@ -16,7 +16,6 @@ export function Main() {
 
       const getConclusion = React.useCallback((): StepTypes => {
             const baseProperties = { key: 'conclusion' }
-
             switch (conclusion) {
                   case 'commit':
                         return { title: 'Commit', container: <Commits />, ...baseProperties }
