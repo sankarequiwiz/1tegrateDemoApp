@@ -14,8 +14,10 @@ type ContextTypes = {
       selectedOrganization?: string;
       selectedRepo?: string;
       conclusion?: string;
-      setConclusion?: (option?: string) => void;
+      selectedBranch?: string;
 
+      setSelectedBranch?: (selectedBranch: string) => void;
+      setConclusion?: (option?: string) => void;
       setSelectedOrganization?: (selectedOrganization: string) => void;
       setSelectedService?: (selectedService: string) => void;
       setSelectedRepo?: (selectedOrganization: string) => void;
@@ -83,6 +85,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
+      const setSelectedBranch = (newBranch: string) => {
+            setSearch((prev) => {
+                  prev.set('selectedBranch', newBranch.toString())
+                  return prev;
+            })
+      }
+
       const contextValues: ContextTypes = {
             setAccessKey,
             setDomain,
@@ -93,7 +102,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
             setSelectedOrganization,
             setSelectedRepo,
             setConclusion,
+            setSelectedBranch,
             organization,
+            selectedBranch: search.get('selectedBranch'),
             conclusion: search.get('conclusion'),
             selectedService: search.get('service'),
             selectedRepo: search.get("selectedRepo"),
