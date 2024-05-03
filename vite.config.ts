@@ -4,6 +4,9 @@ import sass from 'sass';
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    outDir: 'build'
+  },
   css: {
     preprocessorOptions: {
       scss: {
