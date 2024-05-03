@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Checkbox, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, ButtonProps, Checkbox, ListProps, Space, Spin } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
