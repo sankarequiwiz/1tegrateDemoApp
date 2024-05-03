@@ -37,12 +37,12 @@ export function Main() {
       }, [headerRef])
 
       return (
-            <>
+            <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
                   <Header ref={headerRef} />
-                  <Layout id='app' style={{ height: 'calc(100vh - 76px)' }} >
+                  <Layout id='app' style={{ flex: 1 }}  >
                         <Stepper name='demo-app-guide' items={items} />
                   </Layout>
                   <FloatingActionComp />
-            </>
+            </div>
       )
 }
