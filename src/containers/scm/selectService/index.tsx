@@ -65,7 +65,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                           {
                                                 Array.isArray(services) && services.map((item, index) => {
                                                       return (
-                                                            <Col className='w-full' span={6} key={index}>
+                                                            <Col className='w-full' span={24} md={12} xl={10}  xxl={6} key={index}>
                                                                   <Card
                                                                         bordered
                                                                         rootClassName='card'

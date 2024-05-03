@@ -15,7 +15,10 @@ type ContextTypes = {
       selectedRepo?: string;
       conclusion?: string;
       selectedBranch?: string;
+      userName?: string;
 
+      setUserName?: (userName: string) => void;
+      setAccessKey?: (accessKey: string) => void
       setSelectedBranch?: (selectedBranch: string) => void;
       setConclusion?: (option?: string) => void;
       setSelectedOrganization?: (selectedOrganization: string) => void;
@@ -23,7 +26,6 @@ type ContextTypes = {
       setSelectedRepo?: (selectedOrganization: string) => void;
       setCurrentStep?: (newCurrent: number) => void;
       setOrganization?: React.Dispatch<React.SetStateAction<string>>
-      setAccessKey?: React.Dispatch<React.SetStateAction<string>>
       setDomain?: React.Dispatch<React.SetStateAction<DomainTypes>>
       setIntegration?: (serviceProfileTypes: ServiceTypes) => void
 
@@ -37,9 +39,7 @@ type ProviderTypes = {
 }
 
 export function AppProvider({ children, value }: ProviderTypes) {
-      const [accessKey, setAccessKey] = React.useState<string>(null);
       const [domain, setDomain] = React.useState<DomainTypes>('SCM');
-      const [organization, setOrganization] = React.useState<string>(undefined);
 
       const [search, setSearch] = useSearchParams({ current: '0' });
 
@@ -50,9 +50,30 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
+      const setOrganization = (arg) => {
+            setSearch((prev) => {
+                  prev.set('organization', arg)
+                  return prev;
+            })
+      }
+
+      const setUserName = (arg) => {
+            setSearch((prev) => {
+                  prev.set('userName', arg)
+                  return prev;
+            })
+      }
+
       const setConclusion = (arg) => {
             setSearch((prev) => {
                   prev.set('conclusion', arg)
+                  return prev;
+            })
+      }
+
+      const setAccessKey = (arg) => {
+            setSearch((prev) => {
+                  prev.set('accessKey', arg)
                   return prev;
             })
       }
@@ -103,7 +124,10 @@ export function AppProvider({ children, value }: ProviderTypes) {
             setSelectedRepo,
             setConclusion,
             setSelectedBranch,
-            organization,
+            setUserName,
+            organization: search.get('organization'),
+            userName: search.get("userName"),
+            accessKey: search.get('accessKey'),
             selectedBranch: search.get('selectedBranch'),
             conclusion: search.get('conclusion'),
             selectedService: search.get('service'),
@@ -112,7 +136,6 @@ export function AppProvider({ children, value }: ProviderTypes) {
             selectedOrganization: search.get('selectedOrganization'),
             integration: search.get('integration') ? JSON.parse(search.get('integration')) : undefined,
             domain,
-            accessKey,
             ...value
       }
 

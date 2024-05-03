@@ -35,7 +35,7 @@ export function Main() {
       return (
             <>
                   <Header ref={headerRef} />
-                  <Layout id='app' >
+                  <Layout id='app' style={{ height: 'calc(100vh - 76px)' }} >
                         <Stepper name='demo-app-guide' items={items} />
                   </Layout>
                   <FloatingActionComp />

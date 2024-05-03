@@ -1,5 +1,5 @@
 import { AppstoreOutlined as AppSwitch } from '@ant-design/icons';
-import { Alert, Button, Dropdown, Layout, MenuProps } from 'antd';
+import { Alert, Avatar, Button, Dropdown, MenuProps, Space, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { AppContext } from '../context/AppProvider';
 import { DomainTypes } from '../types/type';
@@ -19,7 +19,7 @@ const warningMsg = 'Access key not configured yet!';
 
 export const Header = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
       (props, ref) => {
-            const { setDomain, domain: selectedDomain, accessKey } = React.useContext(AppContext)
+            const { setDomain, domain: selectedDomain, accessKey, userName, organization } = React.useContext(AppContext)
 
             const items: MenuProps['items'] = domain.map(({ label, key }) => {
                   return {
@@ -32,21 +32,24 @@ export const Header = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
             return (
                   <div {...props} ref={ref}>
                         {!accessKey && <Alert message={warningMsg} banner closable />}
-                        <Layout.Header >
-                              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                    <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow={{ pointAtCenter: true }}>
-                                          <Button size='small'>
-                                                <AppSwitch />
-                                                {selectedDomain}
-                                          </Button>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '.8rem 1rem', background: 'black' }}>
+                              <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow={{ pointAtCenter: true }}>
+                                    <Button size='small'>
+                                          <AppSwitch />
+                                          {selectedDomain}
+                                    </Button>
 
-                                    </Dropdown>
-                                    <div>
-                                          <h4 style={{ color: "white" }}>user persona</h4>
+                              </Dropdown>
+                              <Space>
+                                    <Avatar style={{ backgroundColor: 'orange', verticalAlign: 'middle' }} size="large" >
+                                          {userName?.charAt(0)}
+                                    </Avatar>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '.2rem' }} >
+                                          <Typography.Title level={5} style={{ color: 'white', margin: 0 }}>{userName}</Typography.Title>
+                                          <Typography.Text style={{ color: 'white' }}>{organization}</Typography.Text>
                                     </div>
-                              </div>
-                        </Layout.Header>
-
+                              </Space>
+                        </div>
                   </div>
             )
       })
