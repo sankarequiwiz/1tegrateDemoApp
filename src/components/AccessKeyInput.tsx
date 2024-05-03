@@ -1,6 +1,6 @@
 import { Alert, FloatButton, FloatButtonProps, Form, Input, Modal } from "antd";
 import React, { Fragment } from "react";
-import { SettingOutlined, KeyOutlined } from '@ant-design/icons';
+import { SettingOutlined, KeyOutlined,UserOutlined } from '@ant-design/icons';
 import { FloatButtonElement } from "antd/es/float-button/interface";
 import { AppContext } from "../context/AppProvider";
 
@@ -24,8 +24,71 @@ export const FloatingActionComp = React.forwardRef(() => {
                         open={open}
                   >
                         <AccessKeyForm />
+                        <UserPersona />
                   </FloatButton.Group>
             </FloatButtonContext.Provider>
+      )
+})
+
+
+const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.LegacyRef<FloatButtonElement>) => {
+      const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
+      const [form] = Form.useForm()
+
+      const { setOpen: setOpenFloat } = React.useContext(FloatButtonContext);
+      const { setAccessKey, accessKey: accessKeyValue, setOrganization, organization } = React.useContext(AppContext)
+
+      const handleOpen = () => {
+            setIsOpen(true);
+      }
+
+      const handleClose = () => {
+            setIsOpen(false);
+            setOpenFloat(false);
+            /* reset the form when close the modal box */
+            form.resetFields();
+      }
+
+      React.useEffect(() => {
+            isOpen && form.setFieldsValue({ accessKey: accessKeyValue, organization })
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [isOpen])
+
+      return (
+            <Fragment>
+                  <FloatButton {...props} ref={ref} onClick={handleOpen} icon={<UserOutlined />} />
+                  <Modal
+                        title='Enter details'
+                        open={isOpen}
+                        onCancel={handleClose}
+                        onOk={() => {
+                              form.validateFields()
+                                    .then((resp: { [key: string]: string }) => {
+                                          const { accessKey, organization } = resp;
+                                          setAccessKey(accessKey as string);
+                                          setOrganization(organization)
+                                          handleClose();
+                                    })
+                                    .catch(() => { })
+                        }}
+                        children={(() => {
+                              return (
+                                    <div style={{ margin: '1rem 0rem', display: 'flex', gap: '.5rem', flexDirection: 'column' }}>
+                                          <Form  form={form} layout='vertical'>
+                                                <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Customer name'}>
+                                                      <Input placeholder="Enter Customer name" />
+                                                </Form.Item>
+                                                <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }} label={'organization Name'}>
+                                                      <Input placeholder="Enter the organization name" />
+                                                </Form.Item>
+                                          </Form>
+                                    </div>
+
+                              )
+                        })()}
+                  />
+            </Fragment>
       )
 })
 
@@ -79,7 +142,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 closable
                                           />
                                           <Form  form={form} layout='vertical'>
-                                                <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Access Name'}>
+                                                <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Access Key'}>
                                                       <Input placeholder="Enter the access key" />
                                                 </Form.Item>
                                                 <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }} label={'Customer Name'}>
