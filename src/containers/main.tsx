@@ -33,8 +33,6 @@ export function Main() {
             return getStepItems([getConclusion()])[domain]
       }, [domain, getConclusion]);
 
-      console.log(items)
-
       return (
             <>
                   <Header ref={headerRef} />

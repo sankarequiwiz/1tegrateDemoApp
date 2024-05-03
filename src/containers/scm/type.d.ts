@@ -9,12 +9,5 @@ export type BranchTypes = {
       authored_date: string,
       committer_date: string,
       isLoading?: boolean;
-      native_response: {
-            name: string,
-            commit: {
-                  sha: string,
-                  url: string
-            },
-            protected: boolean
-      }
+      native_response?: { [key: string]: unknown }
 }
