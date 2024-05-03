@@ -1,6 +1,6 @@
 import { Alert, FloatButton, FloatButtonProps, Form, Input, Modal } from "antd";
 import React, { Fragment } from "react";
-import { SettingOutlined, KeyOutlined,UserOutlined } from '@ant-design/icons';
+import { SettingOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons';
 import { FloatButtonElement } from "antd/es/float-button/interface";
 import { AppContext } from "../context/AppProvider";
 
@@ -75,11 +75,14 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
                         children={(() => {
                               return (
                                     <div style={{ margin: '1rem 0rem', display: 'flex', gap: '.5rem', flexDirection: 'column' }}>
-                                          <Form  form={form} layout='vertical'>
-                                                <Form.Item rules={[{ required: true }]} name={"userName"} style={{ width: '100%' }} label={'Customer name'}>
-                                                      <Input placeholder="Enter Customer name" />
+                                          <Form form={form} layout='vertical'>
+                                                <Form.Item  name={"appTittle"} style={{ width: '100%' }} label={'App title'}>
+                                                      <Input placeholder="Enter app title" value="Demo app User" />
                                                 </Form.Item>
-                                                <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }} label={'organization Name'}>
+                                                <Form.Item  name={"userName"} style={{ width: '100%' }} label={'User name'}>
+                                                      <Input placeholder="Enter customer name" />
+                                                </Form.Item>
+                                                <Form.Item  name={"organization"} style={{ width: '100%' }} label={'Company'}>
                                                       <Input placeholder="Enter the organization name" />
                                                 </Form.Item>
                                           </Form>
@@ -140,7 +143,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 type="info"
                                                 closable
                                           />
-                                          <Form  form={form} layout='vertical'>
+                                          <Form form={form} layout='vertical'>
                                                 <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Access Key'}>
                                                       <Input placeholder="Enter the access key" />
                                                 </Form.Item>

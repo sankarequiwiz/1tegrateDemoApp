@@ -40,7 +40,9 @@ export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <Space direction='vertical' style={{ width: '100%' }}>
                         <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-                            
+                              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    <Typography.Text strong >Select commit</Typography.Text>
+                              </div>
                         </div>
                         <ListComp dataSource={commits} />
                   </Space>
