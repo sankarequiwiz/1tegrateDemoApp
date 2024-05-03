@@ -33,13 +33,20 @@ export const Header = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
                   <div {...props} ref={ref}>
                         {!accessKey && <Alert message={warningMsg} banner closable />}
                         <Layout.Header >
-                              <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow={{ pointAtCenter: true }}>
-                                    <Button size='small'>
-                                          <AppSwitch />
-                                          {selectedDomain}
-                                    </Button>
-                              </Dropdown>
+                              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                    <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow={{ pointAtCenter: true }}>
+                                          <Button size='small'>
+                                                <AppSwitch />
+                                                {selectedDomain}
+                                          </Button>
+
+                                    </Dropdown>
+                                    <div>
+                                          <h4 style={{ color: "white" }}>user persona</h4>
+                                    </div>
+                              </div>
                         </Layout.Header>
+
                   </div>
             )
       })
