@@ -16,12 +16,12 @@ const ModalStepOptions = React.forwardRef(({ ...props }: ModalProps, ref: React.
     const { setConclusion, conclusion } = React.useContext(AppContext);
 
     return (
-        <Modal {...props} title='Select an options'>
+        <Modal {...props} title='Select download options'>
             <div ref={ref}>
                 <Space direction='vertical'>
                     <Space direction='vertical'>
                         <Typography.Text type='secondary'>
-                            Please select an option where you want to download the project
+                            Please specify the desired level for your repository/project download.
                         </Typography.Text>
                     </Space>
                     <Radio.Group

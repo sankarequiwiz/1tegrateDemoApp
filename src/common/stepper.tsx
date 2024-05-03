@@ -5,16 +5,16 @@ import { SelectService } from "../containers/scm/selectService";
 
 export const conclusionOption = [
       {
-          label: 'Commit',
-          value: 'commit'
+          label: 'Branch',
+          value: 'branch'
       },
       {
-          label: 'Pull request',
+          label: 'Pull request/Merge request',
           value: 'pullRequest'
       },
       {
-          label: 'Branch',
-          value: 'branch'
+          label: 'Commit',
+          value: 'commit'
       }
   ]
 

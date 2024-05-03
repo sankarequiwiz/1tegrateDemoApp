@@ -46,7 +46,7 @@ type ProviderTypes = {
 export function AppProvider({ children, value }: ProviderTypes) {
       const [domain, setDomain] = React.useState<DomainTypes>('SCM');
 
-      const [search, setSearch] = useSearchParams({ current: '0' });
+      const [search, setSearch] = useSearchParams({ current: '0', userName: 'Demo app User', organization: 'Demo app Company' });
 
       const setIntegrationDetails = (arg) => {
             setSearch((prev) => {

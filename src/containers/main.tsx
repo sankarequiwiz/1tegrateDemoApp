@@ -18,19 +18,23 @@ export function Main() {
             const baseProperties = { key: 'conclusion' }
             switch (conclusion) {
                   case 'commit':
-                        return { title: 'Commit', container: <Commits />, ...baseProperties }
+                        return { title: 'Select Commit', container: <Commits />, ...baseProperties }
                   case 'pullRequest':
-                        return { title: 'Pull Request', container: <PullRequest />, ...baseProperties }
+                        return { title: 'Select Pull Request', container: <PullRequest />, ...baseProperties }
                   case 'branch':
-                        return { title: 'Branch', container: <Branch />, ...baseProperties }
+                        return { title: 'Select Branch', container: <Branch />, ...baseProperties }
                   default:
-                        return { title: 'Resource', container: null, ...baseProperties }
+                        return { title: 'Download Options', container: null, ...baseProperties }
             }
       }, [conclusion])
 
       const items = React.useMemo(() => {
             return getStepItems([getConclusion()])[domain]
       }, [domain, getConclusion]);
+
+      React.useLayoutEffect(() => {
+            console.log(headerRef.current?.clientHeight)
+      }, [headerRef])
 
       return (
             <>

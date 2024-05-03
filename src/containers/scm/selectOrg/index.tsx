@@ -13,7 +13,7 @@ import mock from './mock.json';
 export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
       const { setCurrentStep, current, selectedOrganization } = React.useContext(AppContext);
 
-      const [organization, setOrganization] = React.useState<Array<OrganizationTypes>>(mock.data);
+      const [organization] = React.useState<Array<OrganizationTypes>>(mock.data);
 
       const getOrganization = async () => {
             try {
@@ -40,7 +40,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                                     <Typography.Text strong >Select organization</Typography.Text>
                               </div>
                         </div>
-                        <ListComp dataSource={organization} setOrganization={setOrganization} />
+                        <ListComp dataSource={organization} />
                   </Space>
                   <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={() => setCurrentStep(current + 1)} onOkProps={onOkProps} />
             </Space>
@@ -49,7 +49,6 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
 
 type ListTypes = {
       dataSource: Array<OrganizationTypes>
-      setOrganization?: React.Dispatch<React.SetStateAction<Array<OrganizationTypes>>>
 } & ListProps<unknown>
 
 const ListComp = ({ dataSource, ...props }: ListTypes) => {
