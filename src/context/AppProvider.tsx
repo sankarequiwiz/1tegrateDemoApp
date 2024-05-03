@@ -16,12 +16,13 @@ type ContextTypes = {
       conclusion?: string;
       selectedBranch?: string;
       userName?: string;
-
-      setUserName?: (userName: string) => void;
-      setAccessKey?: (accessKey: string) => void
       selectedPullReq?: string;
       selectedCommit? :string;
+      appTitle?: string;
 
+      setAppTitle?: (appTitle: string) => void;
+      setUserName?: (userName: string) => void;
+      setAccessKey?: (accessKey: string) => void
       setSelectedCommit?: (selectedCommit :string) =>void;
       setSelectedPullReq?: (selectedPullReq :string) => void;
       setSelectedBranch?: (selectedBranch: string) => void;
@@ -46,7 +47,7 @@ type ProviderTypes = {
 export function AppProvider({ children, value }: ProviderTypes) {
       const [domain, setDomain] = React.useState<DomainTypes>('SCM');
 
-      const [search, setSearch] = useSearchParams({ current: '0', userName: 'Demo app User', organization: 'Demo app Company' });
+      const [search, setSearch] = useSearchParams({ current: '0', userName: 'Demo app User', organization: 'Demo app Company', appTitle: 'Demo app Title' });
 
       const setIntegrationDetails = (arg) => {
             setSearch((prev) => {
@@ -131,6 +132,14 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
+      const setAppTitle = (newCommit: string) => {
+            setSearch((prev) => {
+                  prev.set('appTitle', newCommit.toString())
+                  return prev;
+            })
+      }
+
+
       const contextValues: ContextTypes = {
             setAccessKey,
             setDomain,
@@ -143,11 +152,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
             setConclusion,
             setSelectedBranch,
             setUserName,
+            setAppTitle,
+            setSelectedPullReq,
+            setSelectedCommit,
             organization: search.get('organization'),
             userName: search.get("userName"),
             accessKey: search.get('accessKey'),
-            setSelectedPullReq,
-            setSelectedCommit,
+            appTitle: search.get('appTitle'),
             selectedCommit: search.get("selectedCommit"),
             selectedPullReq: search.get('selectedPullReq'),
             selectedBranch: search.get('selectedBranch'),

@@ -37,7 +37,6 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                   <Space direction='vertical' style={{ width: '100%' }}>
                         <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    <Typography.Text strong >Select organization</Typography.Text>
                               </div>
                         </div>
                         <ListComp dataSource={organization} />

@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin} from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';

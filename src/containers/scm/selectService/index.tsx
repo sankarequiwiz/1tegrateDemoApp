@@ -56,7 +56,6 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                              <Typography.Text strong >Available services</Typography.Text>
                               {
                                     loading && <Skeleton />
                               }
