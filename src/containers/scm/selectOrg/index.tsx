@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Checkbox, ListProps, Space, Typography } from 'antd';
+import { Button, ButtonProps, Checkbox, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -52,29 +52,17 @@ type ListTypes = {
       setOrganization?: React.Dispatch<React.SetStateAction<Array<OrganizationTypes>>>
 } & ListProps<unknown>
 
-const ListComp = ({ dataSource, setOrganization, ...props }: ListTypes) => {
+const ListComp = ({ dataSource, ...props }: ListTypes) => {
       const { setSelectedOrganization, selectedOrganization, integration } = React.useContext(AppContext);
+      const [loading, setLoading] = React.useState<boolean>(false);
 
       const handleSelect = (selected: string) => {
             setSelectedOrganization(selectedOrganization === selected ? '' : selected)
       }
 
-      const makeLoad = (selectedData: OrganizationTypes, isLoading: boolean) => {
-            setOrganization((prev) => {
-                  return prev.map((item) => {
-                        if (item.id === selectedData.id) {
-                              /* load the spinner when api call happens for each single items */
-                              item = { ...item, isLoading }
-                        }
-                        return item;
-                  })
-            })
-      }
-
-      const handleCreateWatch = async (selectedData: OrganizationTypes) => {
-            makeLoad(selectedData, true)
+      const handleCreateWatch = async () => {
+            setLoading(true);
             const fullBodySelected = dataSource.find((item) => item.id === selectedOrganization);
-
             const payload: Payload = {
                   "name": `web-gateway-service-${fullBodySelected?.login}`,
                   "description": `Watch for ${fullBodySelected.login} repository`,
@@ -91,30 +79,32 @@ const ListComp = ({ dataSource, setOrganization, ...props }: ListTypes) => {
             } catch (error) {
                   console.log(error);
             } finally {
-                  makeLoad(selectedData, false)
+                  setLoading(false);
             }
       }
 
       return (
-            <List
-                  {...props}
-                  dataSource={dataSource}
-                  renderItem={(item: OrganizationTypes) => (
-                        <List.Item
-                              actions={[<Button loading={item?.isLoading} onClick={() => handleCreateWatch(item)} type='link' key={1}>Create Watch</Button>]}
-                        >
-                              <List.Item.Meta
-                                    avatar={
-                                          <Checkbox
-                                                checked={selectedOrganization === item.id.toString()}
-                                                value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                          />
-                                    }
-                                    title={<a >{item.login}</a>}
-                                    description={item.description}
-                              />
-                        </List.Item>
-                  )}
-            />
+            <Spin spinning={loading} tip='Creating...'  >
+                  <List
+                        {...props}
+                        dataSource={dataSource}
+                        renderItem={(item: OrganizationTypes) => (
+                              <List.Item
+                                    actions={[<Button loading={item?.isLoading} onClick={handleCreateWatch} type='link' key={1}>Create Watch</Button>]}
+                              >
+                                    <List.Item.Meta
+                                          avatar={
+                                                <Checkbox
+                                                      checked={selectedOrganization === item.id.toString()}
+                                                      value={item.id} onChange={(e) => handleSelect(e.target.value)}
+                                                />
+                                          }
+                                          title={<a >{item.login}</a>}
+                                          description={item.description}
+                                    />
+                              </List.Item>
+                        )}
+                  />
+            </Spin>
       )
 };

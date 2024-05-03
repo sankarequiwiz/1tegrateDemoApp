@@ -106,6 +106,10 @@ export const getAllBranches = async (payload: { [key: string]: unknown }) => {
       return await fetch.post('/api/v1/services/search', payload)
 }
 
+export const downloadBranch = async (payload: { [key: string]: unknown }) => {
+      return await fetch.post('/api/v1/services/search', payload)
+}
+
 
 export const createWatch = async (payload: { [key: string]: unknown }, integrationId: string) => {
       return await fetch.post(`api/v1/integrations/${integrationId}/watches`, payload)
