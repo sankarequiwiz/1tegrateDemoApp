@@ -37,7 +37,7 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
       const [form] = Form.useForm()
 
       const { setOpen: setOpenFloat } = React.useContext(FloatButtonContext);
-      const { setAccessKey, accessKey: accessKeyValue, setOrganization, organization } = React.useContext(AppContext)
+      const { setUserName, userName, setOrganization, organization } = React.useContext(AppContext)
 
       const handleOpen = () => {
             setIsOpen(true);
@@ -51,7 +51,7 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
       }
 
       React.useEffect(() => {
-            isOpen && form.setFieldsValue({ accessKey: accessKeyValue, organization })
+            isOpen && form.setFieldsValue({ userName, organization })
             // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [isOpen])
 
@@ -65,8 +65,8 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
                         onOk={() => {
                               form.validateFields()
                                     .then((resp: { [key: string]: string }) => {
-                                          const { accessKey, organization } = resp;
-                                          setAccessKey(accessKey as string);
+                                          const { userName, organization } = resp;
+                                          setUserName(userName as string);
                                           setOrganization(organization)
                                           handleClose();
                                     })
@@ -76,7 +76,7 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
                               return (
                                     <div style={{ margin: '1rem 0rem', display: 'flex', gap: '.5rem', flexDirection: 'column' }}>
                                           <Form  form={form} layout='vertical'>
-                                                <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Customer name'}>
+                                                <Form.Item rules={[{ required: true }]} name={"userName"} style={{ width: '100%' }} label={'Customer name'}>
                                                       <Input placeholder="Enter Customer name" />
                                                 </Form.Item>
                                                 <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }} label={'organization Name'}>
@@ -98,7 +98,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
       const [form] = Form.useForm()
 
       const { setOpen: setOpenFloat } = React.useContext(FloatButtonContext);
-      const { setAccessKey, accessKey: accessKeyValue, setOrganization, organization } = React.useContext(AppContext)
+      const { setAccessKey, accessKey: accessKeyValue } = React.useContext(AppContext)
 
       const handleOpen = () => {
             setIsOpen(true);
@@ -112,7 +112,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
       }
 
       React.useEffect(() => {
-            isOpen && form.setFieldsValue({ accessKey: accessKeyValue, organization })
+            isOpen && form.setFieldsValue({ accessKey: accessKeyValue })
             // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [isOpen])
 
@@ -126,9 +126,8 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                         onOk={() => {
                               form.validateFields()
                                     .then((resp: { [key: string]: string }) => {
-                                          const { accessKey, organization } = resp;
+                                          const { accessKey } = resp;
                                           setAccessKey(accessKey as string);
-                                          setOrganization(organization)
                                           handleClose();
                                     })
                                     .catch(() => { })
@@ -144,9 +143,6 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                           <Form  form={form} layout='vertical'>
                                                 <Form.Item rules={[{ required: true }]} name={"accessKey"} style={{ width: '100%' }} label={'Access Key'}>
                                                       <Input placeholder="Enter the access key" />
-                                                </Form.Item>
-                                                <Form.Item rules={[{ required: true }]} name={"organization"} style={{ width: '100%' }} label={'Customer Name'}>
-                                                      <Input placeholder="Enter the customer name" />
                                                 </Form.Item>
                                           </Form>
                                     </div>

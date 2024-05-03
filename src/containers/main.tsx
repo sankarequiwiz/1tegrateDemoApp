@@ -16,7 +16,6 @@ export function Main() {
 
       const getConclusion = React.useCallback((): StepTypes => {
             const baseProperties = { key: 'conclusion' }
-
             switch (conclusion) {
                   case 'commit':
                         return { title: 'Commit', container: <Commits />, ...baseProperties }
@@ -36,7 +35,7 @@ export function Main() {
       return (
             <>
                   <Header ref={headerRef} />
-                  <Layout id='app' >
+                  <Layout id='app' style={{ height: 'calc(100vh - 76px)' }} >
                         <Stepper name='demo-app-guide' items={items} />
                   </Layout>
                   <FloatingActionComp />

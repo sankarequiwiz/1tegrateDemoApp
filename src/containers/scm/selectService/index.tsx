@@ -65,7 +65,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                           {
                                                 Array.isArray(services) && services.map((item, index) => {
                                                       return (
-                                                            <Col className='w-full' span={6} key={index}>
+                                                            <Col className='w-full' span={24} md={12} xl={10}  xxl={6} key={index}>
                                                                   <Card
                                                                         bordered
                                                                         rootClassName='card'
@@ -200,16 +200,6 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                               {contextHolder}
                               <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
                                     <Space direction='vertical' >
-                                          <Space direction='vertical'>
-                                                <Typography.Text strong>
-                                                      Integration name
-                                                </Typography.Text>
-                                                <Form.Item name={'name'} rules={[{ required: true }]} >
-                                                      {
-                                                            <Input placeholder={'Enter integration name'} />
-                                                      }
-                                                </Form.Item>
-                                          </Space>
                                           <Space direction='vertical'>
                                                 <div >
                                                       <Typography.Text strong>
