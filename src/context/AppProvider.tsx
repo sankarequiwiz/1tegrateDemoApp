@@ -13,6 +13,8 @@ type ContextTypes = {
       selectedService?: string;
       selectedOrganization?: string;
       selectedRepo?: string;
+      conclusion?: string;
+      setConclusion?: (option?: string) => void;
 
       setSelectedOrganization?: (selectedOrganization: string) => void;
       setSelectedService?: (selectedService: string) => void;
@@ -46,6 +48,15 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
+
+      const setConclusion = (arg) => {
+            setSearch((prev) => {
+                  prev.set('conclusion', arg)
+                  return prev;
+            })
+      }
+
+
       const setSelectedService = (arg) => {
             setSearch((prev) => {
                   prev.set('service', arg)
@@ -67,7 +78,6 @@ export function AppProvider({ children, value }: ProviderTypes) {
             })
       }
 
-
       const setCurrentStep = (newCurrent: number) => {
             setSearch((prev) => {
                   prev.set('current', newCurrent.toString())
@@ -84,7 +94,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
             setSelectedService,
             setSelectedOrganization,
             setSelectedRepo,
+            setConclusion,
             organization,
+            conclusion: search.get('conclusion'),
             selectedService: search.get('service'),
             selectedRepo: search.get("selectedRepo"),
             current: +search.get('current'),
