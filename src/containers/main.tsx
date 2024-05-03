@@ -32,10 +32,6 @@ export function Main() {
             return getStepItems([getConclusion()])[domain]
       }, [domain, getConclusion]);
 
-      React.useLayoutEffect(() => {
-            console.log(headerRef.current?.clientHeight)
-      }, [headerRef])
-
       return (
             <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
                   <Header ref={headerRef} />

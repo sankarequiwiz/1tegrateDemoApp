@@ -3,10 +3,10 @@ import fetch from '../utils/API/fetchInstance';
 
 
 export const getServices = async (payload: { [key: string]: unknown }) => {
-      return await fetch.post('/api/v1/services/search', payload)
+      return await fetch('/api/v1/services/search', { method: 'POST', data: payload })
 }
 
-export const getRepo= async ()=>{
+export const getRepo = async () => {
       return await fetch.get('/api/v1/scm/organizations/EQ-IPaaS/repositories/shared-services-api')
 }
 
