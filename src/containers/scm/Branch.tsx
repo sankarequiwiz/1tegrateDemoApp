@@ -40,9 +40,7 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <Space direction='vertical' style={{ width: '100%' }}>
                         <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-                              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    <Typography.Text strong >Select branch</Typography.Text>
-                              </div>
+                              
                         </div>
                         <ListComp dataSource={branches} />
                   </Space>
@@ -81,7 +79,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: BranchTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} loading={item?.isLoading} type='link' key={1}>Download</Button>]}
+                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />}  type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={
