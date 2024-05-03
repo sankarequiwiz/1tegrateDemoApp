@@ -201,16 +201,6 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                               <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
                                     <Space direction='vertical' >
                                           <Space direction='vertical'>
-                                                <Typography.Text strong>
-                                                      Integration name
-                                                </Typography.Text>
-                                                <Form.Item name={'name'} rules={[{ required: true }]} >
-                                                      {
-                                                            <Input placeholder={'Enter integration name'} />
-                                                      }
-                                                </Form.Item>
-                                          </Space>
-                                          <Space direction='vertical'>
                                                 <div >
                                                       <Typography.Text strong>
                                                             Select the integration type
