@@ -76,7 +76,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                                                         onClick={() => selectHandler(item?.id)}
                                                                   >
                                                                         <Space align='start'>
-                                                                              <img alt='services_images' src={item?.serviceProfile?.image?.original || serviceImage} />
+                                                                              <img alt='services_images' width={34} src={item?.serviceProfile?.image?.original || serviceImage} />
                                                                               <Space direction='vertical'>
                                                                                     {
                                                                                           item?.serviceProfile?.name && (
