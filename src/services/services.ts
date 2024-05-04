@@ -4,8 +4,8 @@ import fetch from '../utils/API/fetchInstance';
 import { DomainTypes } from '../types/type';
 
 /* set accessKey */
-export const setAccessKey = async (apiKey: string) => {
-      return await fetch.post('/api/demo/apiKey', { apiKey })
+export const setAccessKey = async (key: string) => {
+      return await fetch.post('/api/demo/apiKey', { key })
 }
 
 /* get services */
