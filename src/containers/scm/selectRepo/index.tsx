@@ -71,13 +71,13 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
     const downloadHandler = async () => {
         setDownloading(true);
         try {
-              await API.services.downloadCodeBase({})
+            await API.services.downloadCodeBase({})
         } catch (error) {
-              console.error(error)
+            console.error(error)
         } finally {
-              setDownloading(false);
+            setDownloading(false);
         }
-  }
+    }
 
     React.useEffect(() => {
         getRepos()
@@ -101,7 +101,7 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                             <List.Item
                                 actions={[
                                     <Button type='link' key={1}>Create Watch</Button>,
-                                    <Button type='link' onClick={downloadHandler} icon={<DownloadOutlined />} key={2}  >Download</Button>
+                                    <Button type='link' onClick={downloadHandler} icon={<DownloadOutlined />} key={2} style={{ display: 'none' }}  >Download</Button>
                                 ]}
                             >
                                 <List.Item.Meta
