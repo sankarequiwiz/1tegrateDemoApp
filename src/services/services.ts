@@ -2,9 +2,13 @@ import { AxiosHeaders } from 'axios';
 import { Payload as CreateIntegrationType } from '../containers/scm/selectService/types';
 import fetch from '../utils/API/fetchInstance';
 
+/* set accessKey */
+export const setAccessKey = async (apiKey: string) => {
+      return await fetch.post('/api/demo/apiKey', { apiKey })
+}
 
 /* get services */
-export const getServices = async ( headers: { [key: string]: string }) => {
+export const getServices = async (headers: { [key: string]: string }) => {
       return await fetch.get('/api/demo/services', { headers: headers })
 }
 

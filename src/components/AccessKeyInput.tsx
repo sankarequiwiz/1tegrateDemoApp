@@ -1,8 +1,10 @@
-import { Alert, FloatButton, FloatButtonProps, Form, Input, Modal } from "antd";
+import { Alert, FloatButton, FloatButtonProps, Form, Input, Modal, message } from "antd";
 import React, { Fragment } from "react";
 import { SettingOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons';
 import { FloatButtonElement } from "antd/es/float-button/interface";
 import { AppContext } from "../context/AppProvider";
+
+import API from '../services/index';
 
 type FloatButtonContextTypes = {
       setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -33,7 +35,6 @@ export const FloatingActionComp = React.forwardRef(() => {
 
 const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.LegacyRef<FloatButtonElement>) => {
       const [isOpen, setIsOpen] = React.useState<boolean>(false);
-
       const [form] = Form.useForm()
 
       const { setOpen: setOpenFloat } = React.useContext(FloatButtonContext);
@@ -77,13 +78,13 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
                               return (
                                     <div style={{ margin: '1rem 0rem', display: 'flex', gap: '.5rem', flexDirection: 'column' }}>
                                           <Form form={form} layout='vertical'>
-                                                <Form.Item  name={"appTitle"} style={{ width: '100%' }} label={'App title'}>
+                                                <Form.Item name={"appTitle"} style={{ width: '100%' }} label={'App title'}>
                                                       <Input placeholder="Enter app title" value="Demo app User" />
                                                 </Form.Item>
-                                                <Form.Item  name={"userName"} style={{ width: '100%' }} label={'User name'}>
+                                                <Form.Item name={"userName"} style={{ width: '100%' }} label={'User name'}>
                                                       <Input placeholder="Enter customer name" />
                                                 </Form.Item>
-                                                <Form.Item  name={"organization"} style={{ width: '100%' }} label={'Company'}>
+                                                <Form.Item name={"organization"} style={{ width: '100%' }} label={'Company'}>
                                                       <Input placeholder="Enter the organization name" />
                                                 </Form.Item>
                                           </Form>
@@ -98,6 +99,8 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
 
 const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.LegacyRef<FloatButtonElement>) => {
       const [isOpen, setIsOpen] = React.useState<boolean>(false);
+      const [isSetting, seIsLoading] = React.useState<boolean>(false);
+      const [messageApi, contextHolder] = message.useMessage();
 
       const [form] = Form.useForm()
 
@@ -122,17 +125,38 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
 
       return (
             <Fragment>
+                  {contextHolder}
                   <FloatButton {...props} ref={ref} onClick={handleOpen} icon={<KeyOutlined />} />
                   <Modal
                         title='Please enter 1tegrate Access key for your organization'
                         open={isOpen}
+                        okButtonProps={{ loading: isSetting }}
                         onCancel={handleClose}
                         onOk={() => {
                               form.validateFields()
-                                    .then((resp: { [key: string]: string }) => {
+                                    .then(async (resp: { [key: string]: string }) => {
                                           const { accessKey } = resp;
-                                          setAccessKey(accessKey as string);
-                                          handleClose();
+                                          try {
+                                                seIsLoading(true);
+                                                await API.services.setAccessKey(accessKey)
+                                                setAccessKey(accessKey as string);
+                                                handleClose();
+                                          } catch (error) {
+                                                let content = 'Something went wrong!'
+                                                const { data, status } = error.response;
+                                                if (status === 400) {
+                                                      if (Array.isArray(data) && data.length >= 1) {
+                                                            content = data[0].errorMessage
+                                                      } else {
+                                                            content = data.error;
+                                                      }
+                                                } else if (status === 500) {
+                                                      content = data.error;
+                                                }
+                                                messageApi.open({ type: 'error', content })
+                                          } finally {
+                                                seIsLoading(false);
+                                          }
                                     })
                                     .catch(() => { })
                         }}
@@ -145,7 +169,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 closable
                                           />
                                           <Form form={form} layout='vertical'>
-                                                <Form.Item  name={"accessKey"} style={{ width: '100%' }} label={'Access Key'}>
+                                                <Form.Item name={"accessKey"} style={{ width: '100%' }} label={'Access Key'}>
                                                       <Input placeholder="Enter the access key" />
                                                 </Form.Item>
                                           </Form>

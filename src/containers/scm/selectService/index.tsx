@@ -72,20 +72,20 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                                                   <Card
                                                                         bordered
                                                                         rootClassName='card'
-                                                                        aria-selected={selected === item.id}
-                                                                        onClick={() => selectHandler(item.id)}
+                                                                        aria-selected={selected === item?.id}
+                                                                        onClick={() => selectHandler(item?.id)}
                                                                   >
                                                                         <Space align='start'>
-                                                                              <img alt='services_images' src={item.serviceProfile.image.original || serviceImage} />
+                                                                              <img alt='services_images' src={item?.serviceProfile?.image?.original || serviceImage} />
                                                                               <Space direction='vertical'>
                                                                                     {
-                                                                                          item.serviceProfile.name && (
-                                                                                                <Typography.Text strong>{item.serviceProfile.name}</Typography.Text>
+                                                                                          item?.serviceProfile?.name && (
+                                                                                                <Typography.Text strong>{item?.serviceProfile?.name}</Typography.Text>
                                                                                           )
                                                                                     }
                                                                                     {
-                                                                                          item.serviceProfile.description && (
-                                                                                                <Typography.Text type='secondary'>{item.serviceProfile.description}</Typography.Text>
+                                                                                          item?.serviceProfile?.description && (
+                                                                                                <Typography.Text type='secondary'>{item?.serviceProfile?.description}</Typography.Text>
                                                                                           )
                                                                                     }
                                                                               </Space>
@@ -131,7 +131,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
 
             const fields = React.useMemo(() => {
                   if (selected) {
-                        return selected.serviceProfile.accessPointConfigs
+                        return selected?.serviceProfile?.accessPointConfigs
                   }
                   return [];
             }, [selected]);
@@ -200,7 +200,8 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
             });
 
             const fieldConfigs: Array<fieldTypeConfigTypes> = React.useMemo(() => {
-                  if (fields && fields.length === 1) {
+                  if (!fields) return undefined;
+                  if (fields.length === 1) {
                         const [field] = fields;
                         return field.fieldTypeConfigs;
                   } else {
@@ -222,10 +223,10 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                   <div {...props} ref={ref}>
                         <Form layout='vertical' form={form}>
                               {contextHolder}
-                              <Card title={`Enter details for the ${selected.serviceProfile.name}`}>
+                              <Card title={`Enter details for the ${selected?.serviceProfile?.name}`}>
                                     <Space direction='vertical' >
                                           {
-                                                fields.length > 1 && <Space direction='vertical'>
+                                                fields?.length > 1 && <Space direction='vertical'>
                                                       <div >
                                                             <Typography.Text strong>
                                                                   Select the integration type
@@ -237,7 +238,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                                         {
                                                                               fields.map((field, index) => {
                                                                                     return (
-                                                                                          <Radio value={field.type} key={index}>{field.label}</Radio>
+                                                                                          <Radio value={field.type} key={index}>{field?.label}</Radio>
                                                                                     )
                                                                               })
                                                                         }
