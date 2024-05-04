@@ -34,7 +34,7 @@ export const getRepo = async (organizationId: string, headers: { [key: string]: 
 
 /* get all branches from the repositories */
 export const getAllBranches = async (organizationId: string, headers: { [key: string]: string }) => {
-      return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/demo-repository`, { headers })
+      return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/demo-repository/branches`, { headers })
 }
 
 /* get all commits for the repositories */
