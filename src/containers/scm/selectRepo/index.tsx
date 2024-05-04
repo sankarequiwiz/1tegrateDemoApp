@@ -88,8 +88,9 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
     }
 
     return (
-        <Spin spinning={downloading} tip='Downloading...' >
-            <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
+        <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between', flex: 1 }}>
+            <Spin spinning={downloading} tip='Downloading...' style={{ height: '100%' }}>
+
                 <Space direction='vertical' style={{ width: '100%' }}>
                     <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -113,9 +114,9 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                         )}
                     />
                 </Space>
-                <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={handleNext} onOkProps={onOkProps} />
-                <ModalStepOptions onOk={handleOk} open={open} onCancel={closeHandler} />
-            </Space>
-        </Spin>
+            </Spin>
+            <ModalStepOptions onOk={handleOk} open={open} onCancel={closeHandler} />
+            <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={handleNext} onOkProps={onOkProps} />
+        </Space>
     )
 })
