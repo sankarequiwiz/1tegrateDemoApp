@@ -19,34 +19,16 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       const [loading, setLoading] = React.useState<boolean>(false);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void, loading: boolean }>();
 
-      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey, domain } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
-            const payload = {
-                  filter: {
-                        and: [
-                              {
-                                    "property": "/state",
-                                    "operator": "=",
-                                    "values": ["ACTIVE"]
-                              },
-                              {
-                                    "property": "/type",
-                                    "operator": "=",
-                                    "values": [domain]
-                              }
-                        ]
-                  },
-                  pagination: {
-                        limit: 20,
-                        offset: 0
-                  }
-            }
             const headers = { apiKey }
             try {
-                  const resp = await API.services.getServices(payload, headers)
-                  setServices(resp.data.data);
+                  const resp = await API.services.getServices(headers);
+                  if (resp && resp.data.data) {
+                        setServices(resp.data.data);
+                  }
             } catch (error) {
                   console.log(error);
             } finally {
@@ -117,7 +99,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                               }
                               <FormArea
                                     ref={childRef as any}
-                                    selected={services.find((item) => item.id === selected) as any}
+                                    selected={services.find((item) => item?.id === selected) as any}
                               />
                         </div>
                   </div>
