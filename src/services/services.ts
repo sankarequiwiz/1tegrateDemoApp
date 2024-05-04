@@ -1,6 +1,7 @@
 import { AxiosHeaders } from 'axios';
 import { Payload as CreateIntegrationType } from '../containers/scm/selectService/types';
 import fetch from '../utils/API/fetchInstance';
+import { DomainTypes } from '../types/type';
 
 /* set accessKey */
 export const setAccessKey = async (apiKey: string) => {
@@ -8,8 +9,12 @@ export const setAccessKey = async (apiKey: string) => {
 }
 
 /* get services */
-export const getServices = async (headers: { [key: string]: string }) => {
-      return await fetch.get('/api/demo/services', { headers: headers })
+type QueryParams = {
+      type: DomainTypes
+      state: 'ACTIVE' | 'INACTIVE'
+}
+export const getServices = async (params: QueryParams, headers: { [key: string]: string }) => {
+      return await fetch.get('/api/demo/services', { headers, params: { ...params } })
 }
 
 /* create integrations */

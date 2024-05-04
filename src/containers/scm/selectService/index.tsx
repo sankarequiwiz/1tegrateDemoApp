@@ -19,13 +19,13 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       const [loading, setLoading] = React.useState<boolean>(false);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void, loading: boolean }>();
 
-      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey, domain } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
             const headers = { apiKey }
             try {
-                  const resp = await API.services.getServices(headers);
+                  const resp = await API.services.getServices({ type: domain, state: 'ACTIVE' }, headers);
                   if (resp && resp.data.data) {
                         setServices(resp.data.data);
                   }
@@ -142,9 +142,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                               const key = resp[fieldConfigs[0].name];
                               const formValues: Payload = {
                                     name: `${key} integration`,
-                                    subOrganization: {
-                                          name: organization,
-                                    },
+                                    subOrganization: { name: organization },
                                     target: {
                                           accessPoint: {
                                                 type: 'SP',
