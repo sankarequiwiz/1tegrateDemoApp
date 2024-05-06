@@ -85,12 +85,12 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                                     <List.Item.Meta
                                           avatar={
                                                 <Checkbox
-                                                      checked={selectedPullReq === item.id}
+                                                      checked={selectedPullReq === item?.id}
                                                       value={item.id} onChange={(e) => handleSelect(e.target.value)}
                                                 />
                                           }
-                                          title={<a >{item.name}</a>}
-                                          description={item.html_url}
+                                          title={<a >{item?.name || item?.title}</a>}
+                                          description={item?.html_url}
                                     />
                               </List.Item>
                         )}

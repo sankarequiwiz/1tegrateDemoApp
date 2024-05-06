@@ -6,7 +6,6 @@ import { AppContext } from '../../context/AppProvider';
 import { CommitTypes } from './type';
 import API from '../../services';
 
-import mock from './commits.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {

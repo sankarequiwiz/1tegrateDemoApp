@@ -44,7 +44,7 @@ export const getAllCommit = async (headers: { [key: string]: string }, organizat
 
 /* get all pull request for repositories  */
 export const getAllPullRequest = async (headers: { [key: string]: string }, organizationId: string, repoId: string) => {
-      return await fetch.post(`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequest`, { headers })
+      return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequest`, { headers })
 }
 
 /* download the branch, repo, pullRequest  */
