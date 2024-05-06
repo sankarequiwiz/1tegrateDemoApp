@@ -8,7 +8,6 @@ import { ReposTypes } from './type';
 import { List } from 'antd';
 
 
-import mock from "./mock.json";
 import { conclusionOption } from '../../../common/stepper';
 import { DownloadOutlined } from '@ant-design/icons';
 
@@ -39,13 +38,15 @@ const ModalStepOptions = React.forwardRef(({ ...props }: ModalProps, ref: React.
 
 export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
     const { setCurrentStep, current, setSelectedRepo, selectedRepo, setConclusion, selectedOrganization, integration } = React.useContext(AppContext);
-    const [Repositories] = React.useState<Array<ReposTypes>>(mock.data as any);
+    const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
     const [open, setOpen] = React.useState<boolean>(false);
     const [downloading, setDownloading] = React.useState<boolean>(false);
 
     const getRepos = async () => {
         try {
-            await API.services.getRepo(selectedOrganization, { integrationId: integration?.id });
+            const resp = await API.services.getRepo(selectedOrganization, { integrationId: integration?.id });
+            const { data } = resp.data;
+            setRepos(data);
         } catch (error) {
             console.log(error)
         }

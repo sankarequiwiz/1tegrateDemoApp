@@ -11,7 +11,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
       const { setCurrentStep, current, integration } = React.useContext(AppContext);
 
-      const [pullRequest] = React.useState<Array<PullRequestTypes>>(mock.data);
+      const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>(mock.data);
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -26,7 +26,9 @@ export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
 
       const getAllPullRequest = async () => {
             try {
-                  await API.services.getAllPullRequest({ integrationId: integration?.id })
+                  const resp = await API.services.getAllPullRequest({ integrationId: integration?.id });
+                  const { data } = resp.data;
+                  setPullRequest(data);
             } catch (error) {
                   console.log(error);
             }
@@ -79,7 +81,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: PullRequestTypes) => (
                               <List.Item
-                                    actions={[<Button style={{ display: 'none' }} onClick={downloadHandler} icon={<DownloadOutlined />}  type='link' key={1}>Download</Button>]}
+                                    actions={[<Button style={{ display: 'none' }} onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={

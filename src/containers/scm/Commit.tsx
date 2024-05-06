@@ -12,7 +12,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
       const { setCurrentStep, current, integration } = React.useContext(AppContext);
 
-      const [commits] = React.useState<Array<CommitTypes>>(mock.data as any);
+      const [commits, setCommits] = React.useState<Array<CommitTypes>>(mock.data as any);
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -27,7 +27,9 @@ export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
 
       const getAllCommit = async () => {
             try {
-                  await API.services.getAllCommit({ integrationId: integration?.id })
+                  const resp = await API.services.getAllCommit({ integrationId: integration?.id });
+                  const { data } = resp.data;
+                  setCommits(data);
             } catch (error) {
                   console.log(error);
             }

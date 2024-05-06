@@ -19,11 +19,11 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       const [loading, setLoading] = React.useState<boolean>(false);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void, loading: boolean }>();
 
-      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: apiKey, domain } = React.useContext(AppContext);
+      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: key, domain } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
-            const headers = { apiKey }
+            const headers = { key }
             try {
                   const resp = await API.services.getServices({ type: domain, state: 'ACTIVE' }, headers);
                   if (resp && resp.data.data) {

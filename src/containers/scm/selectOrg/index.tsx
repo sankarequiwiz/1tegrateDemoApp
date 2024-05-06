@@ -8,12 +8,10 @@ import API from '../../../services/index'
 import { OrganizationTypes, Payload } from './type';
 import { List } from 'antd';
 
-import mock from './mock.json';
-
 export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
       const { setCurrentStep, current, selectedOrganization, integration } = React.useContext(AppContext);
 
-      const [organization] = React.useState<Array<OrganizationTypes>>(mock.data);
+      const [organization, setOrganization] = React.useState<Array<OrganizationTypes>>([]);
 
       const headers = {
             integrationId: integration?.id
@@ -23,7 +21,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
             try {
                   const resp = await API.services.getSCMOrganization(headers as any);
                   const { data } = resp.data;
-                  console.log(data);
+                  setOrganization(data);
                   // todo
             } catch (error) {
                   console.log(error);

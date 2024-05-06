@@ -11,7 +11,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
       const { setCurrentStep, current, integration, selectedOrganization } = React.useContext(AppContext);
 
-      const [branches] = React.useState<Array<BranchTypes>>(mock.data);
+      const [branches, setRepos] = React.useState<Array<BranchTypes>>(mock.data);
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -26,7 +26,9 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
 
       const getAllBranches = async () => {
             try {
-                  await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id })
+                  const resp = await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id })
+                  const { data } = resp.data;
+                  setRepos(data);
             } catch (error) {
                   console.log(error);
             }
