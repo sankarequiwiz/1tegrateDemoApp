@@ -33,18 +33,18 @@ export const getRepo = async (organizationId: string, headers: { [key: string]: 
 }
 
 /* get all branches from the repositories */
-export const getAllBranches = async (organizationId: string, headers: { [key: string]: string }) => {
-      return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/demo-repository/branches`, { headers })
+export const getAllBranches = async (organizationId: string, headers: { [key: string]: string }, repoId: string) => {
+      return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/branches`, { headers })
 }
 
 /* get all commits for the repositories */
-export const getAllCommit = async (headers: { [key: string]: string }) => {
-      return await fetch.get('/api/demo/scm/organizations/EQ-IPaaS/repositories/identity-manager-service/commits', { headers })
+export const getAllCommit = async (headers: { [key: string]: string }, organizationId: string, repoId: string) => {
+      return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/commits`, { headers })
 }
 
 /* get all pull request for repositories  */
-export const getAllPullRequest = async (headers: { [key: string]: string }) => {
-      return await fetch.post('/api/demo/scm/organizations/Equiwiz/repositories/identity-manager-service/pullRequest', { headers })
+export const getAllPullRequest = async (headers: { [key: string]: string }, organizationId: string, repoId: string) => {
+      return await fetch.post(`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequest`, { headers })
 }
 
 /* download the branch, repo, pullRequest  */
@@ -53,5 +53,5 @@ export const downloadCodeBase = async (payload: { [key: string]: unknown }) => {
 }
 
 export const createWatch = async (payload: { [key: string]: unknown }, integrationId: string) => {
-      return await fetch.post(`api/demo/integrations/${integrationId}/watches`, payload)
+      return await fetch.post(`/api/demo/integrations/${integrationId}/watches`, payload)
 }

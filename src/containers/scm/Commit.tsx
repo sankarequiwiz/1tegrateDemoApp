@@ -10,9 +10,9 @@ import mock from './commits.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current, integration } = React.useContext(AppContext);
+      const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
 
-      const [commits, setCommits] = React.useState<Array<CommitTypes>>(mock.data as any);
+      const [commits, setCommits] = React.useState<Array<CommitTypes>>([] as any);
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -27,7 +27,7 @@ export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
 
       const getAllCommit = async () => {
             try {
-                  const resp = await API.services.getAllCommit({ integrationId: integration?.id });
+                  const resp = await API.services.getAllCommit({ integrationId: integration?.id }, selectedOrganization, selectedRepo);
                   const { data } = resp.data;
                   setCommits(data);
             } catch (error) {
@@ -93,7 +93,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                                                       value={item.id} onChange={(e) => handleSelect(e.target.value)}
                                                 />
                                           }
-                                          title={<a >{item.author.name}</a>}
+                                          title={<a >{item?.author?.login || item?.author?.type}</a>}
                                           description={item.url}
                                     />
                               </List.Item>

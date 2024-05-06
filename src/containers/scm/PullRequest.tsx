@@ -5,13 +5,12 @@ import { AppContext } from '../../context/AppProvider';
 import { PullRequestTypes } from './type';
 import API from '../../services';
 
-import mock from './pullreq.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current, integration } = React.useContext(AppContext);
+      const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
 
-      const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>(mock.data);
+      const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>([]);
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -26,7 +25,7 @@ export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
 
       const getAllPullRequest = async () => {
             try {
-                  const resp = await API.services.getAllPullRequest({ integrationId: integration?.id });
+                  const resp = await API.services.getAllPullRequest({ integrationId: integration?.id }, selectedOrganization, selectedRepo);
                   const { data } = resp.data;
                   setPullRequest(data);
             } catch (error) {

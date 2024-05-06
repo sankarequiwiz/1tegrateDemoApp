@@ -44,7 +44,7 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
 
     const getRepos = async () => {
         try {
-            const resp = await API.services.getRepo(selectedOrganization, { integrationId: integration?.id });
+            const resp = await API.services.getRepo(selectedOrganization, { integrationId: integration.id });
             const { data } = resp.data;
             setRepos(data);
         } catch (error) {
@@ -108,8 +108,8 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                             >
                                 <List.Item.Meta
                                     avatar={<Checkbox checked={selectedRepo == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
-                                    title={<a >{item.fullName}</a>}
-                                    description={item.description}
+                                    title={<a >{item?.fullName}</a>}
+                                    description={item?.description}
                                 />
                             </List.Item>
                         )}

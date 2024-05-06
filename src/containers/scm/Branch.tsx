@@ -5,13 +5,12 @@ import { AppContext } from '../../context/AppProvider';
 import { BranchTypes } from './type';
 import API from '../../services';
 
-import mock from './branc.json';
 import { DownloadOutlined } from '@ant-design/icons';
 
 export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current, integration, selectedOrganization } = React.useContext(AppContext);
+      const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
 
-      const [branches, setRepos] = React.useState<Array<BranchTypes>>(mock.data);
+      const [branches, setRepos] = React.useState<Array<BranchTypes>>();
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -26,7 +25,7 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
 
       const getAllBranches = async () => {
             try {
-                  const resp = await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id })
+                  const resp = await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id }, selectedRepo)
                   const { data } = resp.data;
                   setRepos(data);
             } catch (error) {
