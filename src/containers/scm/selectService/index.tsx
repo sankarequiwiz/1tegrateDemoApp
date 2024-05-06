@@ -103,7 +103,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                               />
                         </div>
                   </div>
-                  <Footer onSubmit={handleNext} onOkProps={onOkProps} />
+                  <Footer hideBackButton onSubmit={handleNext} onOkProps={onOkProps} />
             </Space>
       )
 })

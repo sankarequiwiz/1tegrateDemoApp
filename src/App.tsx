@@ -1,5 +1,9 @@
 import { ConfigProvider } from 'antd';
+
 import './app.scss';
+import './assets/styles/main.css';
+import './assets/styles/responsive.css';
+
 import { AppProvider } from './context/AppProvider';
 import { Main } from './containers/main';
 

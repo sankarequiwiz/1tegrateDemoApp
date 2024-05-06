@@ -1,4 +1,4 @@
-import { Alert, FloatButton, FloatButtonProps, Form, Input, Modal, message } from "antd";
+import { FloatButton, FloatButtonProps, Form, Input, Modal, message } from "antd";
 import React, { Fragment } from "react";
 import { SettingOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons';
 import { FloatButtonElement } from "antd/es/float-button/interface";
@@ -60,7 +60,7 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
             <Fragment>
                   <FloatButton {...props} ref={ref} onClick={handleOpen} icon={<UserOutlined />} />
                   <Modal
-                        title='Enter details'
+                        title={`Kindly set up the following details based on the customer's specifications:`}
                         open={isOpen}
                         onCancel={handleClose}
                         onOk={() => {
@@ -128,7 +128,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                   {contextHolder}
                   <FloatButton {...props} ref={ref} onClick={handleOpen} icon={<KeyOutlined />} />
                   <Modal
-                        title='Please enter 1tegrate Access key for your organization'
+                        title='Please enter 1tegrate Access key for your organization:'
                         open={isOpen}
                         okButtonProps={{ loading: isSetting }}
                         onCancel={handleClose}
@@ -163,11 +163,6 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                         children={(() => {
                               return (
                                     <div style={{ margin: '1rem 0rem', display: 'flex', gap: '.5rem', flexDirection: 'column' }}>
-                                          <Alert
-                                                message="Your access key will take across all the api's"
-                                                type="info"
-                                                closable
-                                          />
                                           <Form form={form} layout='vertical'>
                                                 <Form.Item name={"accessKey"} style={{ width: '100%' }} label={'Access Key'}>
                                                       <Input placeholder="Enter the access key" />
