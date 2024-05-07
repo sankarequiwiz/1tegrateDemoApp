@@ -5,10 +5,7 @@
             cursor: pointer;
 
             &[aria-selected='true'] {
-                  background-color: #2782f3 !important;
-                  .ant-typography {
-                        color: white !important;
-                  }
+                  border-color: #2782f3 !important;
             }
       }
 }
