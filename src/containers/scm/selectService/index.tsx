@@ -148,12 +148,12 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                 type: 'SP',
                                                 serviceProfile: {
                                                       id: selected?.serviceProfile.id
-                                                }
-                                          },
-                                          accessPointConfig: {
-                                                type: resp.integrationType || 'APIKEY_FLW'
-                                          },
-                                          apiKey: key
+                                                },
+                                                accessPointConfig: {
+                                                      type: resp.integrationType || 'APIKEY_FLW'
+                                                },
+                                                apiKey: key
+                                          }
                                     }
                               };
                               setLoading(true);

@@ -90,7 +90,7 @@ export type ServiceProfileDataTypes = {
       links?: []
       organization?: CommonDataType,
       changeLog?: ChangeLogType
- };
+};
 
 type Payload = {
       name: string
@@ -104,12 +104,12 @@ type Payload = {
                   type: 'SP',
                   serviceProfile: {
                         id: string
-                  }
-            },
-            accessPointConfig: {
-                  type: 'APIKEY_FLW' | 'EMAIL' | ''
-            },
-            emailAddress?: string
-            apiKey: string
+                  },
+                  accessPointConfig: {
+                        type: 'APIKEY_FLW' | 'EMAIL' | ''
+                  },
+                  emailAddress?: string
+                  apiKey: string
+            }
       }
 }
