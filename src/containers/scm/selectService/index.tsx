@@ -151,7 +151,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                 }
                                           },
                                           accessPointConfig: {
-                                                type: resp.integrationType
+                                                type: resp.integrationType || 'APIKEY_FLW'
                                           },
                                           apiKey: key
                                     }
