@@ -12,8 +12,6 @@ import FormItem from 'antd/es/form/FormItem';
 
 type VoidFunction = () => void;
 
-const serviceImage = 'https://integrations.lambdatest.com/assets/images/integration-jira.svg';
-
 export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
       const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
       const [loading, setLoading] = React.useState<boolean>(false);
