@@ -6,12 +6,15 @@ import { AppContext } from '../../context/AppProvider';
 import { CommitTypes } from './type';
 import API from '../../services';
 
+
 import { DownloadOutlined } from '@ant-design/icons';
 
-export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
+export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(() => {
       const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
 
       const [commits, setCommits] = React.useState<Array<CommitTypes>>([] as any);
+      const [loading, setLoading] = React.useState<boolean>(false)
+
 
       const okButtonProps: ButtonProps = {
             children: 'Done',
@@ -22,15 +25,20 @@ export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
             setCurrentStep(current - 1)
       }
 
-      const onNext = () => { }
+      const onNext = () => {
+            setCurrentStep(0)
+        }
 
       const getAllCommit = async () => {
             try {
+                  setLoading(true)
                   const resp = await API.services.getAllCommit({ integrationId: integration?.id }, selectedOrganization, selectedRepo);
                   const { data } = resp.data;
                   setCommits(data);
             } catch (error) {
                   console.log(error);
+            }finally{
+                  setLoading(false)
             }
       }
 
@@ -41,12 +49,10 @@ export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
       return (
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <Space direction='vertical' style={{ width: '100%' }}>
-                        <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-                              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    <Typography.Text strong >Select commit</Typography.Text>
-                              </div>
-                        </div>
-                        <ListComp dataSource={commits} />
+                        <Typography.Title level={4}>
+                              Commits
+                        </Typography.Title>
+                        <ListComp dataSource={commits} loading={loading}/>
                   </Space>
                   <Footer onCancel={onCancel} onSubmit={onNext} onOkProps={okButtonProps} />
             </Space>
@@ -83,7 +89,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: CommitTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} style={{ display: 'none' }} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
+                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={

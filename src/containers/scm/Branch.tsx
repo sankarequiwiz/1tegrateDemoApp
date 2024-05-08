@@ -1,35 +1,32 @@
-import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin } from 'antd';
+import { Button, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
-import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';
 import { BranchTypes } from './type';
 import API from '../../services';
 
-import { DownloadOutlined } from '@ant-design/icons';
 
-export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
+import { DownloadOutlined } from '@ant-design/icons';
+import { Commits } from './Commit';
+import { PullRequest } from './PullRequest';
+
+export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(() => {
+      const { integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
+      const [loading, setLoading] = React.useState<boolean>(false)
+
 
       const [branches, setRepos] = React.useState<Array<BranchTypes>>();
 
-      const okButtonProps: ButtonProps = {
-            children: 'Done',
-            icon: null
-      }
-
-      const onCancel = () => {
-            setCurrentStep(current - 1)
-      }
-
-      const onNext = () => { }
 
       const getAllBranches = async () => {
             try {
+                  setLoading(true)
                   const resp = await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id }, selectedRepo)
                   const { data } = resp.data;
                   setRepos(data);
             } catch (error) {
                   console.log(error);
+            } finally {
+                  setLoading(false)
             }
       }
 
@@ -38,15 +35,24 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
       }, [])
 
       return (
-            <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
-                  <Space direction='vertical' style={{ width: '100%' }}>
-                        <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-
-                        </div>
-                        <ListComp dataSource={branches} />
+            <div style={{ display: "flex", height: '100%', flexDirection: "column", gap: "1rem" }}>
+                  <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
+                        <Space direction='vertical' style={{ width: '100%' }}>
+                              <Typography.Title level={4}>
+                                    Branch
+                              </Typography.Title>
+                              <ListComp dataSource={branches} loading={loading} />
+                        </Space>
+                        <div>
+                        <PullRequest />
+                  </div>
+                  <div>
+                        <Commits />
+                  </div>
                   </Space>
-                  <Footer onCancel={onCancel} onSubmit={onNext} onOkProps={okButtonProps} />
-            </Space>
+                  
+
+            </div>
       )
 })
 
@@ -80,7 +86,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: BranchTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' style={{ display: 'none' }} key={1}>Download</Button>]}
+                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={
