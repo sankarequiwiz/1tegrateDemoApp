@@ -26,6 +26,7 @@ export type StepTypes = StepperItemsTypes & {
 
 export function getStepItems(args: Array<StepTypes> = []): { [key: string]: StepTypes[] } {
 
+      console.log(args)
       return {
             SCM: [
                   {

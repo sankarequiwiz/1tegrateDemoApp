@@ -1,5 +1,5 @@
 import React, { HTMLProps } from 'react';
-import { Steps, StepsProps, StepProps, Layout, theme } from 'antd';
+import { Steps, StepsProps, StepProps, Layout } from 'antd';
 import './style.scss';
 import { AppContext } from '../../context/AppProvider';
 
