@@ -1,35 +1,28 @@
-import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin } from 'antd';
+import { Button, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
-import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';
 import { PullRequestTypes } from './type';
 import API from '../../services';
 
 import { DownloadOutlined } from '@ant-design/icons';
 
-export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, ref) => {
-      const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
+export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(() => {
+      const { integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
 
       const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>([]);
+      const [loading, setLoading] = React.useState<boolean>(false)
 
-      const okButtonProps: ButtonProps = {
-            children: 'Done',
-            icon: null
-      }
-
-      const onCancel = () => {
-            setCurrentStep(current - 1)
-      }
-
-      const onNext = () => { }
 
       const getAllPullRequest = async () => {
             try {
+                  setLoading(true)
                   const resp = await API.services.getAllPullRequest({ integrationId: integration?.id }, selectedOrganization, selectedRepo);
                   const { data } = resp.data;
                   setPullRequest(data);
             } catch (error) {
                   console.log(error);
+            }finally{
+                  setLoading(false)
             }
       }
 
@@ -40,12 +33,11 @@ export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
       return (
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
                   <Space direction='vertical' style={{ width: '100%' }}>
-                        <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
-
-                        </div>
-                        <ListComp dataSource={pullRequest} />
+                        <Typography.Title level={4}>
+                              Pull Request
+                        </Typography.Title>
+                        <ListComp dataSource={pullRequest} loading={loading} />
                   </Space>
-                  <Footer onCancel={onCancel} onSubmit={onNext} onOkProps={okButtonProps} />
             </Space>
       )
 })
@@ -54,7 +46,7 @@ type ListTypes = {
       dataSource: Array<PullRequestTypes>
 } & ListProps<unknown>
 
-const ListComp = ({ dataSource, ...props }: ListTypes) => {
+const ListComp = ({ dataSource,  ...props }: ListTypes) => {
       const { setSelectedPullReq, selectedPullReq } = React.useContext(AppContext);
       const [downloading, setDownloading] = React.useState<boolean>(false)
 
@@ -80,7 +72,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: PullRequestTypes) => (
                               <List.Item
-                                    actions={[<Button style={{ display: 'none' }} onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
+                                    actions={[<Button  onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           avatar={

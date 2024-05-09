@@ -34,8 +34,8 @@ export function Main() {
 
       return (
             <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-                  <Header ref={headerRef} />
-                  <Layout id='app' style={{ flex: 1 }}  >
+                  <Header ref={headerRef} style={{ position: 'fixed', top: 0, width: '100%', zIndex: 2 }} />
+                  <Layout style={{ flex: 1 }}  >
                         <Stepper name='demo-app-guide' items={items} />
                   </Layout>
                   <FloatingActionComp />

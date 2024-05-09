@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ButtonProps, Space, Typography, Button, Checkbox, Modal, ModalProps, Radio, Spin } from 'antd';
+import { ButtonProps, Space, Button, Checkbox, Spin } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -8,71 +8,36 @@ import { ReposTypes } from './type';
 import { List } from 'antd';
 
 
-import { conclusionOption } from '../../../common/stepper';
 import { DownloadOutlined } from '@ant-design/icons';
 
-
-const ModalStepOptions = React.forwardRef(({ ...props }: ModalProps, ref: React.RefObject<HTMLDivElement>) => {
-    const { setConclusion, conclusion } = React.useContext(AppContext);
-
-    return (
-        <Modal {...props} title='Select download options'>
-            <div ref={ref}>
-                <Space direction='vertical'>
-                    <Space direction='vertical'>
-                        <Typography.Text type='secondary'>
-                            Please specify the desired level for your repository/project download.
-                        </Typography.Text>
-                    </Space>
-                    <Radio.Group
-                        value={conclusion}
-                        onChange={e => setConclusion(e.target.value)}
-                        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                        options={conclusionOption}
-                    />
-                </Space>
-            </div>
-        </Modal>
-    )
-})
-
 export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-    const { setCurrentStep, current, setSelectedRepo, selectedRepo, setConclusion, selectedOrganization, integration } = React.useContext(AppContext);
+    const { setCurrentStep, current, setSelectedRepo, selectedRepo, selectedOrganization, integration } = React.useContext(AppContext);
     const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
-    const [open, setOpen] = React.useState<boolean>(false);
     const [downloading, setDownloading] = React.useState<boolean>(false);
+    const [loading, setLoading]=React.useState<boolean>(false)
 
     const getRepos = async () => {
         try {
+            setLoading(true)
             const resp = await API.services.getRepo(selectedOrganization, { integrationId: integration.id });
             const { data } = resp.data;
             setRepos(data);
+            
         } catch (error) {
             console.log(error)
+        }finally{
+            setLoading(false)
         }
     }
 
     const handleSelect = (selected: string) => {
         setSelectedRepo(selected === selectedRepo ? '' : selected)
     }
-
-    const handleNext = () => {
-        setOpen(true)
-    }
-
-    const handleOk = () => {
-        setCurrentStep(current + 1)
-    }
-
-    const closeHandler = () => {
-        setConclusion('')
-        setOpen(false);
-    }
-
     const downloadHandler = async () => {
         setDownloading(true);
         try {
             await API.services.downloadCodeBase({})
+            
         } catch (error) {
             console.error(error)
         } finally {
@@ -91,7 +56,6 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
     return (
         <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between', flex: 1 }}>
             <Spin spinning={downloading} tip='Downloading...' style={{ height: '100%' }}>
-
                 <Space direction='vertical' style={{ width: '100%' }}>
                     <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -99,6 +63,7 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                     </div>
                     <List
                         dataSource={Repositories}
+                        loading={loading}
                         renderItem={(item) => (
                             <List.Item
                                 actions={[
@@ -116,8 +81,7 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                     />
                 </Space>
             </Spin>
-            <ModalStepOptions onOk={handleOk} open={open} onCancel={closeHandler} />
-            <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={handleNext} onOkProps={onOkProps} />
+            <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={() => setCurrentStep(current + 1)} onOkProps={onOkProps} />
         </Space>
     )
 })
