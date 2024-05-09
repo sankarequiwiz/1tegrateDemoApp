@@ -101,7 +101,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                                                       value={item.id} onChange={(e) => handleSelect(e.target.value)}
                                                 />
                                           }
-                                          title={<a >{item.login}</a>}
+                                          title={<a >{item?.id}</a>}
                                           description={item.description}
                                     />
                               </List.Item>

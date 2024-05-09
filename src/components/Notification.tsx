@@ -2,7 +2,8 @@
 import { BellFilled } from '@ant-design/icons';
 import { Badge, Button, ListProps, Popover, List as AntList, Typography, Space, Divider, Modal } from 'antd';
 import React, { HTMLProps } from 'react';
-
+import { socket } from '../config/socket';
+0
 const { Item } = AntList;
 type LisTypes = {
    listProps?: ListProps<unknown>
@@ -67,6 +68,29 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
 
 export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const [count, setCount] = React.useState(0);
+
+   React.useEffect(() => {
+
+      socket.onConnect = () => {
+
+         socket.subscribe('/topic/event', (message) => {
+            console.log('Received message:', message.body);
+         })
+
+         socket.publish({ destination: '/topic/event', body: JSON.stringify({"name": "helloworld","description":"test"}) })
+      }
+
+      socket.onWebSocketError = (error) => {
+         console.error('Error with websocket', error);
+      };
+
+      socket.onStompError = (frame) => {
+         console.error('Broker reported error: ' + frame.headers['message']);
+      };
+
+      socket.activate();
+   }, [])
+
    return (
       <div {...props} ref={ref}>
          <Popover forceRender id='notification-container' placement="bottomRight" content={<WatchDog setCount={setCount} />} trigger={['click']} >
