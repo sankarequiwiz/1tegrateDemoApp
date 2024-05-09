@@ -1,7 +1,9 @@
 import { StepperItemsTypes } from "../components/stepper";
+import { Branch } from "../containers/scm/Branch";
 import { SelectOrganization } from "../containers/scm/selectOrg";
 import { SelectRepo } from "../containers/scm/selectRepo";
 import { SelectService } from "../containers/scm/selectService";
+
 
 export const conclusionOption = [
       {
@@ -24,6 +26,7 @@ export type StepTypes = StepperItemsTypes & {
 
 export function getStepItems(args: Array<StepTypes> = []): { [key: string]: StepTypes[] } {
 
+      console.log(args)
       return {
             SCM: [
                   {
@@ -41,7 +44,12 @@ export function getStepItems(args: Array<StepTypes> = []): { [key: string]: Step
                         container: <SelectRepo />,
                         key: '3'
                   },
-                  ...args,
+                  {
+                        title: 'Download Options',
+                        container: <Branch />,
+                        key: '3'
+                  },
+                  // ...args,
             ],
             BTS: [
                   {

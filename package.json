@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.6",
+    "@stomp/stompjs": "^7.0.0",
     "antd": "^5.16.4",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",

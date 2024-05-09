@@ -3,13 +3,80 @@ import { BellFilled } from '@ant-design/icons';
 import { Badge, Button, ListProps, Popover, List as AntList, Typography, Space, Divider, Modal } from 'antd';
 import React, { HTMLProps } from 'react';
 
-import { socket } from '../config/socket';
-
 const { Item } = AntList;
 type LisTypes = {
    listProps?: ListProps<unknown>
    onSelect?: (target: HTMLDivElement, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
+
+type WatchDogTypes = {
+   setCount?: React.Dispatch<React.SetStateAction<number>>
+}
+
+export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ setCount, ...props }, ref) => {
+   const [watchData] = React.useState<Array<{ [key: string]: any }>>(sampleData);
+   const [modal, setModal] = React.useState<boolean>(false);
+   const [selected, setSelected] = React.useState<string>(undefined);
+
+   const handleOpenModal = (newSelected: string) => {
+      setSelected(newSelected);
+      setModal(true);
+   }
+
+   const handleClose = () => {
+      setSelected(undefined);
+      setModal(false);
+   }
+
+   const onSelect = (target: HTMLDivElement) => {
+      const node = target.getAttribute('listNode');
+      handleOpenModal(node)
+   }
+
+   React.useEffect(() => {
+      setCount(watchData.length)
+   }, [watchData, setCount])
+
+   const listProps: ListProps<unknown> = {
+      dataSource: watchData,
+      style: { height: 100 }
+   }
+
+   return (
+      <div {...props} ref={ref}>
+         <List onSelect={(target) => onSelect(target)} listProps={listProps} />
+         <Modal title={`Events for the ${selected}`} open={modal} onCancel={handleClose} >
+            {selected && <CodeBlock selected={watchData.find((item) => item.name === selected) as any} />}
+         </Modal>
+      </div>
+   )
+})
+
+type CodeBlockTypes = {
+   selected?: { [key: string]: any }
+}
+
+export const CodeBlock = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & CodeBlockTypes>(({ selected, ...props }, ref) => {
+   console.log(selected)
+   return (
+      <div {...props} ref={ref} >
+
+      </div>
+   )
+})
+
+export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
+   const [count, setCount] = React.useState(0);
+   return (
+      <div {...props} ref={ref}>
+         <Popover forceRender id='notification-container' placement="bottomRight" content={<WatchDog setCount={setCount} />} trigger={['click']} >
+            <Badge size='small' count={count} offset={[10, 10]}>
+               <Button size='small' shape='circle' icon={<BellFilled />} />
+            </Badge>
+         </Popover>
+      </div>
+   )
+})
 
 export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & LisTypes>(
    ({ listProps, onSelect, ...props }, ref) => {
@@ -60,95 +127,3 @@ const sampleData = [
       name: 'ADO event',
    }
 ]
-
-type WatchDogTypes = {
-   setCount?: React.Dispatch<React.SetStateAction<number>>
-}
-
-export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ setCount, ...props }, ref) => {
-   const [isConnected] = React.useState<boolean>(false);
-   const [watchData] = React.useState<Array<{ [key: string]: any }>>(sampleData);
-   const [modal, setModal] = React.useState<boolean>(false);
-   const [selected, setSelected] = React.useState<string>(undefined);
-
-
-
-   const handleOpenModal = (newSelected: string) => {
-      setSelected(newSelected);
-      setModal(true);
-   }
-
-   const handleClose = () => {
-      setSelected(undefined);
-      setModal(false);
-   }
-
-   const onSelect = (target: HTMLDivElement) => {
-      const node = target.getAttribute('listNode');
-      handleOpenModal(node)
-   }
-
-   React.useEffect(() => {
-
-      socket.connect({}, (frame) => {
-         console.log('Connected: ' + frame);
-      }, (err) => {
-         console.log(err)
-      });
-
-      return () => {
-         if (socket) {
-            socket.disconnect();
-         }
-      };
-
-   }, [])
-
-   React.useEffect(() => {
-      console.log(`socket ${!isConnected ? 'dis' : ''}connected!`)
-   }, [isConnected])
-
-   React.useEffect(() => {
-      setCount(watchData.length)
-   }, [watchData, setCount])
-
-   const listProps: ListProps<unknown> = {
-      dataSource: watchData,
-      style: { height: 100 }
-   }
-
-   return (
-      <div {...props} ref={ref}>
-         <List onSelect={(target) => onSelect(target)} listProps={listProps} />
-         <Modal title={`Events for the ${selected}`} open={modal} onCancel={handleClose} >
-            {selected && <CodeBlock selected={watchData.find((item) => item.name === selected) as any} />}
-         </Modal>
-      </div>
-   )
-})
-
-type CodeBlockTypes = {
-   selected?: { [key: string]: any }
-}
-
-export const CodeBlock = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & CodeBlockTypes>(({ selected, ...props }, ref) => {
-   console.log(selected)
-   return (
-      <div {...props} ref={ref} >
-
-      </div>
-   )
-})
-
-export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const [count, setCount] = React.useState(0);
-   return (
-      <div {...props} ref={ref}>
-         <Popover forceRender id='notification-container' placement="bottomRight" content={<WatchDog setCount={setCount} />} trigger={['click']} >
-            <Badge size='small' count={count} offset={[10, 10]}>
-               <Button size='small' shape='circle' icon={<BellFilled />} />
-            </Badge>
-         </Popover>
-      </div>
-   )
-})
