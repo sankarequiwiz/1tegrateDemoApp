@@ -1,5 +1,6 @@
-import io from 'socket.io-client';
+import SockJS from "sockjs-client/dist/sockjs"
+import Stomp from 'stompjs';
 
-const url = import.meta.env.VITE_ITEGRATE_BASE_URL;
-
-export const socket = io(url, { autoConnect: false });
+const url = import.meta.env.VITE_SOCKET_SERVER_URL;
+const socketClient = new SockJS(url);
+export const socket = Stomp.over(socketClient)

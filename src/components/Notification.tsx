@@ -66,14 +66,12 @@ type WatchDogTypes = {
 }
 
 export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ setCount, ...props }, ref) => {
-   const [isConnected, setIsConnected] = React.useState<boolean>(false);
-   const [watchData, setWatchData] = React.useState<Array<{ [key: string]: any }>>(sampleData);
+   const [isConnected] = React.useState<boolean>(false);
+   const [watchData] = React.useState<Array<{ [key: string]: any }>>(sampleData);
    const [modal, setModal] = React.useState<boolean>(false);
    const [selected, setSelected] = React.useState<string>(undefined);
 
-   const watchListener = (events: unknown) => {
-      setWatchData((prev) => ([...prev, events]))
-   }
+
 
    const handleOpenModal = (newSelected: string) => {
       setSelected(newSelected);
@@ -92,15 +90,17 @@ export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
 
    React.useEffect(() => {
 
-      socket.on('connect', function () {
-         setIsConnected(true);
+      socket.connect({}, (frame) => {
+         console.log('Connected: ' + frame);
+      }, (err) => {
+         console.log(err)
       });
 
-      socket.on('disconnect', function () {
-         setIsConnected(false)
-      });
-
-      socket.on('listen_watch', watchListener)
+      return () => {
+         if (socket) {
+            socket.disconnect();
+         }
+      };
 
    }, [])
 
