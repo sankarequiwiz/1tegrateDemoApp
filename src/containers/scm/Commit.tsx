@@ -65,12 +65,7 @@ type ListTypes = {
 } & ListProps<unknown>
 
 const ListComp = ({ dataSource, ...props }: ListTypes) => {
-      const { setSelectedCommit, selectedCommit } = React.useContext(AppContext);
       const [downloading, setDownloading] = React.useState<boolean>(false)
-
-      const handleSelect = (selected: string) => {
-            setSelectedCommit(selected === selectedCommit ? '' : selected)
-      }
 
       const downloadHandler = async () => {
             setDownloading(true);

@@ -62,12 +62,8 @@ type ListTypes = {
 } & ListProps<unknown>
 
 const ListComp = ({ dataSource, ...props }: ListTypes) => {
-      const { setSelectedBranch, selectedBranch } = React.useContext(AppContext);
       const [downloading, setDownloading] = React.useState<boolean>(false)
 
-      const handleSelect = (selected: string) => {
-            setSelectedBranch(selected === selectedBranch ? '' : selected)
-      }
 
       const downloadHandler = async () => {
             setDownloading(true);

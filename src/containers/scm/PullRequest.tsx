@@ -48,12 +48,7 @@ type ListTypes = {
 } & ListProps<unknown>
 
 const ListComp = ({ dataSource,  ...props }: ListTypes) => {
-      const { setSelectedPullReq, selectedPullReq } = React.useContext(AppContext);
       const [downloading, setDownloading] = React.useState<boolean>(false)
-
-      const handleSelect = (selected: string) => {
-            setSelectedPullReq(selected === selectedPullReq ? '' : selected)
-      }
 
       const downloadHandler = async () => {
             setDownloading(true);
