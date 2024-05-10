@@ -1,4 +1,5 @@
-import { Button, Checkbox,Radio, List, ListProps, Space, Spin, Typography } from 'antd';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Button,  List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { AppContext } from '../../context/AppProvider';
 import { PullRequestTypes } from './type';
@@ -82,7 +83,7 @@ const ListComp = ({ dataSource,  ...props }: ListTypes) => {
                                           //       />
                                           // }
                                           title={<a >{item?.name || item?.title}</a>}
-                                          description={item?.htmlUrl}
+                                          description={item?.htmlUrl || item?.htmlurl}
                                     />
                               </List.Item>
                         )}

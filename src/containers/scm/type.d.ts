@@ -20,7 +20,8 @@ export type PullRequestTypes ={
       description: string,
       url: string,
       node_id: string,
-      htmlurl: string,
+      htmlurl?: string,
+      htmlUrl?: string,
       native_response?: { [key: string]: unknown }
 }
 
@@ -55,7 +56,7 @@ export type CommitTypes ={
                 email: string,
                 date: string,
                 type: string,
-                url:string, 
+                url:string,
                 id: string,
                 login: string,
                 site_admin: boolean,

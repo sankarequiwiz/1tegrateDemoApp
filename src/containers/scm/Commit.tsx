@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Radio, List, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, ButtonProps, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';

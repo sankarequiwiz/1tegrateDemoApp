@@ -1,4 +1,5 @@
-import { Button, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Button, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { AppContext } from '../../context/AppProvider';
 import { BranchTypes } from './type';
@@ -50,7 +51,7 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
                         <Commits />
                   </div>
                   </Space>
-                  
+
 
             </div>
       )
