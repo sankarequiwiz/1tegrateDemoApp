@@ -1,4 +1,4 @@
-import { Button, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, Checkbox,Radio, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { AppContext } from '../../context/AppProvider';
 import { PullRequestTypes } from './type';
@@ -75,14 +75,14 @@ const ListComp = ({ dataSource,  ...props }: ListTypes) => {
                                     actions={[<Button  onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
-                                          avatar={
-                                                <Checkbox
-                                                      checked={selectedPullReq === item?.id}
-                                                      value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                                />
-                                          }
+                                          // avatar={
+                                          //       <Checkbox
+                                          //             checked={selectedPullReq === item?.id}
+                                          //             value={item.id} onChange={(e) => handleSelect(e.target.value)}
+                                          //       />
+                                          // }
                                           title={<a >{item?.name || item?.title}</a>}
-                                          description={item?.html_url}
+                                          description={item?.htmlUrl}
                                     />
                               </List.Item>
                         )}

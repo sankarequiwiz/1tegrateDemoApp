@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Checkbox, ListProps, Space, Spin } from 'antd';
+import { Button, ButtonProps, Radio, ListProps, Space, Spin } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -12,6 +12,8 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
       const { setCurrentStep, current, selectedOrganization, integration } = React.useContext(AppContext);
 
       const [organization, setOrganization] = React.useState<Array<OrganizationTypes>>([]);
+      const [loading, setLoading] = React.useState<boolean>(false)
+
 
       const headers = {
             integrationId: integration?.id
@@ -19,12 +21,14 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
 
       const getOrganization = async () => {
             try {
+                  setLoading(true)
                   const resp = await API.services.getSCMOrganization(headers as any);
                   const { data } = resp.data;
                   setOrganization(data);
-                  // todo
             } catch (error) {
                   console.log(error);
+            }finally{
+                  setLoading(false)
             }
       }
 
@@ -43,7 +47,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                               </div>
                         </div>
-                        <ListComp dataSource={organization} />
+                        <ListComp dataSource={organization} loading={loading}/>
                   </Space>
                   <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={() => setCurrentStep(current + 1)} onOkProps={onOkProps} />
             </Space>
@@ -96,7 +100,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                               >
                                     <List.Item.Meta
                                           avatar={
-                                                <Checkbox
+                                                <Radio
                                                       checked={selectedOrganization === item.id.toString()}
                                                       value={item.id} onChange={(e) => handleSelect(e.target.value)}
                                                 />

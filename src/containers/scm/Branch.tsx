@@ -89,12 +89,12 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                                     actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
-                                          avatar={
-                                                <Checkbox
-                                                      checked={selectedBranch === item.id}
-                                                      value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                                />
-                                          }
+                                          // avatar={
+                                          //       <Checkbox
+                                          //             checked={selectedBranch === item.id}
+                                          //             value={item.id} onChange={(e) => handleSelect(e.target.value)}
+                                          //       />
+                                          // }
                                           title={<a >{item.name}</a>}
                                           description={item.url}
                                     />

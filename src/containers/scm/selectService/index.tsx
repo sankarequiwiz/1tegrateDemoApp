@@ -266,12 +266,12 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                                   <div key={index}>
                                                                         <div style={{ margin: '.5rem 0' }}>
                                                                               <Typography.Text strong>
-                                                                                    Please enter your personal access token :
+                                                                               <span style={{color:"red"}}>*</span> Please enter your personal access token :
                                                                               </Typography.Text>
                                                                         </div>
                                                                         <Form.Item key={index} name={field.name} rules={[{ required: field.required }]} >
                                                                               {
-                                                                                    <Input placeholder={"Enter your personal access token"} />
+                                                                                    <Input style={{ width: '35rem' }} placeholder={"Enter your personal access token"} />
                                                                               }
                                                                         </Form.Item>
                                                                   </div>
