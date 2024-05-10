@@ -20,7 +20,7 @@ export type PullRequestTypes ={
       description: string,
       url: string,
       node_id: string,
-      html_url: string,
+      htmlurl: string,
       native_response?: { [key: string]: unknown }
 }
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Checkbox, List, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, ButtonProps, Radio, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';
@@ -92,12 +92,12 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                                     actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
-                                          avatar={
-                                                <Checkbox
-                                                      checked={selectedCommit === item.id}
-                                                      value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                                />
-                                          }
+                                          // avatar={
+                                          //       <Checkbox
+                                          //             checked={selectedCommit === item.id}
+                                          //             value={item.id} onChange={(e) => handleSelect(e.target.value)}
+                                          //       />
+                                          // }
                                           title={<a >{item?.author?.login || item?.author?.type}</a>}
                                           description={item.url}
                                     />
