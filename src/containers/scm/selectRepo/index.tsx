@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ButtonProps, Space, Button, Checkbox, Spin } from 'antd';
+import { ButtonProps, Space, Button, Radio, Spin } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -72,7 +72,7 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                                 ]}
                             >
                                 <List.Item.Meta
-                                    avatar={<Checkbox checked={selectedRepo == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
+                                    avatar={<Radio checked={selectedRepo == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
                                     title={<a >{item?.fullName}</a>}
                                     description={item?.description}
                                 />
