@@ -99,14 +99,14 @@ export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEl
 })
 
 export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & LisTypes>(
-   ({ listProps, onSelect, ...props }, ref) => {
+   ({ listProps, ...props }, ref) => {
       const { clearEvents } = React.useContext(WatchContext)
 
-      const handleEventSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, selected: unknown) => {
-         const target = e.target as HTMLDivElement;
-         target.setAttribute('listNode', selected.toString());
-         onSelect && onSelect(target, e);
-      }
+      // const handleEventSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, selected: unknown) => {
+      //    const target = e.target as HTMLDivElement;
+      //    target.setAttribute('listNode', selected.toString());
+      //    onSelect && onSelect(target, e);
+      // }
 
       return (
          <div {...props} ref={ref}>
