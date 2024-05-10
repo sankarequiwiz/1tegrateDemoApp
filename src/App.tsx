@@ -9,18 +9,21 @@ import { Main } from './containers/main';
 
 import { BrowserRouter } from 'react-router-dom';
 import { StepProvider } from './context/StepCompProvider';
+import { WatchEventsProvider } from './context/WatchContext';
 
 
 function Root() {
   return (
     <BrowserRouter>
-      <StepProvider>
-        <AppProvider>
-          <ConfigProvider theme={{ token: { borderRadius: 2 } }}>
-            <Main />
-          </ConfigProvider>
-        </AppProvider>
-      </StepProvider>
+      <WatchEventsProvider>
+        <StepProvider>
+          <AppProvider>
+            <ConfigProvider theme={{ token: { borderRadius: 2 } }}>
+              <Main />
+            </ConfigProvider>
+          </AppProvider>
+        </StepProvider>
+      </WatchEventsProvider>
     </BrowserRouter>
   )
 }

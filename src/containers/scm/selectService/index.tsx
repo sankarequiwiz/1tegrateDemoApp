@@ -159,7 +159,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                         form.validateFields().then(async (resp) => {
                               const key = resp[fieldConfigs[0].name];
                               const formValues: Payload = {
-                                    name: `${key} integration`,
+                                    name: ``,
                                     subOrganization: { name: organization },
                                     target: {
                                           accessPoint: {

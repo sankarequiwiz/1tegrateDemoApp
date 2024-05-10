@@ -3,7 +3,8 @@ import { BellFilled } from '@ant-design/icons';
 import { Badge, Button, ListProps, Popover, List as AntList, Typography, Space, Divider, Modal } from 'antd';
 import React, { HTMLProps } from 'react';
 import { socket } from '../config/socket';
-0
+import { WatchContext, WatchEvents } from '../context/WatchContext';
+
 const { Item } = AntList;
 type LisTypes = {
    listProps?: ListProps<unknown>
@@ -14,10 +15,11 @@ type WatchDogTypes = {
    setCount?: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ setCount, ...props }, ref) => {
+export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ ...props }, ref) => {
    const [watchData] = React.useState<Array<{ [key: string]: any }>>(sampleData);
    const [modal, setModal] = React.useState<boolean>(false);
    const [selected, setSelected] = React.useState<string>(undefined);
+   const { events } = React.useContext(WatchContext)
 
    const handleOpenModal = (newSelected: string) => {
       setSelected(newSelected);
@@ -34,12 +36,8 @@ export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
       handleOpenModal(node)
    }
 
-   React.useEffect(() => {
-      setCount(watchData.length)
-   }, [watchData, setCount])
-
    const listProps: ListProps<unknown> = {
-      dataSource: watchData,
+      dataSource: events,
       style: { height: 100 }
    }
 
@@ -67,17 +65,15 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
 })
 
 export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const [count, setCount] = React.useState(0);
+
+   const { setEvents, events } = React.useContext(WatchContext)
 
    React.useEffect(() => {
-
       socket.onConnect = () => {
-
-         socket.subscribe('/topic/event', (message) => {
-            console.log('Received message:', message.body);
+         console.log('websocket connected!')
+         socket.subscribe('/topic/events', (message) => {
+            setEvents(JSON.parse(message?.body))
          })
-
-         socket.publish({ destination: '/topic/event', body: JSON.stringify({"name": "helloworld","description":"test"}) })
       }
 
       socket.onWebSocketError = (error) => {
@@ -93,8 +89,8 @@ export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEl
 
    return (
       <div {...props} ref={ref}>
-         <Popover forceRender id='notification-container' placement="bottomRight" content={<WatchDog setCount={setCount} />} trigger={['click']} >
-            <Badge size='small' count={count} offset={[10, 10]}>
+         <Popover forceRender id='notification-container' placement="bottomRight" content={<WatchDog />} trigger={['click']} >
+            <Badge size='small' count={events.length} offset={[10, 10]}>
                <Button size='small' shape='circle' icon={<BellFilled />} />
             </Badge>
          </Popover>
@@ -104,6 +100,7 @@ export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEl
 
 export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & LisTypes>(
    ({ listProps, onSelect, ...props }, ref) => {
+      const { clearEvents } = React.useContext(WatchContext)
 
       const handleEventSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, selected: unknown) => {
          const target = e.target as HTMLDivElement;
@@ -117,24 +114,40 @@ export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> &
                <Typography.Text strong>
                   {'Events'}
                </Typography.Text>
-               <Button size='small'>
-                  View all
-               </Button>
+               <Space>
+                  <Button size='small' onClick={clearEvents}>
+                     Clear All Events
+                  </Button>
+                  <Button size='small' type='primary'>
+                     View all
+                  </Button>
+               </Space>
             </Space>
             <Divider style={{ margin: '10px 0' }} />
             <AntList
                {...listProps}
                style={{ minWidth: '400px' }}
                loading={false}
-               renderItem={(item: { name: string }) => (
-                  <Item onClick={(event) => handleEventSelect(event, item.name)}>
-                     <Item.Meta
-                        avatar={<img alt='name' src='https://integrations.lambdatest.com/assets/images/integration-jira.svg' />}
-                        title={<a href="https://ant.design">{item.name}</a>}
-                        description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                     />
-                  </Item>
-               )}
+               renderItem={(item: WatchEvents) => {
+                  if (item.payload) {
+                     return (
+                        <Item
+                           // onClick={(event) => handleEventSelect(event, item)}
+                        >
+                           <Item.Meta
+                              avatar={<img alt='name' src='https://integrations.lambdatest.com/assets/images/integration-jira.svg' />}
+                              title={<a>{item.name}</a>}
+                              description={
+                                 <Typography.Paragraph onClick={(e) => e.stopPropagation()} ellipsis={{ rows: 1, expandable: true, symbol: 'more' }}>
+                                    {`${JSON.stringify(item?.payload?.payload)}`}
+                                 </Typography.Paragraph>
+                              }
+                           />
+                        </Item>
+                     )
+                  }
+
+               }}
             />
          </div>
       )
