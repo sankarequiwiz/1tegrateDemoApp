@@ -47,9 +47,23 @@ export const getAllPullRequest = async (headers: { [key: string]: string }, orga
       return await fetch.get(`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequest`, { headers })
 }
 
+type RepositoryDownloadType = {
+      orgId: string
+      repoId: string
+};
 /* download the branch, repo, pullRequest  */
-export const downloadCodeBase = async (payload: { [key: string]: unknown }) => {
-      return await fetch.post('/api/demo/services/search', payload)
+export const repositoryDownload = async (props: RepositoryDownloadType, headers: { [key: string]: string }) => {
+      return await fetch.get(`/api/demo/scm/organizations/${props.orgId}/repositories/${props.repoId}`, { headers })
+}
+
+type BranchDownloadType = {
+      orgId: string
+      repoId: string
+      branch: string
+};
+/* download the branch  */
+export const branchDownload = async (args: BranchDownloadType, headers: { [key: string]: string }) => {
+      return await fetch.get(`api/demo/scm/organizations/${args.orgId}/repositories/${args.repoId}/branches/${args.branch}`, { headers })
 }
 
 export const createWatch = async (payload: { [key: string]: unknown }, integrationId: string) => {

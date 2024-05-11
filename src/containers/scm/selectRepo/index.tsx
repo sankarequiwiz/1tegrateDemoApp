@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ButtonProps, Space, Button, Radio, Spin } from 'antd';
+import { ButtonProps, Space, Button, Radio, Spin, message } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -14,18 +14,23 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
     const { setCurrentStep, current, setSelectedRepo, selectedRepo, selectedOrganization, integration } = React.useContext(AppContext);
     const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
     const [downloading, setDownloading] = React.useState<boolean>(false);
-    const [loading, setLoading]=React.useState<boolean>(false)
+    const [loading, setLoading] = React.useState<boolean>(false);
 
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const getHeaders = () => {
+        return { integrationId: integration.id }
+    }
     const getRepos = async () => {
         try {
             setLoading(true)
-            const resp = await API.services.getRepo(selectedOrganization, { integrationId: integration.id });
+            const resp = await API.services.getRepo(selectedOrganization, getHeaders());
             const { data } = resp.data;
             setRepos(data);
-            
+
         } catch (error) {
             console.log(error)
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
@@ -36,10 +41,17 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
     const downloadHandler = async () => {
         setDownloading(true);
         try {
-            await API.services.downloadCodeBase({})
-            
+            await API.services.repositoryDownload(
+                {
+                    orgId: selectedOrganization,
+                    repoId: selectedRepo
+                },
+                getHeaders()
+            );
+            messageApi.success('Repository download successfully');
         } catch (error) {
             console.error(error)
+            messageApi.error('Failed to download');
         } finally {
             setDownloading(false);
         }
@@ -55,6 +67,7 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
 
     return (
         <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between', flex: 1 }}>
+            {contextHolder}
             <Spin spinning={downloading} tip='Downloading...' style={{ height: '100%' }}>
                 <Space direction='vertical' style={{ width: '100%' }}>
                     <div {...props} ref={ref} id='service_profile' style={{ flex: 1 }} >
@@ -64,20 +77,23 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                     <List
                         dataSource={Repositories}
                         loading={loading}
-                        renderItem={(item) => (
-                            <List.Item
-                                actions={[
-                                    <Button type='link' key={1}>Create Watch</Button>,
-                                    <Button type='link' onClick={downloadHandler} icon={<DownloadOutlined />} key={2} style={{ display: 'none' }}  >Download</Button>
-                                ]}
-                            >
-                                <List.Item.Meta
-                                    avatar={<Radio checked={selectedRepo == item.id.toString()} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
-                                    title={<a >{item?.fullName}</a>}
-                                    description={item?.description}
-                                />
-                            </List.Item>
-                        )}
+                        renderItem={(item) => {
+                            const isSelected = selectedRepo == item.id.toString();
+                            return (
+                                <List.Item
+                                    actions={[
+                                        <Button type='link' key={1}>Create Watch</Button>,
+                                        <Button type='link' onClick={downloadHandler} icon={<DownloadOutlined />} key={2} style={{ display: isSelected ? 'block': 'none' }}  >Download</Button>
+                                    ]}
+                                >
+                                    <List.Item.Meta
+                                        avatar={<Radio checked={isSelected} value={item.id} onChange={(e) => handleSelect(e.target.value)} />}
+                                        title={<a >{item?.fullName}</a>}
+                                        description={item?.description}
+                                    />
+                                </List.Item>
+                            )
+                        }}
                     />
                 </Space>
             </Spin>
