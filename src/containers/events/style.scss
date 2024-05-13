@@ -17,4 +17,12 @@
       width: 100%;
       padding: .5rem;
    }
+
+   .ant-list-item {
+      border-left: 2.5px solid transparent;
+      &[aria-selected='true'] {
+         background-color: rgba(220, 220, 220, 0.331);
+         border-left-color:rgb(43, 63, 136);
+      }
+   }
 }

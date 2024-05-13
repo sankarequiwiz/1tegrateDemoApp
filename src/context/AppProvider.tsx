@@ -53,6 +53,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
                   userName: 'Demo app User',
                   organization: 'Demo app Company',
                   appTitle: 'Demo app Title',
+
             }
       );
 

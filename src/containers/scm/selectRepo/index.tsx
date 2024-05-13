@@ -4,7 +4,7 @@ import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { ReposTypes } from './type';
+import { Payload, ReposTypes } from './type';
 import { List } from 'antd';
 
 
@@ -57,6 +57,32 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
         }
     }
 
+    const handleCreateWatch = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        setLoading(true);
+        const fullBodySelected = Repositories.find((item) => item?.id?.toString() === selectedRepo);
+        const payload: Payload = {
+            "name": `web-gateway-service-${fullBodySelected?.fullName}`,
+            "description": `Watch for ${fullBodySelected.description} repository`,
+            "type": "HOOK",
+            "resource": {
+                "type": 'REPOSITORY',
+                'repository': {
+                    "id": selectedRepo
+                }
+            }
+        }
+        try {
+            await API.services.createWatch(payload, integration.id)
+            messageApi.success({ content: 'Watch created successfully' });
+        } catch (error) {
+            console.log(error);
+            messageApi.success({ content: 'Watch creation failed' });
+        } finally {
+            setLoading(false);
+        }
+    }
+
     React.useEffect(() => {
         getRepos()
     }, [])
@@ -82,8 +108,8 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                             return (
                                 <List.Item
                                     actions={[
-                                        <Button type='link' key={1}>Create Watch</Button>,
-                                        <Button type='link' onClick={downloadHandler} icon={<DownloadOutlined />} key={2} style={{ display: isSelected ? 'block': 'none' }}  >Download</Button>
+                                        isSelected && <Button type='link' key={1} onClick={handleCreateWatch}>Create Watch</Button>,
+                                        <Button type='link' onClick={downloadHandler} icon={<DownloadOutlined />} key={2} style={{ display: isSelected ? 'block' : 'none' }}  >Download</Button>
                                     ]}
                                 >
                                     <List.Item.Meta

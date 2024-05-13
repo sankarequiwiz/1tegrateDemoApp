@@ -21,7 +21,7 @@ export const WatchEventsProvider = ({ children, value }: { children?: React.Reac
 
       const setEvents = (event: WatchEvents, clear = false) => {
             if (!clear) {
-                  setEventState(prev => [...prev, event])
+                  setEventState(prev => [{ isRead: false, ...event }, ...prev])
                   setEvent(event);
             } else {
                   setEventState([])

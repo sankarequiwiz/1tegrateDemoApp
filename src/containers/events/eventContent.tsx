@@ -11,12 +11,17 @@ export const EventContent = (({ ...props }: EventContentTypes) => {
    const { selected } = React.useContext(EventContext)
 
    const payload = React.useMemo(() => {
-      return selected?.payload;
+      return selected?.item?.payload?.payload;
+   }, [selected?.item])
+
+   const name = React.useMemo(() => {
+      return selected?.item?.payload?.name;
    }, [selected])
+
 
    return (
       <div  {...props} >
-         <Typography.Text strong >{selected?.name}</Typography.Text>
+         <Typography.Text strong >{name}</Typography.Text>
          {
             payload && <SyntaxHighlighter style={nord}  >
                {JSON.stringify(payload, null, 2)}

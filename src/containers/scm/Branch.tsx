@@ -91,7 +91,6 @@ const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
                               <List.Item
                                     actions={[
                                           <Button
-                                                // style={{ display: item.id === selectedBranch ? 'block' : 'none' }}
                                                 onClick={() => downloadHandler(item?.id)} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>
                                     ]}
                               >

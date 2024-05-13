@@ -58,15 +58,8 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: PullRequestTypes) => (
                               <List.Item
-                                    // actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
-                                          // avatar={
-                                          //       <Checkbox
-                                          //             checked={selectedPullReq === item?.id}
-                                          //             value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                          //       />
-                                          // }
                                           title={<a >{item?.name || item?.title}</a>}
                                           description={item?.htmlUrl || item?.htmlurl}
                                     />

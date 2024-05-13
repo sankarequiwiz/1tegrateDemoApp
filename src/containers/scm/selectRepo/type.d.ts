@@ -144,3 +144,18 @@ export type ReposTypes = {
     },
     change_log: string
 }
+
+export type Payload = {
+      name?: string,
+      description?: string,
+      type: "HOOK",
+      resource: {
+            type: "ORGANIZATION" | "REPOSITORY",
+            organization?: {
+                  id: string
+            },
+            repository: {
+                  id: string
+            },
+      }
+}

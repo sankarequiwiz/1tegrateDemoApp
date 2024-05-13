@@ -10,6 +10,6 @@ export const useLayout = (): UseLayoutTypes => {
 
    const marginTop = accessKey ? '77px' : '113px';
    return {
-      style: { marginTop }
+      style: { marginTop, height: `calc(100vh - ${marginTop})` }
    }
 }

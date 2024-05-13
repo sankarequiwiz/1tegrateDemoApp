@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, Radio, ListProps, Space, Spin } from 'antd';
+import { Button, ButtonProps, Radio, ListProps, Space, Spin, message } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -61,6 +61,7 @@ type ListTypes = {
 const ListComp = ({ dataSource, ...props }: ListTypes) => {
       const { setSelectedOrganization, selectedOrganization, integration } = React.useContext(AppContext);
       const [loading, setLoading] = React.useState<boolean>(false);
+      const [messageApi, contextHolder] = message.useMessage();
 
       const handleSelect = (selected: string) => {
             setSelectedOrganization(selectedOrganization === selected ? '' : selected)
@@ -83,8 +84,10 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
             }
             try {
                   await API.services.createWatch(payload, integration.id)
+                  messageApi.success({ content: 'Watch created successfully' });
             } catch (error) {
                   console.log(error);
+                  messageApi.success({ content: 'Watch creation failed' });
             } finally {
                   setLoading(false);
             }
@@ -92,6 +95,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
 
       return (
             <Spin spinning={loading} tip='Creating...'  >
+                  {contextHolder}
                   <List
                         {...props}
                         dataSource={dataSource}

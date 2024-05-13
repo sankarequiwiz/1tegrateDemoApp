@@ -118,7 +118,7 @@ export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> &
                               avatar={<EventMessageIcon />}
                               title={<a>{item.name}</a>}
                               description={
-                                 <Typography.Paragraph onClick={(e) => e.stopPropagation()} ellipsis={{ rows: 1, expandable: true, symbol: 'more' }}>
+                                 <Typography.Paragraph  ellipsis={true}>
                                     {`${JSON.stringify(item?.payload?.payload)}`}
                                  </Typography.Paragraph>
                               }

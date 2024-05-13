@@ -7,7 +7,6 @@ import './style.scss';
 import { AppContext } from '../../../context/AppProvider';
 import { Footer } from '../../../components/footer';
 import { Payload, ServiceTypes } from './types';
-import services from '../../../services';
 import FormItem from 'antd/es/form/FormItem';
 
 type VoidFunction = () => void;
@@ -17,7 +16,14 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
       const [loading, setLoading] = React.useState<boolean>(false);
       const childRef = React.useRef<{ onIntegrate: (callBack: VoidFunction) => void, loading: boolean }>();
 
-      const { setCurrentStep, current, setSelectedService: setSelected, selectedService: selected, accessKey: key, domain } = React.useContext(AppContext);
+      const {
+            setCurrentStep,
+            current,
+            setSelectedService: setSelected,
+            selectedService: selected,
+            accessKey: key,
+            domain
+      } = React.useContext(AppContext);
 
       const getServices = async () => {
             setLoading(true);
@@ -176,7 +182,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                               };
                               setLoading(true);
                               try {
-                                    const resp = await services.services.createIntegrations(formValues);
+                                    const resp = await API.services.createIntegrations(formValues);
                                     const { data } = resp;
                                     setIntegration(data)
                                     setTimeout(callback, 1000)
@@ -266,7 +272,7 @@ const FormArea = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & Fo
                                                                   <div key={index}>
                                                                         <div style={{ margin: '.5rem 0' }}>
                                                                               <Typography.Text strong>
-                                                                               <span style={{color:"red"}}>*</span> Please enter your personal access token :
+                                                                                    <span style={{ color: "red" }}>*</span> Please enter your personal access token :
                                                                               </Typography.Text>
                                                                         </div>
                                                                         <Form.Item key={index} name={field.name} rules={[{ required: field.required }]} >
