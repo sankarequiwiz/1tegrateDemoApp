@@ -1,5 +1,4 @@
 import React from "react";
-import { Header } from "../components/Header";
 import { Layout } from "antd";
 import { Stepper } from "../components/stepper";
 import { FloatingActionComp } from "../components/AccessKeyInput";
@@ -11,8 +10,6 @@ import { Branch } from "./scm/Branch";
 
 export function Main() {
       const { domain, conclusion } = React.useContext(AppContext);
-
-      const headerRef = React.useRef<HTMLDivElement>(null)
 
       const getConclusion = React.useCallback((): StepTypes => {
             const baseProperties = { key: 'conclusion' }
@@ -33,8 +30,7 @@ export function Main() {
       }, [domain, getConclusion]);
 
       return (
-            <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-                  <Header ref={headerRef} style={{ position: 'fixed', top: 0, width: '100%', zIndex: 2 }} />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <Layout style={{ flex: 1 }}  >
                         <Stepper name='demo-app-guide' items={items} />
                   </Layout>

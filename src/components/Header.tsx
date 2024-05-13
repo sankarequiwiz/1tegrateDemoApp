@@ -42,7 +42,14 @@ const warningMsg = 'Warning: Access key not configured yet. Please configure the
 export const Header = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
       (props, ref) => {
             const { token: { colorPrimary } } = theme.useToken();
-            const { setDomain, domain: selectedDomain, accessKey, userName, organization, appTitle } = React.useContext(AppContext)
+            const {
+                  setDomain,
+                  domain: selectedDomain,
+                  accessKey,
+                  userName,
+                  organization,
+                  appTitle
+            } = React.useContext(AppContext);
 
             const items: MenuProps['items'] = domain.map(({ label, key, ...rest }) => {
                   const selected = selectedDomain === key;

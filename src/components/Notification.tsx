@@ -7,6 +7,7 @@ import { WatchContext, WatchEvents } from '../context/WatchContext';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nord } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { EventMessageIcon } from './Events';
+import { useNavigate } from 'react-router-dom';
 
 
 const { Item } = AntList;
@@ -20,21 +21,19 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
    return (
       <div {...props} ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '.1rem' }} >
          {
-              <SyntaxHighlighter style={nord}  >
-                  {JSON.stringify(selected?.payload?.payload, null, 2)}
-               </SyntaxHighlighter>
+            <SyntaxHighlighter style={nord}  >
+               {JSON.stringify(selected?.payload?.payload, null, 2)}
+            </SyntaxHighlighter>
          }
-
-
       </div>
    )
 })
 
 type WatchDogTypes = {
-   setCount?: React.Dispatch<React.SetStateAction<number>>
+   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ ...props }, ref) => {
+export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & WatchDogTypes>(({ setOpen, ...props }, ref) => {
    const [modal, setModal] = React.useState<boolean>(false);
    const [selected, setSelected] = React.useState<WatchEvents>(undefined);
    const { events } = React.useContext(WatchContext)
@@ -60,7 +59,7 @@ export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
 
    return (
       <div {...props} ref={ref}>
-         <List onSelect={(arg) => onSelect(arg)} listProps={listProps} />
+         <List setOpen={setOpen} onSelect={(arg) => onSelect(arg)} listProps={listProps} />
          <Modal footer={false} title={`Events for the ${selected?.name}`} open={modal} onCancel={handleClose} >
             {selected && <CodeBlock selected={selected as any} />}
          </Modal>
@@ -71,11 +70,12 @@ export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
 type LisTypes = {
    listProps?: ListProps<unknown>
    onSelect?: (selected: WatchEvents) => void;
-}
+} & Pick<WatchDogTypes, 'setOpen'>
 
 export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & LisTypes>(
-   ({ listProps, onSelect, ...props }, ref) => {
-      const { clearEvents } = React.useContext(WatchContext)
+   ({ listProps, onSelect, setOpen, ...props }, ref) => {
+      const { clearEvents } = React.useContext(WatchContext);
+      const navigate = useNavigate();
 
       const handleEventSelect = (selected: WatchEvents) => {
          onSelect && onSelect(selected);
@@ -91,7 +91,14 @@ export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> &
                   <Button size='small' onClick={clearEvents}>
                      Clear All Events
                   </Button>
-                  <Button size='small' type='primary'>
+                  <Button
+                     size='small'
+                     type='primary'
+                     onClick={() => {
+                        navigate('/events');
+                        setOpen(false);
+                     }}
+                  >
                      View all
                   </Button>
                </Space>
@@ -129,7 +136,11 @@ export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> &
 
 export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
 
-   const { setEvents, events } = React.useContext(WatchContext)
+   const {
+      setEvents,
+      events
+   } = React.useContext(WatchContext);
+   const [open, setOpen] = React.useState(false);
 
    React.useEffect(() => {
       socket.onConnect = () => {
@@ -152,9 +163,17 @@ export const Notification = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEl
 
    return (
       <div {...props} ref={ref}>
-         <Popover forceRender id='notification-container' placement="bottomRight" content={<WatchDog />} trigger={['click']} >
+         <Popover
+            onOpenChange={(newOpen) => !newOpen && setOpen(false)}
+            open={open}
+            forceRender
+            id='notification-container'
+            placement="bottomRight"
+            content={<WatchDog setOpen={setOpen} />}
+            trigger={['click']}
+         >
             <Badge size='small' count={events.length} offset={[10, 10]}>
-               <Button size='small' shape='circle' icon={<EventMessageIcon />} />
+               <Button onClick={() => setOpen(true)} size='small' shape='circle' icon={<EventMessageIcon />} />
             </Badge>
          </Popover>
       </div>

@@ -53,7 +53,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
             loading: childRef.current?.loading
       };
 
-      const lowerCasedName = React.useCallback((name: string) => {
+      const getLogo = React.useCallback((name: string) => {
             name = name?.toLowerCase();
             if (name.startsWith('github')) {
                   return (<svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" className="octicon octicon-mark-github v-align-middle color-fg-default">
@@ -67,10 +67,10 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                   return (<img width="34" height="32" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0OncSEQCPit3dLLOLGlf-9lntTMTyxvnCsQ&s" alt="Bit Bucket" />
                   )
             } else if (name.startsWith('ado')) {
-                  return (<svg fill="none" width="34" height="34" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" ><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="12" x2="12" y1="20.9438" y2="3.03371"><stop offset="0" stop-color="#0078d4" /><stop offset=".16" stop-color="#1380da" /><stop offset=".53" stop-color="#3c91e5" /><stop offset=".82" stop-color="#559cec" /><stop offset="1" stop-color="#5ea0ef" /></linearGradient><path d="m21 6.3708v10.9439l-4.5 3.6853-6.975-2.5393v2.5169l-3.94874-5.1574 11.50874.8989v-9.85392zm-3.8362.55055-6.4576-3.92135v2.57305l-5.9287 1.74157-1.7775 2.28091v5.17977l2.5425 1.1236v-6.64045z" fill="url(#a)" /></svg>
+                  return (<svg fill="none" width="34" height="34" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" ><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="12" x2="12" y1="20.9438" y2="3.03371"><stop offset="0" stopColor="#0078d4" /><stop offset=".16" stopColor="#1380da" /><stop offset=".53" stopColor="#3c91e5" /><stop offset=".82" stopColor="#559cec" /><stop offset="1" stopColor="#5ea0ef" /></linearGradient><path d="m21 6.3708v10.9439l-4.5 3.6853-6.975-2.5393v2.5169l-3.94874-5.1574 11.50874.8989v-9.85392zm-3.8362.55055-6.4576-3.92135v2.57305l-5.9287 1.74157-1.7775 2.28091v5.17977l2.5425 1.1236v-6.64045z" fill="url(#a)" /></svg>
                   )
             }
-      }, [services])
+      }, [])
 
 
       return (
@@ -94,7 +94,7 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                                                                         onClick={() => selectHandler(item?.id)}
                                                                   >
                                                                         <Space align='start'>
-                                                                              {lowerCasedName(item?.serviceProfile?.name)}
+                                                                              {getLogo(item?.serviceProfile?.name)}
                                                                               <Space direction='vertical'>
                                                                                     {
                                                                                           item?.serviceProfile?.name && (

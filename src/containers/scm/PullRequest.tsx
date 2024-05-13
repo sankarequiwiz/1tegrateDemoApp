@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button,  List, ListProps, Space, Spin, Typography } from 'antd';
+import { List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { AppContext } from '../../context/AppProvider';
 import { PullRequestTypes } from './type';
 import API from '../../services';
-
-import { DownloadOutlined } from '@ant-design/icons';
 
 export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(() => {
       const { integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
@@ -13,16 +11,19 @@ export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
       const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>([]);
       const [loading, setLoading] = React.useState<boolean>(false)
 
+      const getHeaders = () => {
+            return { integrationId: integration?.id };
+      }
 
       const getAllPullRequest = async () => {
             try {
                   setLoading(true)
-                  const resp = await API.services.getAllPullRequest({ integrationId: integration?.id }, selectedOrganization, selectedRepo);
+                  const resp = await API.services.getAllPullRequest(getHeaders(), selectedOrganization, selectedRepo);
                   const { data } = resp.data;
                   setPullRequest(data);
             } catch (error) {
                   console.log(error);
-            }finally{
+            } finally {
                   setLoading(false)
             }
       }
@@ -47,19 +48,8 @@ type ListTypes = {
       dataSource: Array<PullRequestTypes>
 } & ListProps<unknown>
 
-const ListComp = ({ dataSource,  ...props }: ListTypes) => {
-      const [downloading, setDownloading] = React.useState<boolean>(false)
-
-      const downloadHandler = async () => {
-            setDownloading(true);
-            try {
-                  await API.services.downloadCodeBase({})
-            } catch (error) {
-                  console.error(error)
-            } finally {
-                  setDownloading(false);
-            }
-      }
+const ListComp = ({ dataSource, ...props }: ListTypes) => {
+      const [downloading] = React.useState<boolean>(false)
 
       return (
             <Spin spinning={downloading} tip='Downloading...'>
@@ -68,7 +58,7 @@ const ListComp = ({ dataSource,  ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: PullRequestTypes) => (
                               <List.Item
-                                    actions={[<Button  onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
+                                    // actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
                                           // avatar={

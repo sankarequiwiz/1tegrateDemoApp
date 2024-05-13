@@ -27,7 +27,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                   setOrganization(data);
             } catch (error) {
                   console.log(error);
-            }finally{
+            } finally {
                   setLoading(false)
             }
       }
@@ -47,7 +47,7 @@ export const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTM
                               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                               </div>
                         </div>
-                        <ListComp dataSource={organization} loading={loading}/>
+                        <ListComp dataSource={organization} loading={loading} />
                   </Space>
                   <Footer onCancel={() => setCurrentStep(current - 1)} onSubmit={() => setCurrentStep(current + 1)} onOkProps={onOkProps} />
             </Space>
@@ -66,7 +66,8 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
             setSelectedOrganization(selectedOrganization === selected ? '' : selected)
       }
 
-      const handleCreateWatch = async () => {
+      const handleCreateWatch = async (e: React.MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation();
             setLoading(true);
             const fullBodySelected = dataSource.find((item) => item.id === selectedOrganization);
             const payload: Payload = {
@@ -94,22 +95,37 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                   <List
                         {...props}
                         dataSource={dataSource}
-                        renderItem={(item: OrganizationTypes) => (
-                              <List.Item
-                                    actions={[<Button loading={item?.isLoading} onClick={handleCreateWatch} type='link' key={1}>Create Watch</Button>]}
-                              >
-                                    <List.Item.Meta
-                                          avatar={
-                                                <Radio
-                                                      checked={selectedOrganization === item.id.toString()}
-                                                      value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                                />
-                                          }
-                                          title={<a >{item?.id}</a>}
-                                          description={item.description}
-                                    />
-                              </List.Item>
-                        )}
+                        renderItem={(item: OrganizationTypes) => {
+                              const isSelected = item.id === selectedOrganization;
+                              return (
+                                    <List.Item
+                                          onClick={() => {
+                                                handleSelect(item.id)
+                                          }}
+                                          actions={[
+                                                isSelected && <Button
+                                                      loading={item?.isLoading}
+                                                      onClick={handleCreateWatch}
+                                                      type='link'
+                                                      key={1}
+                                                >
+                                                      Create Watch
+                                                </Button>
+                                          ]}
+                                    >
+                                          <List.Item.Meta
+                                                avatar={
+                                                      <Radio
+                                                            checked={isSelected}
+                                                            value={item.id}
+                                                      />
+                                                }
+                                                title={<a >{item?.id}</a>}
+                                                description={item.description}
+                                          />
+                                    </List.Item>
+                              )
+                        }}
                   />
             </Spin>
       )

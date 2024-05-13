@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps, List, ListProps, Space, Spin, Typography } from 'antd';
+import {  ButtonProps, List, ListProps, Space, Spin, Typography } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Footer } from '../../components/footer';
 import { AppContext } from '../../context/AppProvider';
 import { CommitTypes } from './type';
 import API from '../../services';
 
-
-import { DownloadOutlined } from '@ant-design/icons';
 
 export const Commits = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(() => {
       const { setCurrentStep, current, integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
@@ -65,18 +63,7 @@ type ListTypes = {
 } & ListProps<unknown>
 
 const ListComp = ({ dataSource, ...props }: ListTypes) => {
-      const [downloading, setDownloading] = React.useState<boolean>(false)
-
-      const downloadHandler = async () => {
-            setDownloading(true);
-            try {
-                  await API.services.downloadCodeBase({})
-            } catch (error) {
-                  console.error(error)
-            } finally {
-                  setDownloading(false);
-            }
-      }
+      const [downloading] = React.useState<boolean>(false)
 
       return (
             <Spin spinning={downloading} tip='Downloading...'>
@@ -85,15 +72,9 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                         dataSource={dataSource}
                         renderItem={(item: CommitTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
                               >
                                     <List.Item.Meta
-                                          // avatar={
-                                          //       <Checkbox
-                                          //             checked={selectedCommit === item.id}
-                                          //             value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                          //       />
-                                          // }
+
                                           title={<a >{item?.author?.login || item?.author?.type}</a>}
                                           description={item.url}
                                     />

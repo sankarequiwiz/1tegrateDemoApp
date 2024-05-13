@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, List, ListProps, Space, Spin, Typography } from 'antd';
+import { Button, List, ListProps, Space, Spin, Typography, message } from 'antd';
 import React, { HTMLProps } from 'react';
 import { AppContext } from '../../context/AppProvider';
 import { BranchTypes } from './type';
@@ -14,14 +14,15 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
       const { integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
       const [loading, setLoading] = React.useState<boolean>(false)
 
-
       const [branches, setRepos] = React.useState<Array<BranchTypes>>();
 
+      const getHeaders = () => {
+            return { integrationId: integration?.id };
+      }
 
       const getAllBranches = async () => {
             try {
-                  setLoading(true)
-                  const resp = await API.services.getAllBranches(selectedOrganization, { integrationId: integration?.id }, selectedRepo)
+                  const resp = await API.services.getAllBranches(selectedOrganization, getHeaders(), selectedRepo)
                   const { data } = resp.data;
                   setRepos(data);
             } catch (error) {
@@ -42,14 +43,14 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
                               <Typography.Title level={4}>
                                     Branch
                               </Typography.Title>
-                              <ListComp dataSource={branches} loading={loading} />
+                              <ListComp getHeaders={getHeaders} dataSource={branches} loading={loading} />
                         </Space>
                         <div>
-                        <PullRequest />
-                  </div>
-                  <div>
-                        <Commits />
-                  </div>
+                              <PullRequest />
+                        </div>
+                        <div>
+                              <Commits />
+                        </div>
                   </Space>
 
 
@@ -59,18 +60,22 @@ export const Branch = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
 
 type ListTypes = {
       dataSource: Array<BranchTypes>
+      getHeaders: () => { [key: string]: string }
 } & ListProps<unknown>
 
-const ListComp = ({ dataSource, ...props }: ListTypes) => {
+const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
       const [downloading, setDownloading] = React.useState<boolean>(false)
+      const { selectedOrganization, selectedRepo } = React.useContext(AppContext);
+      const [messageApi, contextHolder] = message.useMessage();
 
-
-      const downloadHandler = async () => {
+      const downloadHandler = async (id: string) => {
             setDownloading(true);
             try {
-                  await API.services.downloadCodeBase({})
+                  await API.services.branchDownload({ repoId: selectedRepo, orgId: selectedOrganization, branch: id }, getHeaders())
+                  messageApi.success('Branch download successfully');
             } catch (error) {
                   console.error(error)
+                  messageApi.error('Failed to download');
             } finally {
                   setDownloading(false);
             }
@@ -78,20 +83,19 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
 
       return (
             <Spin spinning={downloading} tip='Downloading...'>
+                  {contextHolder}
                   <List
                         {...props}
                         dataSource={dataSource}
                         renderItem={(item: BranchTypes) => (
                               <List.Item
-                                    actions={[<Button onClick={downloadHandler} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>]}
+                                    actions={[
+                                          <Button
+                                                // style={{ display: item.id === selectedBranch ? 'block' : 'none' }}
+                                                onClick={() => downloadHandler(item?.id)} icon={<DownloadOutlined />} type='link' key={1}>Download</Button>
+                                    ]}
                               >
                                     <List.Item.Meta
-                                          // avatar={
-                                          //       <Checkbox
-                                          //             checked={selectedBranch === item.id}
-                                          //             value={item.id} onChange={(e) => handleSelect(e.target.value)}
-                                          //       />
-                                          // }
                                           title={<a >{item.name}</a>}
                                           description={item.url}
                                     />

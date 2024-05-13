@@ -17,14 +17,14 @@ type ContextTypes = {
       selectedBranch?: string;
       userName?: string;
       selectedPullReq?: string;
-      selectedCommit? :string;
+      selectedCommit?: string;
       appTitle?: string;
 
       setAppTitle?: (appTitle: string) => void;
       setUserName?: (userName: string) => void;
       setAccessKey?: (accessKey: string) => void
-      setSelectedCommit?: (selectedCommit :string) =>void;
-      setSelectedPullReq?: (selectedPullReq :string) => void;
+      setSelectedCommit?: (selectedCommit: string) => void;
+      setSelectedPullReq?: (selectedPullReq: string) => void;
       setSelectedBranch?: (selectedBranch: string) => void;
       setConclusion?: (option?: string) => void;
       setSelectedOrganization?: (selectedOrganization: string) => void;
@@ -47,7 +47,14 @@ type ProviderTypes = {
 export function AppProvider({ children, value }: ProviderTypes) {
       const [domain, setDomain] = React.useState<DomainTypes>('SCM');
 
-      const [search, setSearch] = useSearchParams({ current: '0', userName: 'Demo app User', organization: 'Demo app Company', appTitle: 'Demo app Title' });
+      const [search, setSearch] = useSearchParams(
+            {
+                  current: '0',
+                  userName: 'Demo app User',
+                  organization: 'Demo app Company',
+                  appTitle: 'Demo app Title',
+            }
+      );
 
       const setIntegrationDetails = (arg) => {
             setSearch((prev) => {
