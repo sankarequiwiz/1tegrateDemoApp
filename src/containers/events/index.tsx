@@ -29,8 +29,8 @@ export const Events = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
    return (
       <EventContext.Provider value={{ selected }}>
          <div {...props} style={style} className='event-list' ref={ref}>
-            <div className='event-selector'>
-               <EventList onSelect={onSelect} dataSource={[...events] as any} />
+            <div className='event-selector' >
+               <EventList  onSelect={onSelect} dataSource={events as any} />
             </div>
             <EventContent className='event-content' />
          </div>

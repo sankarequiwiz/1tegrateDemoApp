@@ -11,11 +11,11 @@ export const EventContent = (({ ...props }: EventContentTypes) => {
    const { selected } = React.useContext(EventContext)
 
    const payload = React.useMemo(() => {
-      return selected?.item?.payload?.payload;
+      return selected?.item?.payload;
    }, [selected?.item])
 
    const name = React.useMemo(() => {
-      return selected?.item?.payload?.name;
+      return selected?.item?.name;
    }, [selected])
 
 

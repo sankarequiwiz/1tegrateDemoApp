@@ -14,17 +14,18 @@ export const EventList = (({ onSelect, ...props }: EventListTypes) => {
    const getStringed = (payload) => {
       return JSON.stringify(payload)
    };
+
    return (
       <List
          {...props}
          renderItem={(item, index: number) => {
-            const { payload } = item;
+            const { payload, name } = item;
             const stringed = getStringed(payload);
             return (
                <List.Item aria-selected={index === selected?.index} onClick={() => onSelect(item, index)} key={item?.name}>
                   <List.Item.Meta
                      avatar={<EventMessageIcon />}
-                     title={<a>{payload?.name}</a>}
+                     title={<a>{name}</a>}
                      description={
                         <Typography.Paragraph
                            ellipsis={{ expandable: true, symbol: 'more' }}
