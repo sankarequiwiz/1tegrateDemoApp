@@ -5,6 +5,7 @@ import { useLayout } from '../../hooks/useLayout';
 import { EventList } from './eventList';
 import { EventContent } from './eventContent';
 import { WatchContext } from '../../context/WatchContext';
+import { Col, Row } from 'antd';
 
 
 type EventContextType = {
@@ -28,12 +29,14 @@ export const Events = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>
 
    return (
       <EventContext.Provider value={{ selected }}>
-         <div {...props} style={style} className='event-list' ref={ref}>
-            <div className='event-selector' >
-               <EventList  onSelect={onSelect} dataSource={events as any} />
-            </div>
-            <EventContent className='event-content' />
-         </div>
+         <Row {...props as any} style={{ ...style, width: '100%' }} className='event-list' ref={ref}>
+            <Col span={5} className='event-selector' >
+               <EventList onSelect={onSelect} dataSource={events as any} />
+            </Col>
+            <Col span={19}>
+               <EventContent className='event-content' />
+            </Col>
+         </Row>
       </EventContext.Provider>
    )
 })
