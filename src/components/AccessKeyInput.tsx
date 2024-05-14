@@ -71,6 +71,7 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
                                           setAppTitle(appTitle);
                                           setOrganization(organization);
                                           handleClose();
+                                          
                                     })
                                     .catch(() => { })
                         }}
@@ -141,6 +142,9 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 await API.services.setAccessKey(accessKey)
                                                 setAccessKey(accessKey as string);
                                                 handleClose();
+
+                                                //Refresh
+                                                window.location.reload();
                                           } catch (error) {
                                                 let content = 'Something went wrong!'
                                                 const { data, status } = error.response;
