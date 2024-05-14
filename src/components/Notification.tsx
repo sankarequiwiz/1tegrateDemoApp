@@ -22,7 +22,7 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
       <div {...props} ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '.1rem' }} >
          {
             <SyntaxHighlighter style={nord}  >
-               {JSON.stringify(selected?.payload?.payload, null, 2)}
+               {JSON.stringify(selected?.payload, null, 2)}
             </SyntaxHighlighter>
          }
       </div>
@@ -60,7 +60,7 @@ export const WatchDog = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
    return (
       <div {...props} ref={ref}>
          <List setOpen={setOpen} onSelect={(arg) => onSelect(arg)} listProps={listProps} />
-         <Modal footer={false} title={`Events for the ${selected?.name}`} open={modal} onCancel={handleClose} >
+         <Modal footer={false} width={800} title={`Events for the ${selected?.name}`} open={modal} onCancel={handleClose} >
             {selected && <CodeBlock selected={selected as any} />}
          </Modal>
       </div>
@@ -80,6 +80,7 @@ export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> &
       const handleEventSelect = (selected: WatchEvents) => {
          onSelect && onSelect(selected);
       }
+
 
       return (
          <div {...props} ref={ref}>
@@ -118,8 +119,8 @@ export const List = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> &
                               avatar={<EventMessageIcon />}
                               title={<a>{item.name}</a>}
                               description={
-                                 <Typography.Paragraph  ellipsis={true}>
-                                    {`${JSON.stringify(item?.payload?.payload)}`}
+                                 <Typography.Paragraph ellipsis={true}>
+                                    {`${JSON.stringify(item?.payload)}`}
                                  </Typography.Paragraph>
                               }
                            />

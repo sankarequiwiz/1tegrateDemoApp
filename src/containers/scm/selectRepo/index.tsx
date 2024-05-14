@@ -69,15 +69,19 @@ export const SelectRepo = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElem
                 "type": 'REPOSITORY',
                 'repository': {
                     "id": selectedRepo
+                },
+                'organization': {
+                    "id": selectedOrganization
                 }
-            }
+            },
+
         }
         try {
             await API.services.createWatch(payload, integration.id)
             messageApi.success({ content: 'Watch created successfully' });
         } catch (error) {
             console.log(error);
-            messageApi.success({ content: 'Watch creation failed' });
+            messageApi.error({ content: 'Watch creation failed' });
         } finally {
             setLoading(false);
         }
