@@ -30,5 +30,6 @@ module.exports = {
     'linebreak-style': ['error', 'windows'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
+    'no-unused-vars': ['error', { args: 'none' }], // Report unused variables as errors
   },
 };

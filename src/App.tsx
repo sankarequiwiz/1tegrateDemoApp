@@ -16,6 +16,7 @@ import { Header } from './components/Header';
 import { Events } from './containers/events';
 
 function Root() {
+  const test = '';
   return (
     <BrowserRouter>
       <WatchEventsProvider>
