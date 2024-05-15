@@ -1,27 +1,27 @@
 .event-list {
-   display: flex;
-   justify-content: start;
-   flex-direction: row;
-   width: 100%;
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  width: 100%;
 
-   .event-selector {
-      background: rgb(255, 255, 255);
-      padding: .5rem;
-      border-right: 1.5px rgb(234, 233, 233) solid;
-      overflow-y: auto;
-      height: 100%;
-   }
+  .event-selector {
+    background: rgb(255, 255, 255);
+    padding: 0.5rem;
+    border-right: 1.5px rgb(234, 233, 233) solid;
+    overflow-y: auto;
+    height: 100%;
+  }
 
-   .event-content {
-      width: 100%;
-      padding: .5rem;
-   }
+  .event-content {
+    width: 100%;
+    padding: 0.5rem;
+  }
 
-   .ant-list-item {
-      border-left: 2.5px solid transparent;
-      &[aria-selected='true'] {
-         background-color: rgba(220, 220, 220, 0.331);
-         border-left-color:rgb(43, 63, 136);
-      }
-   }
+  .ant-list-item {
+    border-left: 2.5px solid transparent;
+    &[aria-selected='true'] {
+      background-color: rgba(220, 220, 220, 0.331);
+      border-left-color: rgb(43, 63, 136);
+    }
+  }
 }

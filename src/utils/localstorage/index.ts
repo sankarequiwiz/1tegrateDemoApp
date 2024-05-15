@@ -2,15 +2,15 @@
 const storageName = 'console-provider-events';
 
 export function setEvent(items: { [key: string]: unknown }) {
-   const existing: Array<any> = getEvents() || [];
-   existing.unshift(items);
-   window.localStorage.setItem(storageName, JSON.stringify(existing))
+  const existing: Array<any> = getEvents() || [];
+  existing.unshift(items);
+  window.localStorage.setItem(storageName, JSON.stringify(existing));
 }
 
 export function getEvents() {
-   return JSON.parse(window.localStorage.getItem(storageName))
+  return JSON.parse(window.localStorage.getItem(storageName));
 }
 
 export function clearEvents() {
-   window.localStorage.clear()
+  window.localStorage.clear();
 }

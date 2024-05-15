@@ -27,20 +27,19 @@ function Root() {
         </StepProvider>
       </WatchEventsProvider>
     </BrowserRouter>
-  )
+  );
 }
 
 function App() {
-
   return (
     <Fragment>
       <Header style={{ position: 'fixed', top: 0, width: '100%', zIndex: 2 }} />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/events" element={<Events  />} />
+        <Route path="/events" element={<Events />} />
       </Routes>
     </Fragment>
-  )
+  );
 }
 
-export default Root
+export default Root;

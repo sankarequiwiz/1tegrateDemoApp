@@ -5,67 +5,78 @@ import { AppContext } from '../../context/AppProvider';
 import { PullRequestTypes } from './type';
 import API from '../../services';
 
-export const PullRequest = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(() => {
-      const { integration, selectedOrganization, selectedRepo } = React.useContext(AppContext);
+export const PullRequest = React.forwardRef<
+  HTMLDivElement,
+  HTMLProps<HTMLDivElement>
+>(() => {
+  const { integration, selectedOrganization, selectedRepo } =
+    React.useContext(AppContext);
 
-      const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>([]);
-      const [loading, setLoading] = React.useState<boolean>(false)
+  const [pullRequest, setPullRequest] = React.useState<Array<PullRequestTypes>>(
+    []
+  );
+  const [loading, setLoading] = React.useState<boolean>(false);
 
-      const getHeaders = () => {
-            return { integrationId: integration?.id };
-      }
+  const getHeaders = () => {
+    return { integrationId: integration?.id };
+  };
 
-      const getAllPullRequest = async () => {
-            try {
-                  setLoading(true)
-                  const resp = await API.services.getAllPullRequest(getHeaders(), selectedOrganization, selectedRepo);
-                  const { data } = resp.data;
-                  setPullRequest(data);
-            } catch (error) {
-                  console.log(error);
-            } finally {
-                  setLoading(false)
-            }
-      }
+  const getAllPullRequest = async () => {
+    try {
+      setLoading(true);
+      const resp = await API.services.getAllPullRequest(
+        getHeaders(),
+        selectedOrganization,
+        selectedRepo
+      );
+      const { data } = resp.data;
+      setPullRequest(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      React.useEffect(() => {
-            getAllPullRequest();
-      }, [])
+  React.useEffect(() => {
+    getAllPullRequest();
+  }, []);
 
-      return (
-            <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>
-                  <Space direction='vertical' style={{ width: '100%' }}>
-                        <Typography.Title level={4}>
-                              Pull Request
-                        </Typography.Title>
-                        <ListComp dataSource={pullRequest} loading={loading} />
-                  </Space>
-            </Space>
-      )
-})
+  return (
+    <Space
+      direction="vertical"
+      className="w-full"
+      style={{ height: '100%', justifyContent: 'space-between' }}
+    >
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Typography.Title level={4}>Pull Request</Typography.Title>
+        <ListComp dataSource={pullRequest} loading={loading} />
+      </Space>
+    </Space>
+  );
+});
 
 type ListTypes = {
-      dataSource: Array<PullRequestTypes>
-} & ListProps<unknown>
+  dataSource: Array<PullRequestTypes>;
+} & ListProps<unknown>;
 
 const ListComp = ({ dataSource, ...props }: ListTypes) => {
-      const [downloading] = React.useState<boolean>(false)
+  const [downloading] = React.useState<boolean>(false);
 
-      return (
-            <Spin spinning={downloading} tip='Downloading...'>
-                  <List
-                        {...props}
-                        dataSource={dataSource}
-                        renderItem={(item: PullRequestTypes) => (
-                              <List.Item
-                              >
-                                    <List.Item.Meta
-                                          title={<a >{item?.name || item?.title}</a>}
-                                          description={item?.htmlUrl || item?.htmlurl}
-                                    />
-                              </List.Item>
-                        )}
-                  />
-            </Spin>
-      )
+  return (
+    <Spin spinning={downloading} tip="Downloading...">
+      <List
+        {...props}
+        dataSource={dataSource}
+        renderItem={(item: PullRequestTypes) => (
+          <List.Item>
+            <List.Item.Meta
+              title={<a>{item?.name || item?.title}</a>}
+              description={item?.htmlUrl || item?.htmlurl}
+            />
+          </List.Item>
+        )}
+      />
+    </Spin>
+  );
 };

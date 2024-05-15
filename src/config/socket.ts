@@ -3,5 +3,5 @@ import { Client } from '@stomp/stompjs';
 
 const { hostname, port } = window.location;
 export const socket = new Client({
-   brokerURL: `ws://${hostname}:${port}/ws`
+  brokerURL: `ws://${hostname}:${port}/ws`,
 });

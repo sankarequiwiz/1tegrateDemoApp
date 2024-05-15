@@ -1,11 +1,11 @@
 #service_profile {
-      .card {
-            border: 1.5px solid transparent;
-            border-radius: 4px !important;
-            cursor: pointer;
+  .card {
+    border: 1.5px solid transparent;
+    border-radius: 4px !important;
+    cursor: pointer;
 
-            &[aria-selected='true'] {
-                  border-color: #2782f3 !important;
-            }
-      }
+    &[aria-selected='true'] {
+      border-color: #2782f3 !important;
+    }
+  }
 }
