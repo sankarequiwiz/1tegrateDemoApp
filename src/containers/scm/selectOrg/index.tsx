@@ -125,7 +125,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                                                       />
                                                 }
                                                 title={<a >{item?.login}</a>}
-                                                description={item.description}
+                                                description={item?.description}
                                           />
                                     </List.Item>
                               )
