@@ -11,6 +11,8 @@ import { Branch } from "./scm/Branch";
 export function Main() {
       const { domain, conclusion } = React.useContext(AppContext);
 
+      const test = '';
+
       const getConclusion = React.useCallback((): StepTypes => {
             const baseProperties = { key: 'conclusion' }
             switch (conclusion) {
