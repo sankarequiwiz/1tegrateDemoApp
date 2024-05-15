@@ -73,6 +73,7 @@ const UserPersona = React.forwardRef((props: FloatButtonProps, ref: React.Legacy
                                           setAppTitle(appTitle);
                                           setOrganization(organization);
                                           handleClose();
+                                          
                                     })
                                     .catch(() => { })
                         }}
