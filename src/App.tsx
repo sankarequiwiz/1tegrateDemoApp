@@ -32,7 +32,6 @@ function Root() {
 }
 
 function App() {
-  const test = '';
   return (
     <Fragment>
       <Header style={{ position: 'fixed', top: 0, width: '100%', zIndex: 2 }} />
