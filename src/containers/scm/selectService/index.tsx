@@ -58,6 +58,7 @@ export const SelectService = React.forwardRef<
       }
     } catch (error) {
       console.log(error);
+      setServices([])
     } finally {
       setLoading(false);
     }
