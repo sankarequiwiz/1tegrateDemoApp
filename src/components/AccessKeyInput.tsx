@@ -5,7 +5,7 @@ import { FloatButtonElement } from "antd/es/float-button/interface";
 import { AppContext } from "../context/AppProvider";
 
 import API from '../services/index';
-import accesskeyEvent from '../../src/utils/Events/index';
+import Event from '../../src/utils/Events/index';
 import { WatchContext } from "../context/WatchContext";
 
 type FloatButtonContextTypes = {
@@ -144,7 +144,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 await API.services.setAccessKey(accessKey)
                                                 setAccessKey(accessKey as string);
                                                 handleClose();
-                                                accesskeyEvent.trigger('event:update_accesskey', {});
+                                                Event.trigger('event:update_accesskey', {});
                                                 clearEvents()
                                           } catch (error) {
                                                 let content = 'Something went wrong!'

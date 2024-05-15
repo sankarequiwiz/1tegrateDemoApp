@@ -9,7 +9,7 @@ import { Footer } from '../../../components/footer';
 import { Payload, ServiceTypes } from './types';
 import FormItem from 'antd/es/form/FormItem';
 
-import accesskeyEvent from '../../../utils/Events/index';
+import Event from '../../../utils/Events/index';
 
 type VoidFunction = () => void;
 
@@ -58,10 +58,10 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
 
       React.useEffect(() => {
             /* events */
-            accesskeyEvent.on('event:update_accesskey', getServices)
+            Event.on('event:update_accesskey', getServices)
 
             return () => {
-                  accesskeyEvent.off('event:update_accesskey', getServices)
+                  Event.off('event:update_accesskey', getServices)
             }
       }, [])
 
