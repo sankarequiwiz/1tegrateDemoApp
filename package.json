@@ -3,19 +3,6 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx}": [
-			"eslint"
-		],
-		"*": [
-			"prettier --write --ignore-unknown"
-		]
-	},
 	"scripts": {
 		"dev": "vite",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

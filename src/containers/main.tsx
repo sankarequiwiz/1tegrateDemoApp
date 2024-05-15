@@ -14,30 +14,30 @@ export function Main() {
 	const getConclusion = React.useCallback((): StepTypes => {
 		const baseProperties = { key: 'conclusion' };
 		switch (conclusion) {
-			case 'commit':
-				return {
-					title: 'Select Commit',
-					container: <Commits />,
-					...baseProperties,
-				};
-			case 'pullRequest':
-				return {
-					title: 'Select Pull Request',
-					container: <PullRequest />,
-					...baseProperties,
-				};
-			case 'branch':
-				return {
-					title: 'Select Branch',
-					container: <Branch />,
-					...baseProperties,
-				};
-			default:
-				return {
-					title: 'Download Options',
-					container: null,
-					...baseProperties,
-				};
+		case 'commit':
+			return {
+				title: 'Select Commit',
+				container: <Commits />,
+				...baseProperties,
+			};
+		case 'pullRequest':
+			return {
+				title: 'Select Pull Request',
+				container: <PullRequest />,
+				...baseProperties,
+			};
+		case 'branch':
+			return {
+				title: 'Select Branch',
+				container: <Branch />,
+				...baseProperties,
+			};
+		default:
+			return {
+				title: 'Download Options',
+				container: null,
+				...baseProperties,
+			};
 		}
 	}, [conclusion]);
 

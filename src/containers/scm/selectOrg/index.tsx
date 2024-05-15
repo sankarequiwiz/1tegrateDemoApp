@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { HTMLProps } from 'react';
+
 import {
   Button,
   ButtonProps,
@@ -8,7 +9,6 @@ import {
   Spin,
   message,
 } from 'antd';
-import React, { HTMLProps } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 
