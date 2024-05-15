@@ -9,7 +9,7 @@
 		"preview": "vite preview",
 		"build": "tsc && vite build",
 		"build:dev": "vite build --mode dev",
-		"prepare": "husky"
+		"prepare": "husky && husky install"
 	},
 	"dependencies": {
 		"@ant-design/icons": "^5.3.6",
@@ -40,9 +40,9 @@
 		"eslint-plugin-react": "^7.34.1",
 		"eslint-plugin-react-hooks": "^4.6.2",
 		"eslint-plugin-react-refresh": "^0.4.6",
-		"husky": "^9.0.11",
+		"husky": "^8.0.0",
 		"lint-staged": "^15.2.2",
-		"prettier": "3.2.5",
+		"prettier": "^3.2.5",
 		"sass": "^1.75.0",
 		"sass-loader": "^14.2.1",
 		"typescript": "^5.2.2",
