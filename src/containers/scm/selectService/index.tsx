@@ -9,6 +9,8 @@ import { Footer } from '../../../components/footer';
 import { Payload, ServiceTypes } from './types';
 import FormItem from 'antd/es/form/FormItem';
 
+import Event from '../../../utils/Events/index';
+
 type VoidFunction = () => void;
 
 export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
@@ -54,6 +56,15 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
             getServices()
       }, [])
 
+      React.useEffect(() => {
+            /* events */
+            Event.on('event:update_accesskey', getServices)
+
+            return () => {
+                  Event.off('event:update_accesskey', getServices)
+            }
+      }, [])
+
       const onOkProps: ButtonProps = {
             disabled: !selected,
             loading: childRef.current?.loading
@@ -77,7 +88,6 @@ export const SelectService = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivE
                   )
             }
       }, [])
-
 
       return (
             <Space direction='vertical' className='w-full' style={{ height: '100%', justifyContent: 'space-between' }}>

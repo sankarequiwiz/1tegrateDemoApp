@@ -5,6 +5,8 @@ import { FloatButtonElement } from "antd/es/float-button/interface";
 import { AppContext } from "../context/AppProvider";
 
 import API from '../services/index';
+import Event from '../../src/utils/Events/index';
+import { WatchContext } from "../context/WatchContext";
 
 type FloatButtonContextTypes = {
       setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -102,6 +104,7 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
       const [isOpen, setIsOpen] = React.useState<boolean>(false);
       const [isSetting, seIsLoading] = React.useState<boolean>(false);
       const [messageApi, contextHolder] = message.useMessage();
+      const { clearEvents } = React.useContext(WatchContext);
 
       const [form] = Form.useForm()
 
@@ -142,9 +145,8 @@ const AccessKeyForm = React.forwardRef((props: FloatButtonProps, ref: React.Lega
                                                 await API.services.setAccessKey(accessKey)
                                                 setAccessKey(accessKey as string);
                                                 handleClose();
-
-                                                //Refresh
-                                                window.location.reload();
+                                                Event.trigger('event:update_accesskey', {});
+                                                clearEvents()
                                           } catch (error) {
                                                 let content = 'Something went wrong!'
                                                 const { data, status } = error.response;
