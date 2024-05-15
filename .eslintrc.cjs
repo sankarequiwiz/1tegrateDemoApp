@@ -26,6 +26,13 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        useTabs: true,
+        endOfLine: 'crlf',
+      },
+    ],
     indent: ['error', 'tab'],
     'linebreak-style': ['error', 'windows'],
     quotes: ['error', 'single'],
