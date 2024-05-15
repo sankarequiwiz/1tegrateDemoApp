@@ -16,12 +16,8 @@ import API from '../../../services/index';
 import { OrganizationTypes, Payload } from './type';
 import { List } from 'antd';
 
-export const SelectOrganization = React.forwardRef<
-  HTMLDivElement,
-  HTMLProps<HTMLDivElement>
->((props, ref) => {
-  const { setCurrentStep, current, selectedOrganization, integration } =
-    React.useContext(AppContext);
+const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
+  const { setCurrentStep, current, selectedOrganization, integration } = React.useContext(AppContext);
 
   const [organization, setOrganization] = React.useState<
     Array<OrganizationTypes>
@@ -161,3 +157,5 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
     </Spin>
   );
 };
+
+export { SelectOrganization };
