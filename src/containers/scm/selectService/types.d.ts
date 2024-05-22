@@ -94,6 +94,7 @@ export type ServiceProfileDataTypes = {
 
 type Payload = {
   name: string;
+  type: 'SCM' | 'TICKETING',
   externalKey?: string;
   subOrganization: {
     name: string;

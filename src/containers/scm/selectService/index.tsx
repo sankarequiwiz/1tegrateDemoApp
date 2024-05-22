@@ -22,6 +22,7 @@ import { Payload, ServiceTypes } from './types';
 import FormItem from 'antd/es/form/FormItem';
 
 import Event from '../../../utils/Events/index';
+import { EventTypes } from '../../../utils/Events/types';
 
 type VoidFunction = () => void;
 
@@ -76,14 +77,18 @@ export const SelectService = React.forwardRef<
 
   React.useEffect(() => {
     getServices();
-  }, []);
+  }, [domain]);
 
   React.useEffect(() => {
     /* events */
-    Event.on('event:update_accesskey', getServices);
+    Event.customREventList.forEach((event: EventTypes) => {
+      Event.on(event, getServices);
+    })
 
     return () => {
-      Event.off('event:update_accesskey', getServices);
+      Event.customREventList.forEach((event: EventTypes) => {
+        Event.off(event, getServices);
+      })
     };
   }, []);
 
@@ -263,7 +268,7 @@ const FormArea = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement> & FormAreaTypes
 >(({ selected, ...props }, ref) => {
-  const { organization, setIntegration } = React.useContext(AppContext);
+  const { organization, setIntegration, domain: type } = React.useContext(AppContext);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -286,6 +291,7 @@ const FormArea = React.forwardRef<
           const key = resp[fieldConfigs[0].name];
           const formValues: Payload = {
             name: `${selected?.serviceProfile?.name} integration`,
+            type,
             subOrganization: { name: organization },
             target: {
               accessPoint: {
@@ -324,7 +330,7 @@ const FormArea = React.forwardRef<
             setLoading(false);
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       messageApi.open({
         type: 'error',

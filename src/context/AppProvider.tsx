@@ -44,13 +44,13 @@ type ProviderTypes = {
 };
 
 export function AppProvider({ children, value }: ProviderTypes) {
-  const [domain, setDomain] = React.useState<DomainTypes>('SCM');
 
   const [search, setSearch] = useSearchParams({
     current: '0',
     userName: 'Demo app User',
     organization: 'Demo app Company',
     appTitle: 'Demo app Title',
+    domain: 'SCM'
   });
 
   const setIntegrationDetails = (arg) => {
@@ -136,6 +136,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
+  const setDomain = (arg: DomainTypes) => {
+    setSearch((prev) => {
+      prev.set('domain', arg);
+      return prev;
+    });
+  }
+
   const setAppTitle = (newCommit: string) => {
     setSearch((prev) => {
       prev.set('appTitle', newCommit.toString());
@@ -173,7 +180,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     integration: search.get('integration')
       ? JSON.parse(search.get('integration'))
       : undefined,
-    domain,
+    domain: search.get('domain') as any,
     ...value,
   };
 

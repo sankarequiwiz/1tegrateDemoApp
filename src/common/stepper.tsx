@@ -51,10 +51,10 @@ export function getStepItems(args: Array<StepTypes> = []): {
       },
       // ...args,
     ],
-    BTS: [
+    TICKETING: [
       {
-        title: 'Select Profile',
-        container: <p>kh21dkh</p>,
+        title: 'Select Services',
+        container: <SelectService />,
         key: '1',
       },
       {

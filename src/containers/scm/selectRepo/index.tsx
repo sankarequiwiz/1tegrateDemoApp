@@ -59,10 +59,10 @@ export const SelectRepo = React.forwardRef<
         },
         getHeaders()
       );
-      messageApi.success('Repository download successfully');
+      messageApi.success('Repository downloaded successfully.');
     } catch (error) {
       console.error(error);
-      messageApi.error('Failed to download');
+      messageApi.error('Failed to download the repository');
     } finally {
       setDownloading(false);
     }
@@ -93,7 +93,7 @@ export const SelectRepo = React.forwardRef<
       messageApi.success({ content: 'Watch created successfully' });
     } catch (error) {
       console.log(error);
-      messageApi.error({ content: 'Watch creation failed' });
+      messageApi.error({ content: 'Failed to create watch.' });
     } finally {
       setLoading(false);
     }
