@@ -283,11 +283,35 @@ const FormArea = React.forwardRef<
     return [];
   }, [selected]);
 
+  const integrationPyloadKey = {
+    API_KEY: {
+      value: 'apiKey'
+    },
+    USERNAME: {
+      value: 'username'
+    },
+    PASSWORD: {
+      value: 'password'
+    },
+    DOMAIN: {
+      value: 'domain'
+    }
+  }
+
   const onIntegrate = (callback) => {
     if (organization) {
       form
         .validateFields()
         .then(async (resp) => {
+          Object.entries(resp).map(([key, value]) => {
+            delete resp[key];
+            if (!integrationPyloadKey?.[key]) {
+              alert(`${key} is not configured in mapper`)
+            }
+            resp[integrationPyloadKey?.[key]?.['value'] ?? key] = value;
+          })
+          console.log(resp);
+
           const key = resp[fieldConfigs[0].name];
           const formValues: Payload = {
             name: `${selected?.serviceProfile?.name} integration`,
@@ -302,6 +326,7 @@ const FormArea = React.forwardRef<
                 accessPointConfig: {
                   type: resp.integrationType || 'APIKEY_FLW',
                 },
+                ...resp,
                 apiKey: key,
               },
             },
@@ -398,19 +423,21 @@ const FormArea = React.forwardRef<
                     <div key={index}>
                       <div style={{ margin: '.5rem 0' }}>
                         <Typography.Text strong>
-                          <span style={{ color: 'red' }}>*</span> Please enter
-                          your personal access token :
+                          <span style={{ color: 'red' }}>*</span>
+                          <span >
+                            {`Please enter your ${field.type?.toString()?.toLowerCase()}`}
+                          </span>
                         </Typography.Text>
                       </div>
                       <Form.Item
                         key={index}
-                        name={field.name}
+                        name={field.type}
                         rules={[{ required: field.required }]}
                       >
                         {
                           <Input
                             style={{ width: '35rem' }}
-                            placeholder={'Enter your personal access token'}
+                            placeholder={`Enter your ${field.type?.toString()?.toLowerCase()}`}
                           />
                         }
                       </Form.Item>

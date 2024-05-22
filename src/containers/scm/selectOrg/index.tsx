@@ -17,7 +17,7 @@ import { OrganizationTypes, Payload } from './type';
 import { List } from 'antd';
 
 const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-  const { setCurrentStep, current, selectedOrganization, integration } = React.useContext(AppContext);
+  const { setCurrentStep, current, selectedOrganization, integration ,domain} = React.useContext(AppContext);
 
   const [organization, setOrganization] = React.useState<
     Array<OrganizationTypes>
@@ -31,7 +31,7 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
   const getOrganization = async () => {
     try {
       setLoading(true);
-      const resp = await API.services.getSCMOrganization(headers as any);
+      const resp = await API.services.getSCMOrganization(headers as any, domain);
       const { data } = resp.data;
       setOrganization(data);
     } catch (error) {

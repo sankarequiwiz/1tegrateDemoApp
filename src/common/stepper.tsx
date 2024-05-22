@@ -58,20 +58,20 @@ export function getStepItems(args: Array<StepTypes> = []): {
         key: '1',
       },
       {
-        title: 'Select Organization',
-        container: <p>org select</p>,
+        title: 'Select Inventory ',
+        container: <SelectOrganization />,
         key: '2',
       },
       {
-        title: 'Select Service Profile',
+        title: 'Select Ticketing',
         container: <p>kh21dkh</p>,
         key: '3',
       },
-      {
-        title: 'Select Organization',
-        container: <p>org select</p>,
-        key: '4',
-      },
+      // {
+      //   title: 'Select Organization',
+      //   container: <p>org select</p>,
+      //   key: '4',
+      // },
     ],
   };
 }

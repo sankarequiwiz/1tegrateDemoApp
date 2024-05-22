@@ -29,8 +29,8 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 };
 
 /* get all organization */
-export const getSCMOrganization = async (headers: AxiosHeaders) => {
-	return await fetch.get('/api/demo/scm/organizations ', { headers });
+export const getSCMOrganization = async (headers: AxiosHeaders,type) => {
+	return await fetch.get(`/api/demo/${type}/organizations`, { headers });
 };
 
 /* get all repositories for the organization */

@@ -47,6 +47,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
 
   const [search, setSearch] = useSearchParams({
     current: '0',
+    accessKey: '',
     userName: 'Demo app User',
     organization: 'Demo app Company',
     appTitle: 'Demo app Title',
@@ -136,10 +137,15 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
-  const setDomain = (arg: DomainTypes) => {
+  const setDomain = (domain: DomainTypes) => {
     setSearch((prev) => {
-      prev.set('domain', arg);
-      return prev;
+      return {
+        domain, current: '0',
+        organization: prev.get('organization'), 
+        userName: prev.get('userName'), 
+        appTitle: prev.get('appTitle'),
+        accessKey: prev.get('accessKey') ?? '',
+      }
     });
   }
 
