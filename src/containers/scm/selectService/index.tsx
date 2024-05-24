@@ -69,9 +69,17 @@ export const SelectService = React.forwardRef<
     setSelected(selected);
   };
 
+  const selectedchecked =services.find((item) => item?.id === selected)
+  console.log("selected one is printing here",selectedchecked)
+
   const handleNext = () => {
     childRef.current.onIntegrate(() => {
-      setCurrentStep(current + 1);
+      if (selectedchecked?.serviceProfile?.name == "Jira") {
+        setCurrentStep(current + 2);
+      } else {
+        setCurrentStep(current + 1);
+      }
+
     });
   };
 
@@ -214,7 +222,7 @@ export const SelectService = React.forwardRef<
             gap: '1rem',
           }}
         >
-          <Typography.Text strong>Available services</Typography.Text>
+          <Typography.Title level={5}>Available services</Typography.Title>
           {loading && <Skeleton />}
           {!loading && (
             <Row className="w-full" gutter={[20, 20]}>
@@ -327,9 +335,7 @@ const FormArea = React.forwardRef<
             }
             resp[integrationPyloadKey?.[key]?.['value'] ?? key] = value;
           })
-          console.log(resp);
 
-          const key = resp[fieldConfigs[0].name];
           const formValues: Payload = {
             name: `${selected?.serviceProfile?.name} integration`,
             type,
@@ -344,7 +350,6 @@ const FormArea = React.forwardRef<
                   type: resp.integrationType || 'APIKEY_FLW',
                 },
                 ...resp,
-                apiKey: key,
               },
             },
           };
@@ -411,9 +416,9 @@ const FormArea = React.forwardRef<
         {contextHolder}
         <Card>
           <Space direction='vertical'>
-            <Typography.Text strong>
-              {`Please configure ${selected?.serviceProfile?.name} services`}
-            </Typography.Text>
+            <Typography.Title level={5}>
+              {`Configure ${selected?.serviceProfile?.name} services`}
+            </Typography.Title>
 
             <Space direction="vertical">
               {fields?.length > 1 && (

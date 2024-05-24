@@ -120,3 +120,15 @@ export const createWatch = async (
 		payload
 	);
 };
+
+
+/* Get all Ticketing */
+
+export const getTicketing = async (
+	headers: { [key: string]: string }
+) => {
+	return await fetch.get(
+		`/api/v1/ticketing/ADO-DemoOrg11/collections`,
+		{ headers }
+	);
+};
