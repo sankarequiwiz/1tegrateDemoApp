@@ -114,7 +114,11 @@ export const Header = React.forwardRef<
 
         <Space>
           <Space>
-            <CreateTicket />
+            {
+              selectedDomain?.toLowerCase() === 'ticketing' && (
+                <CreateTicket />
+              )
+            }
             <Notification style={{ marginRight: '1rem' }} />
           </Space>
           <Space>

@@ -33,12 +33,55 @@ type FormTypes = {
    form?: FormInstance<any>
 } & ModalProps;
 
+
 const formDetails = [
    {
       name: 'type',
       type: 'enum',
       label: 'Type',
       fieldType: <Select />,
+      options: [
+         {
+            label: 'Bug',
+            value: 'BUG',
+         },
+         {
+            label: 'Feature Request',
+            value: 'FEATURE_REQUEST'
+         },
+         {
+            label: 'Improvement',
+            value: 'IMPROVEMENT'
+         },
+         {
+            label: 'Story',
+            value: 'STORY',
+         },
+         {
+            label: 'Task',
+            value: 'TASK'
+         },
+         {
+            label: 'Incident',
+            value: 'INCIDENT'
+         },
+         {
+            label: 'Support Request',
+            value: 'SUPPORT_REQUEST',
+         },
+         {
+            label: 'Test Case',
+            value: 'TEST_CASE'
+         },
+         {
+            label: 'Documentation',
+            value: 'DOCUMENTATION'
+         },
+         {
+            label: 'Change Request',
+            value: 'CHANGE_REQUEST'
+         }
+      ]
    },
    {
       name: 'title',
@@ -89,7 +132,7 @@ function FormComp(props: FormTypes) {
                return (
                   <Form.Item label={`Select the ${label}`} key={index} name={name}>
                      {React.cloneElement(fieldType, {
-                        placeholder: `please select the ${label}`,
+                        placeholder: `Please select the ${label}`,
                         ...props
                      })}
                   </Form.Item>
