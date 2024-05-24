@@ -113,7 +113,8 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
       messageApi.success({ content: 'Watch created successfully' });
     } catch (error) {
       console.log(error);
-      messageApi.success({ content: 'Watch creation failed' });
+      const errorMessage = error?.response?.data, status = error?.response?.status;
+      messageApi.error({ content: handleError(errorMessage, status) ?? 'Watch creation failed' });
     } finally {
       setLoading(false);
     }
@@ -133,7 +134,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                 handleSelect(item.id);
               }}
               actions={[
-                isSelected && (
+                 (
                   <Button
                     loading={item?.isLoading}
                     onClick={handleCreateWatch}

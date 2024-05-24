@@ -93,7 +93,8 @@ export const SelectRepo = React.forwardRef<
       messageApi.success({ content: 'Watch created successfully' });
     } catch (error) {
       console.log(error);
-      messageApi.error({ content: 'Failed to create watch.' });
+      const errorMessage = error?.response?.data, status = error?.response?.status;
+      messageApi.error({ content: handleError(errorMessage, status) });
     } finally {
       setLoading(false);
     }

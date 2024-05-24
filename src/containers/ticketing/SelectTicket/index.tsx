@@ -12,6 +12,7 @@ import {
    Spin,
    Tag,
    Typography,
+   message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -81,7 +82,7 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
-            onSubmit={() => setCurrentStep(current + 1)}
+            // onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>
    );
@@ -95,6 +96,9 @@ const ListComp = ({ dataSource }: ListTypes) => {
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
    const [type, setType] = useState<'create' | 'edit'>('create')
+   const [_loading, setLoading] = React.useState<boolean>(false);
+   const [messageApi, contextHolder] = message.useMessage();
+   const { selectedOrganization, integration } = React.useContext(AppContext);
 
    const onOpen = (type: 'edit' | 'create', arg?: { [key: string]: any }) => {
       setType(type);
@@ -107,14 +111,45 @@ const ListComp = ({ dataSource }: ListTypes) => {
       setOpen(false);
    }
 
+   const handleCreateWatch = async (e: any) => {
+      e.stopPropagation();
+      setLoading(true);
+      const fullBodySelected = dataSource.find(
+         (item) => item.id === selectedOrganization
+      );
+      const payload = {
+         name: `web-gateway-service-${fullBodySelected?.login}`,
+         description: `Watch for ${fullBodySelected.login} repository`,
+         type: 'HOOK',
+         resource: {
+            type: 'ORGANIZATION',
+            organization: {
+               id: selectedOrganization,
+            },
+         },
+      };
+      try {
+         await API.services.createWatch(payload, integration.id);
+         messageApi.success({ content: 'Watch created successfully' });
+      } catch (error) {
+         console.log(error);
+         const errorMessage = error?.response?.data, status = error?.response?.status;
+         messageApi.error({ content: handleError(errorMessage, status) ?? 'Watch creation failed' });
+      } finally {
+         setLoading(false);
+      }
+   };
+
+
+
    const menu = useCallback((record: { [key: string]: any }) => {
       return (
          <Menu>
             <Menu.Item key="0" icon={<EditOutlined />}>
                <a onClick={() => onOpen('edit', record)} >Edit</a>
             </Menu.Item>
-            <Menu.Item key="1" icon={<EyeOutlined />} >
-               <a  >Create Watch</a>
+            <Menu.Item onClick={handleCreateWatch} key="1" icon={<EyeOutlined />} >
+               <a >Create Watch</a>
             </Menu.Item>
          </Menu>
       )
@@ -122,6 +157,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
 
    return (
       <Spin spinning={false} >
+         {contextHolder}
          <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <Typography.Title level={3}>List of tickets</Typography.Title>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
