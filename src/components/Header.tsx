@@ -17,6 +17,7 @@ import { Notification } from './Notification';
 import userAvatar from '../assets/avatar.png';
 import brandLogo from '../assets/brandBlue.svg';
 import { CreateTicket } from './CreateTicket';
+import Events from '../utils/Events';
 
 const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
   <svg
@@ -46,8 +47,7 @@ const domain = [
   },
   {
     label: 'Ticketing Integrations Demo',
-    key: 'BTS',
-    disabled: true,
+    key: 'TICKETING',
   },
 ];
 
@@ -77,7 +77,10 @@ export const Header = React.forwardRef<
         <span style={{ color: selected ? colorPrimary : '' }}>{label}</span>
       ),
       key,
-      onClick: () => setDomain(key as DomainTypes),
+      onClick: () => {
+        setDomain(key as DomainTypes)
+        Events.trigger('event:update_domain', {});
+      },
       ...rest,
     };
   });

@@ -1,1 +1,1 @@
-export type EventTypes = 'event:update_accesskey' | keyof DocumentEventMap;
+export type EventTypes = 'event:update_accesskey' | 'event:update_domain' | keyof DocumentEventMap;

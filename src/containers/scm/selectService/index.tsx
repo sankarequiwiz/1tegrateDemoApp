@@ -22,6 +22,7 @@ import { Payload, ServiceTypes } from './types';
 import FormItem from 'antd/es/form/FormItem';
 
 import Event from '../../../utils/Events/index';
+import { EventTypes } from '../../../utils/Events/types';
 
 type VoidFunction = () => void;
 
@@ -68,22 +69,34 @@ export const SelectService = React.forwardRef<
     setSelected(selected);
   };
 
+  const selectedchecked =services.find((item) => item?.id === selected)
+  console.log("selected one is printing here",selectedchecked)
+
   const handleNext = () => {
     childRef.current.onIntegrate(() => {
-      setCurrentStep(current + 1);
+      if (selectedchecked?.serviceProfile?.name == "Jira") {
+        setCurrentStep(current + 2);
+      } else {
+        setCurrentStep(current + 1);
+      }
+
     });
   };
 
   React.useEffect(() => {
     getServices();
-  }, []);
+  }, [domain]);
 
   React.useEffect(() => {
     /* events */
-    Event.on('event:update_accesskey', getServices);
+    Event.customREventList.forEach((event: EventTypes) => {
+      Event.on(event, getServices);
+    })
 
     return () => {
-      Event.off('event:update_accesskey', getServices);
+      Event.customREventList.forEach((event: EventTypes) => {
+        Event.off(event, getServices);
+      })
     };
   }, []);
 
@@ -108,6 +121,20 @@ export const SelectService = React.forwardRef<
           <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
         </svg>
       );
+    } else if (name.startsWith('jira')) {
+      return (
+        <svg height="30" preserveAspectRatio="xMidYMid" width="28" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 -30.632388516510233 255.324 285.95638851651023">
+          <linearGradient id="a">
+            <stop offset=".18" stop-color="#0052cc" />
+            <stop offset="1" stop-color="#2684ff" />
+          </linearGradient>
+          <linearGradient id="b" x1="98.031%" x2="58.888%" xlinkHref="#a" y1=".161%" y2="40.766%" />
+          <linearGradient id="c" x1="100.665%" x2="55.402%" xlinkHref="#a" y1=".455%" y2="44.727%" />
+          <path d="M244.658 0H121.707a55.502 55.502 0 0 0 55.502 55.502h22.649V77.37c.02 30.625 24.841 55.447 55.466 55.467V10.666C255.324 4.777 250.55 0 244.658 0z" fill="#2684ff" />
+          <path d="M183.822 61.262H60.872c.019 30.625 24.84 55.447 55.466 55.467h22.649v21.938c.039 30.625 24.877 55.43 55.502 55.43V71.93c0-5.891-4.776-10.667-10.667-10.667z" fill="url(#b)" />
+          <path d="M122.951 122.489H0c0 30.653 24.85 55.502 55.502 55.502h22.72v21.867c.02 30.597 24.798 55.408 55.396 55.466V133.156c0-5.891-4.776-10.667-10.667-10.667z" fill="url(#c)" />
+        </svg>
+      )
     } else if (name.startsWith('gitlab')) {
       return (
         <svg
@@ -195,7 +222,7 @@ export const SelectService = React.forwardRef<
             gap: '1rem',
           }}
         >
-          <Typography.Text strong>Available services</Typography.Text>
+          <Typography.Title level={5}>Available services</Typography.Title>
           {loading && <Skeleton />}
           {!loading && (
             <Row className="w-full" gutter={[20, 20]}>
@@ -211,6 +238,7 @@ export const SelectService = React.forwardRef<
                       key={index}
                     >
                       <Card
+                        style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
                         bordered
                         rootClassName="card"
                         aria-selected={selected === item?.id}
@@ -224,11 +252,11 @@ export const SelectService = React.forwardRef<
                                 {item?.serviceProfile?.name}
                               </Typography.Text>
                             )}
-                            {item?.serviceProfile?.description && (
+                            {/* {item?.serviceProfile?.description && (
                               <Typography.Text type="secondary">
                                 {item?.serviceProfile?.description}
                               </Typography.Text>
-                            )}
+                            )} */}
                           </Space>
                         </Space>
                       </Card>
@@ -263,7 +291,7 @@ const FormArea = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement> & FormAreaTypes
 >(({ selected, ...props }, ref) => {
-  const { organization, setIntegration } = React.useContext(AppContext);
+  const { organization, setIntegration, domain: type } = React.useContext(AppContext);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -278,14 +306,39 @@ const FormArea = React.forwardRef<
     return [];
   }, [selected]);
 
+  const integrationPyloadKey = {
+    API_KEY: {
+      value: 'apiKey'
+    },
+    USERNAME: {
+      value: 'username'
+    },
+    PASSWORD: {
+      value: 'password'
+    },
+    DOMAIN: {
+      value: 'domain'
+    }
+  }
+
+  console.log(selected);
+
   const onIntegrate = (callback) => {
     if (organization) {
       form
         .validateFields()
         .then(async (resp) => {
-          const key = resp[fieldConfigs[0].name];
+          Object.entries(resp).map(([key, value]) => {
+            delete resp[key];
+            if (!integrationPyloadKey?.[key]) {
+              alert(`${key} is not configured in mapper`)
+            }
+            resp[integrationPyloadKey?.[key]?.['value'] ?? key] = value;
+          })
+
           const formValues: Payload = {
             name: `${selected?.serviceProfile?.name} integration`,
+            type,
             subOrganization: { name: organization },
             target: {
               accessPoint: {
@@ -296,7 +349,7 @@ const FormArea = React.forwardRef<
                 accessPointConfig: {
                   type: resp.integrationType || 'APIKEY_FLW',
                 },
-                apiKey: key,
+                ...resp,
               },
             },
           };
@@ -324,7 +377,7 @@ const FormArea = React.forwardRef<
             setLoading(false);
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       messageApi.open({
         type: 'error',
@@ -362,55 +415,63 @@ const FormArea = React.forwardRef<
       <Form layout="vertical" form={form}>
         {contextHolder}
         <Card>
-          <Space direction="vertical">
-            {fields?.length > 1 && (
-              <Space direction="vertical">
-                <div>
-                  <Typography.Text strong>
-                    Select the integration type
-                  </Typography.Text>
-                </div>
-                <FormItem name={'integrationType'} rules={[{ required: true }]}>
-                  <Radio.Group>
-                    <Space direction="vertical">
-                      {fields.map((field, index) => {
-                        return (
-                          <Radio value={field.type} key={index}>
-                            {field?.label}
-                          </Radio>
-                        );
-                      })}
-                    </Space>
-                  </Radio.Group>
-                </FormItem>
-              </Space>
-            )}
-            <Space direction="vertical" className="w-full">
-              {fieldConfigs &&
-                fieldConfigs.map(({ ...field }, index) => {
-                  return (
-                    <div key={index}>
-                      <div style={{ margin: '.5rem 0' }}>
-                        <Typography.Text strong>
-                          <span style={{ color: 'red' }}>*</span> Please enter
-                          your personal access token :
-                        </Typography.Text>
+          <Space direction='vertical'>
+            <Typography.Title level={5}>
+              {`Configure ${selected?.serviceProfile?.name} services`}
+            </Typography.Title>
+
+            <Space direction="vertical">
+              {fields?.length > 1 && (
+                <Space direction="vertical">
+                  <div>
+                    <Typography.Text strong>
+                      Select the integration type
+                    </Typography.Text>
+                  </div>
+                  <FormItem name={'integrationType'} rules={[{ required: true }]}>
+                    <Radio.Group>
+                      <Space direction="vertical">
+                        {fields.map((field, index) => {
+                          return (
+                            <Radio value={field.type} key={index}>
+                              {field?.label}
+                            </Radio>
+                          );
+                        })}
+                      </Space>
+                    </Radio.Group>
+                  </FormItem>
+                </Space>
+              )}
+              <Space direction="vertical" className="w-full">
+                {fieldConfigs &&
+                  fieldConfigs.map(({ ...field }, index) => {
+                    return (
+                      <div key={index}>
+                        <div style={{ margin: '.5rem 0' }}>
+                          <Typography.Text strong>
+                            <span style={{ color: 'red' }}>*</span>
+                            <span >
+                              {`Please enter your ${field.type?.toString()?.toLowerCase()}`}
+                            </span>
+                          </Typography.Text>
+                        </div>
+                        <Form.Item
+                          key={index}
+                          name={field.type}
+                          rules={[{ required: field.required }]}
+                        >
+                          {
+                            <Input
+                              style={{ width: '35rem' }}
+                              placeholder={`Enter your ${field.type?.toString()?.toLowerCase()}`}
+                            />
+                          }
+                        </Form.Item>
                       </div>
-                      <Form.Item
-                        key={index}
-                        name={field.name}
-                        rules={[{ required: field.required }]}
-                      >
-                        {
-                          <Input
-                            style={{ width: '35rem' }}
-                            placeholder={'Enter your personal access token'}
-                          />
-                        }
-                      </Form.Item>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+              </Space>
             </Space>
           </Space>
         </Card>
