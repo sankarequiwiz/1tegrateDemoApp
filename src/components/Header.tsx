@@ -16,6 +16,7 @@ import { Notification } from './Notification';
 
 import userAvatar from '../assets/avatar.png';
 import brandLogo from '../assets/brandBlue.svg';
+import { CreateTicket } from './CreateTicket';
 
 const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
   <svg
@@ -107,8 +108,12 @@ export const Header = React.forwardRef<
           <img width={23} alt="brand_logo" src={brandLogo} />
           <TypographyText strong>{appTitle}</TypographyText>
         </Space>
+
         <Space>
-          <Notification style={{ marginRight: '1rem' }} />
+          <Space>
+            <CreateTicket />
+            <Notification style={{ marginRight: '1rem' }} />
+          </Space>
           <Space>
             <Avatar
               src={userAvatar}
