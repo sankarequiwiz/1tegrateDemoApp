@@ -44,13 +44,14 @@ type ProviderTypes = {
 };
 
 export function AppProvider({ children, value }: ProviderTypes) {
-  const [domain, setDomain] = React.useState<DomainTypes>('SCM');
 
   const [search, setSearch] = useSearchParams({
     current: '0',
+    accessKey: '',
     userName: 'Demo app User',
     organization: 'Demo app Company',
     appTitle: 'Demo app Title',
+    domain: 'SCM'
   });
 
   const setIntegrationDetails = (arg) => {
@@ -136,6 +137,18 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
+  const setDomain = (domain: DomainTypes) => {
+    setSearch((prev) => {
+      return {
+        domain, current: '0',
+        organization: prev.get('organization'), 
+        userName: prev.get('userName'), 
+        appTitle: prev.get('appTitle'),
+        accessKey: prev.get('accessKey') ?? '',
+      }
+    });
+  }
+
   const setAppTitle = (newCommit: string) => {
     setSearch((prev) => {
       prev.set('appTitle', newCommit.toString());
@@ -173,7 +186,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     integration: search.get('integration')
       ? JSON.parse(search.get('integration'))
       : undefined,
-    domain,
+    domain: search.get('domain') as any,
     ...value,
   };
 

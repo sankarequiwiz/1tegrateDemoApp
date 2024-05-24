@@ -51,26 +51,21 @@ export function getStepItems(args: Array<StepTypes> = []): {
       },
       // ...args,
     ],
-    BTS: [
+    TICKETING: [
       {
-        title: 'Select Profile',
-        container: <p>kh21dkh</p>,
+        title: 'Select Services',
+        container: <SelectService />,
         key: '1',
       },
       {
-        title: 'Select Organization',
-        container: <p>org select</p>,
+        title: 'Select Collections ',
+        container: <SelectOrganization />,
         key: '2',
       },
       {
-        title: 'Select Service Profile',
-        container: <p>kh21dkh</p>,
+        title: 'Select Ticketing',
+        container: <SelectRepo />,
         key: '3',
-      },
-      {
-        title: 'Select Organization',
-        container: <p>org select</p>,
-        key: '4',
       },
     ],
   };

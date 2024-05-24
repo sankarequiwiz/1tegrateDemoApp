@@ -101,10 +101,10 @@ const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
         { repoId: selectedRepo, orgId: selectedOrganization, branch: id },
         getHeaders()
       );
-      messageApi.success('Branch download successfully');
+      messageApi.success('Branch downloaded successfully.');
     } catch (error) {
       console.error(error);
-      messageApi.error('Failed to download');
+      messageApi.error('Failed to download the branch.');
     } finally {
       setDownloading(false);
     }

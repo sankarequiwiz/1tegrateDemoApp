@@ -29,8 +29,8 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 };
 
 /* get all organization */
-export const getSCMOrganization = async (headers: AxiosHeaders) => {
-	return await fetch.get('/api/demo/scm/organizations ', { headers });
+export const getSCMOrganization = async (headers: AxiosHeaders,type) => {
+	return await fetch.get(`/api/demo/${type}/organizations`, { headers });
 };
 
 /* get all repositories for the organization */
@@ -118,5 +118,17 @@ export const createWatch = async (
 	return await fetch.post(
 		`/api/demo/integrations/${integrationId}/watches`,
 		payload
+	);
+};
+
+
+/* Get all Ticketing */
+
+export const getTicketing = async (
+	headers: { [key: string]: string }
+) => {
+	return await fetch.get(
+		`/api/v1/ticketing/ADO-DemoOrg11/collections`,
+		{ headers }
 	);
 };
