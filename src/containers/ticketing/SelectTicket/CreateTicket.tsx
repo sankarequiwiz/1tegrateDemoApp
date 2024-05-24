@@ -14,6 +14,7 @@ const formDetails = [
       type: 'enum',
       label: 'Type',
       fieldType: <Select />,
+      required: true,
       options: [
          {
             label: 'Bug',
@@ -62,18 +63,21 @@ const formDetails = [
       label: 'Title',
       type: 'text',
       fieldType: <Input />,
+      required: true,
    },
    {
       name: 'description',
       label: 'Description',
       type: 'text',
       fieldType: <Input />,
+      required: true,
    },
    {
       name: 'priority',
       label: 'Priority',
       type: 'enum',
       fieldType: <Select />,
+      required: true,
       options: [
          {
             label: 'High',
@@ -116,18 +120,18 @@ function FormComp(props: FormTypes) {
    }, [selected])
 
    return (
-      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Edit'} ticket`} {...rest} onCancel={onCancel} onOk={onOk}>
+      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Edit'} Ticket`} {...rest} onCancel={onCancel} onOk={onOk}>
          <Form layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
-               const { label, name, fieldType, options, type } = item;
+               const { label, name, fieldType, options, type, required = false } = item;
                let props = {}
                if (type === 'enum') {
                   props = { options };
                }
                return (
-                  <Form.Item label={`Select the ${label}`} key={index} name={name}>
+                  <Form.Item rules={[{ required }]} label={label} key={index} name={name}>
                      {React.cloneElement(fieldType, {
-                        placeholder: `Please select the ${label}`,
+                        placeholder: `${type === 'text' ? 'Enter' : 'Select'} the ${label?.toLowerCase()}`,
                         ...props
                      })}
                   </Form.Item>

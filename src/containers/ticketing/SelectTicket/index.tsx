@@ -1,6 +1,7 @@
 import React, { HTMLProps, useCallback, useEffect, useState } from 'react';
 
 import {
+   Badge,
    Button,
    Dropdown,
    Form,
@@ -9,12 +10,28 @@ import {
    Menu,
    Space,
    Spin,
+   Tag,
+   Typography,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
 import { CreateTicketForm } from './CreateTicket';
+
+const Enum = {
+   priority: {
+      high: {
+         color: '#FF0000'
+      },
+      medium: {
+         color: '#f50'
+      },
+      low: {
+         color: '#FFDB5C'
+      }
+   }
+}
 
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, } = React.useContext(AppContext);
@@ -90,16 +107,14 @@ const ListComp = ({ dataSource }: ListTypes) => {
       setOpen(false);
    }
 
-   const onOpenDelete = () => { }
-
    const menu = useCallback((record: { [key: string]: any }) => {
       return (
          <Menu>
-            <Menu.Item key="0">
+            <Menu.Item key="0" icon={<EditOutlined />}>
                <a onClick={() => onOpen('edit', record)} >Edit</a>
             </Menu.Item>
-            <Menu.Item key="1" danger>
-               <a onClick={() => onOpenDelete()} >Delete</a>
+            <Menu.Item key="1" icon={<EyeOutlined />} >
+               <a  >Create Watch</a>
             </Menu.Item>
          </Menu>
       )
@@ -107,8 +122,9 @@ const ListComp = ({ dataSource }: ListTypes) => {
 
    return (
       <Spin spinning={false} >
-         <Space style={{ width: '100%', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-            <Button size='small' type='primary' onClick={() => onOpen('create')} >Create Ticket</Button>
+         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <Typography.Title level={3}>List of tickets</Typography.Title>
+            <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
          <List
             dataSource={dataSource}
@@ -116,31 +132,28 @@ const ListComp = ({ dataSource }: ListTypes) => {
                return (
                   <List.Item
                      actions={[
-                        (
-                           <Button
-                              loading={item?.isLoading}
-                              type="link"
-                              key={1}
-                           >
-                              Create Watch
-                           </Button>
-                        ),
-                        <Dropdown overlay={() => menu(item)} trigger={['click']}>
-                           <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                              <EllipsisOutlined />
-                           </a>
-                        </Dropdown>
+                        <Badge dot color={Enum.priority?.[item.priority?.toLowerCase()].color} />,
+                        <Tag>{item?.type}</Tag>
                      ]}
+                     extra={(
+                        [
+                           <Dropdown overlay={() => menu(item)} trigger={['click']}>
+                              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                 <EllipsisOutlined />
+                              </a>
+                           </Dropdown>
+                        ]
+                     )}
                   >
                      <List.Item.Meta
-                        title={<a>{item?.name}</a>}
+                        title={item?.name}
                         description={item?.description}
                      />
                   </List.Item>
                );
             }}
          />
-         <CreateTicketForm selected={selected} open={open} onCancel={onCancel} type={type} />
+         <CreateTicketForm selected={selected} open={open} onCancel={onCancel} type={type} okText={type === 'create' ? 'Create' : 'Update'} />
       </Spin>
    );
 };
