@@ -2084,11 +2084,6 @@ body {
 .ant-select {
 }
 
-.ant-input {
-  font-weight: 600;
-  color: #8c8c8c;
-}
-
 .ant-input,
 .ant-select {
   height: 40px;
