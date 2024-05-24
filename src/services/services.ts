@@ -123,8 +123,7 @@ export const createWatch = async (
 
 
 /* Get all Ticketing */
-
-export const getTicketing = async (
+export const getAllTickets = async (
 	headers: { [key: string]: string }
 ) => {
 	return await fetch.get(

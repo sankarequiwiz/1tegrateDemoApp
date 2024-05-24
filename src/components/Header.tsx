@@ -16,7 +16,6 @@ import { Notification } from './Notification';
 
 import userAvatar from '../assets/avatar.png';
 import brandLogo from '../assets/brandBlue.svg';
-import { CreateTicket } from './CreateTicket';
 import Events from '../utils/Events';
 
 const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
@@ -114,11 +113,6 @@ export const Header = React.forwardRef<
 
         <Space>
           <Space>
-            {
-              selectedDomain?.toLowerCase() === 'ticketing' && (
-                <CreateTicket />
-              )
-            }
             <Notification style={{ marginRight: '1rem' }} />
           </Space>
           <Space>

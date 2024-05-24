@@ -1,36 +1,10 @@
-import { Badge, Button, Form, FormInstance, Input, Modal, ModalProps, Select } from 'antd';
-import React, { HTMLProps, useState } from 'react';
+import { Badge, Form, Input, Modal, ModalProps, Select } from 'antd';
+import React, { useEffect } from 'react';
 
-
-export const CreateTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const [open, setOpen] = useState<boolean>(false);
-
-   const [form] = Form.useForm();
-
-   const onOpen = () => {
-      setOpen(true);
-   }
-   const onCancel = () => {
-      setOpen(false);
-   }
-   const onOk = () => {
-      form.validateFields().then((resp) => {
-         const formValues = resp;
-
-         console.log(formValues)
-      })
-   }
-
-   return (
-      <div {...props} ref={ref}>
-         <Button size='small' onClick={onOpen} >Create Ticket</Button>
-         <FormComp onCancel={onCancel} onOk={onOk} open={open} form={form} />
-      </div>
-   )
-})
 
 type FormTypes = {
-   form?: FormInstance<any>
+   type: 'edit' | 'create'
+   selected?: { [key: string]: any }
 } & ModalProps;
 
 
@@ -84,7 +58,7 @@ const formDetails = [
       ]
    },
    {
-      name: 'title',
+      name: 'name',
       label: 'Title',
       type: 'text',
       fieldType: <Input />,
@@ -119,9 +93,30 @@ const formDetails = [
 ]
 
 function FormComp(props: FormTypes) {
-   const { open, onCancel, form, ...rest } = props;
+   const { open, type, selected, onCancel: onCancelProp, ...rest } = props;
+
+   const [form] = Form.useForm();
+
+   const onOk = () => {
+      form.validateFields().then((resp) => {
+         let formValues = resp;
+         console.log(formValues);
+      }).catch((err) => {
+         console.error(err);
+      })
+   }
+
+   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+      onCancelProp(e);
+      form.resetFields();
+   }
+
+   useEffect(() => {
+      form.setFieldsValue(selected)
+   }, [selected])
+
    return (
-      <Modal open={open} onCancel={onCancel} title='Create ticket' {...rest}>
+      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Edit'} ticket`} {...rest} onCancel={onCancel} onOk={onOk}>
          <Form layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
                const { label, name, fieldType, options, type } = item;
@@ -142,3 +137,5 @@ function FormComp(props: FormTypes) {
       </Modal>
    )
 }
+
+export { FormComp as CreateTicketForm }
