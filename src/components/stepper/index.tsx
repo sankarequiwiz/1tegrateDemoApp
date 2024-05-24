@@ -28,7 +28,7 @@ export const Stepper = React.forwardRef<
         current={current}
         direction={direction}
         style={{
-          background: '#f5f5f5',
+          background: 'rgb(243 244 246)',
           padding: '1rem',
           position: 'fixed',
           top: style?.marginTop,
