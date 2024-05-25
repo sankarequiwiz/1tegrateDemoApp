@@ -14,10 +14,19 @@ import { AppContext } from '../../../context/AppProvider';
 
 import API from '../../../services/index';
 import { OrganizationTypes, Payload } from './type';
+import { Errors, handleError } from '../../../utils/error';
 import { List } from 'antd';
 
+const errorObj = new Errors();
+
 const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-  const { setCurrentStep, current, selectedOrganization, integration ,domain} = React.useContext(AppContext);
+  const {
+    setCurrentStep,
+    setSelectedOrganization,
+    current,
+    selectedOrganization,
+    integration,
+    domain } = React.useContext(AppContext);
 
   const [organization, setOrganization] = React.useState<
     Array<OrganizationTypes>
@@ -35,7 +44,14 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
       const { data } = resp.data;
       setOrganization(data);
     } catch (error) {
-      console.log(error);
+      setSelectedOrganization('default');
+
+      if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
+        const [{ errorCode }] = error?.response?.data;
+        if (errorCode === errorObj.getOrg().getNotFoundCode) {
+          setCurrentStep(current + 1);
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -134,7 +150,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
                 handleSelect(item.id);
               }}
               actions={[
-                 (
+                (
                   <Button
                     loading={item?.isLoading}
                     onClick={handleCreateWatch}

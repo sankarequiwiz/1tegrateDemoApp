@@ -69,17 +69,9 @@ export const SelectService = React.forwardRef<
     setSelected(selected);
   };
 
-  const selectedchecked =services.find((item) => item?.id === selected)
-  console.log("selected one is printing here",selectedchecked)
-
   const handleNext = () => {
     childRef.current.onIntegrate(() => {
-      if (selectedchecked?.serviceProfile?.name == "Jira") {
-        setCurrentStep(current + 2);
-      } else {
-        setCurrentStep(current + 1);
-      }
-
+      setCurrentStep(current + 1)
     });
   };
 
@@ -306,7 +298,7 @@ const FormArea = React.forwardRef<
     return [];
   }, [selected]);
 
-  const integrationPyloadKey = {
+  const integrationPayloadKey = {
     API_KEY: {
       value: 'apiKey'
     },
@@ -321,8 +313,6 @@ const FormArea = React.forwardRef<
     }
   }
 
-  console.log(selected);
-
   const onIntegrate = (callback) => {
     if (organization) {
       form
@@ -330,10 +320,10 @@ const FormArea = React.forwardRef<
         .then(async (resp) => {
           Object.entries(resp).map(([key, value]) => {
             delete resp[key];
-            if (!integrationPyloadKey?.[key]) {
+            if (!integrationPayloadKey?.[key]) {
               alert(`${key} is not configured in mapper`)
             }
-            resp[integrationPyloadKey?.[key]?.['value'] ?? key] = value;
+            resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
           })
 
           const formValues: Payload = {
