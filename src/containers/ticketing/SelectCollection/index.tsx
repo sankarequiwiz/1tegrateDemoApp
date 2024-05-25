@@ -47,7 +47,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
          organizationId: '4a321a7d-ee19-4e4a-b096-7de51c9e279e'
       }
       try {
-         const resp = await API.services.getAllTickets(headers);
+         const resp = await API.services.getAllCollection(headers);
          console.log(resp);
       } catch (error) {
          console.error(error);

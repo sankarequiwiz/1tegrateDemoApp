@@ -117,7 +117,17 @@ export const SelectService = React.forwardRef<
               {Array.isArray(services) &&
                 services.map((item, index) => {
                   return (
-                    <Popover content={<p>wqd</p>} trigger={['click']} placement='bottom' open={false} >
+                    <Popover
+                      content={
+                        <FormArea
+                          ref={childRef as any}
+                          selected={services.find((item) => item?.id === selected) as any}
+                        />
+                      }
+                      trigger={['click']}
+                      placement='bottom'
+                      open={false}
+                    >
                       <Col
                         className="w-full"
                         span={24}

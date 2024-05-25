@@ -140,8 +140,6 @@ const ListComp = ({ dataSource }: ListTypes) => {
       }
    };
 
-
-
    const menu = useCallback((record: { [key: string]: any }) => {
       return (
          <Menu>
