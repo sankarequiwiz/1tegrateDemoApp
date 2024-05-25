@@ -19,6 +19,7 @@ type ContextTypes = {
   selectedPullReq?: string;
   selectedCommit?: string;
   appTitle?: string;
+  selectedCollection?: string;
 
   setAppTitle?: (appTitle: string) => void;
   setUserName?: (userName: string) => void;
@@ -34,6 +35,7 @@ type ContextTypes = {
   setOrganization?: React.Dispatch<React.SetStateAction<string>>;
   setDomain?: React.Dispatch<React.SetStateAction<DomainTypes>>;
   setIntegration?: (serviceProfileTypes: ServiceTypes) => void;
+  setSelectedCollection?: (collection: string) => void;
 
   integration?: ServiceTypes;
 };
@@ -99,6 +101,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
   const setSelectedOrganization = (arg: string | 'default') => {
     setSearch((prev) => {
       prev.set('selectedOrganization', arg);
+      return prev;
+    });
+  };
+
+  const setSelectedCollection = (arg: string | 'default') => {
+    setSearch((prev) => {
+      prev.set('selected', arg);
       return prev;
     });
   };
@@ -171,6 +180,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setAppTitle,
     setSelectedPullReq,
     setSelectedCommit,
+    setSelectedCollection,
     organization: search.get('organization'),
     userName: search.get('userName'),
     accessKey: search.get('accessKey'),

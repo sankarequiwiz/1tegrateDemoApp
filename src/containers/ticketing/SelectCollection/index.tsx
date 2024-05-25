@@ -6,6 +6,7 @@ import {
    List,
    ListProps,
    Menu,
+   Radio,
    Space,
    Spin,
    Tag,
@@ -14,8 +15,8 @@ import {
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { EllipsisOutlined, EyeOutlined,  } from '@ant-design/icons';
-import { handleError } from '../../../utils/error';
+import { EllipsisOutlined, EyeOutlined, } from '@ant-design/icons';
+import { Errors, handleError } from '../../../utils/error';
 
 const Enum = {
    priority: {
@@ -30,9 +31,9 @@ const Enum = {
       }
    }
 }
-
+const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const { setCurrentStep, current, } = React.useContext(AppContext);
+   const { setCurrentStep, setSelectedCollection, current, } = React.useContext(AppContext);
    const [ticketState] = React.useState([
       { id: 'uuid', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
       { id: 'uuid', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
@@ -51,6 +52,13 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
          console.log(resp);
       } catch (error) {
          console.error(error);
+         setSelectedCollection('default');
+         if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
+            const [{ errorCode }] = error?.response?.data;
+            if (errorCode === errorObj.getOrg().getNotFoundCode) {
+               setCurrentStep(current + 1);
+            }
+         }
       }
    }
 
@@ -79,7 +87,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
-            // onSubmit={() => setCurrentStep(current + 1)}
+         // onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>
    );
@@ -92,13 +100,13 @@ type ListTypes = {
 const ListComp = ({ dataSource }: ListTypes) => {
    const [_loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
-   const { selectedOrganization, integration } = React.useContext(AppContext);
+   const { integration, selectedCollection, setSelectedCollection } = React.useContext(AppContext);
 
    const handleCreateWatch = async (e: any) => {
       e.stopPropagation();
       setLoading(true);
       const fullBodySelected = dataSource.find(
-         (item) => item.id === selectedOrganization
+         (item) => item.id === selectedCollection
       );
       const payload = {
          name: `web-gateway-service-${fullBodySelected?.login}`,
@@ -107,7 +115,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
          resource: {
             type: 'ORGANIZATION',
             organization: {
-               id: selectedOrganization,
+               id: selectedCollection,
             },
          },
       };
@@ -122,6 +130,10 @@ const ListComp = ({ dataSource }: ListTypes) => {
          setLoading(false);
       }
    };
+
+   const handleSelect = (selected: string) => {
+      setSelectedCollection(selectedCollection === selected ? '' : selected);
+    };
 
    const menu = useCallback((_record: { [key: string]: any }) => {
       return (
@@ -139,12 +151,16 @@ const ListComp = ({ dataSource }: ListTypes) => {
          <List
             dataSource={dataSource}
             renderItem={(item: { [key: string]: any }) => {
+               const isSelected = item.id === selectedCollection;
                return (
                   <List.Item
                      actions={[
                         <Badge dot color={Enum.priority?.[item.priority?.toLowerCase()].color} />,
                         <Tag>{item?.type}</Tag>
                      ]}
+                     onClick={() => {
+                        handleSelect(item.id);
+                      }}
                      extra={(
                         [
                            <Dropdown overlay={() => menu(item)} trigger={['click']}>
@@ -156,6 +172,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
                      )}
                   >
                      <List.Item.Meta
+                        avatar={<Radio checked={isSelected} value={item.id} />}
                         title={item?.name}
                         description={item?.description}
                      />
