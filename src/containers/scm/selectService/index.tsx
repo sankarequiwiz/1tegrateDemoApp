@@ -135,10 +135,10 @@ export const SelectService = React.forwardRef<
                     >
                       <Col
                         className="w-full"
-                        span={24}
-                        md={12}
-                        xl={10}
-                        xxl={6}
+                        span={12}
+                        md={8}
+                        xl={6}
+                        xxl={4}
                         key={index}
                       >
                         <ProviderCard

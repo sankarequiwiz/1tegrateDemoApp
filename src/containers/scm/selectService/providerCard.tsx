@@ -1,6 +1,6 @@
 import React, { LegacyRef } from "react";
 
-import { Button, Card, Space, Typography } from "antd";
+import { Button, Card, Typography, Divider } from "antd";
 import { CardProps } from "antd/es/card";
 
 import { Gitlab } from '../../../components/icons/providers/gitlab';
@@ -11,11 +11,6 @@ import { ADO } from '../../../components/icons/providers/ado';
 import { Jira } from '../../../components/icons/providers/jira';
 import { ServiceTypes } from "./types";
 import { AppContext } from "../../../context/AppProvider";
-
-// const iconLayout: React.SVGProps<SVGSVGElement> = {
-//    width: 50,
-//    height: 50
-// }
 
 export const ProviderCard = React.forwardRef((props: CardProps & { item: ServiceTypes }, ref: LegacyRef<HTMLDivElement>) => {
    const { item, onSelect, ...rest } = props;
@@ -33,9 +28,9 @@ export const ProviderCard = React.forwardRef((props: CardProps & { item: Service
          return <Servicenow />
       }
       else if (name.startsWith('gitlab')) {
-         return <Gitlab  />;
+         return <Gitlab />;
       } else if (name.startsWith('bitbucket')) {
-         return <Bitbucket  />;
+         return <Bitbucket />;
       } else if (name.startsWith('ado')) {
          return <ADO />;
       }
@@ -45,16 +40,14 @@ export const ProviderCard = React.forwardRef((props: CardProps & { item: Service
 
    return (
       <Card
-         style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
+         style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",}}
          bordered
          rootClassName="card"
          ref={ref}
          {...rest as CardProps}
       >
-         {/* <Space align="center" size={15}> */}
 
-         {/* <Space direction="vertical"> */}
-         <div style={{ textAlign: "center" }}>
+         <div style={{ textAlign: "center", marginBottom:"1.5rem"}}>
             <div>
                {getLogo(item?.serviceProfile?.name)}
             </div>
@@ -68,12 +61,11 @@ export const ProviderCard = React.forwardRef((props: CardProps & { item: Service
             </div>
 
          </div>
-
-         {/* </Space> */}
-         {/* </Space> */}
+         <Divider style={{ margin:'0 .5rem',border: '0.1px solid #e2e8f0'  }} />
          <div style={{ textAlign: "center" }}>
-            <Button type="link"  style={{fontSize:"15px"}} onClick={onSelect as any}  >
-               {selected?"Selected":'Select'}</Button>
+            <Button type="link" style={{ fontSize: "15px" }} onClick={onSelect as any}  >
+               {selected ? "Selected" : 'Select'} 
+            </Button>
          </div>
 
       </Card>
