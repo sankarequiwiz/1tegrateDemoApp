@@ -2,7 +2,7 @@ import React from "react"
 
 export const Jira = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => {
    return (
-      <svg height="30" preserveAspectRatio="xMidYMid" width="28" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 -30.632388516510233 255.324 285.95638851651023" {...props} ref={ref}>
+      <svg height="50" preserveAspectRatio="xMidYMid" width="50" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 -30.632388516510233 255.324 285.95638851651023" {...props} ref={ref}>
          <linearGradient id="a">
             <stop offset=".18" stopColor="#0052cc" />
             <stop offset="1" stopColor="#2684ff" />

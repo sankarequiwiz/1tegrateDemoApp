@@ -3,11 +3,11 @@ import React from "react"
 export const Github = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => {
    return (
       <svg
-      height="32"
+      height="55"
       aria-hidden="true"
       viewBox="0 0 16 16"
       version="1.1"
-      width="32"
+      width="55"
       data-view-component="true"
       className="octicon octicon-mark-github v-align-middle color-fg-default"
       {...props}

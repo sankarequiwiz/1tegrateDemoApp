@@ -4,7 +4,6 @@ import API from '../../../services';
 import {
   ButtonProps,
   Col,
-  Dropdown,
   Popover,
   Row,
   Skeleton,
@@ -118,6 +117,8 @@ export const SelectService = React.forwardRef<
                 services.map((item, index) => {
                   return (
                     <Popover
+                      overlayStyle={{ width: 'calc(100% - 250px)', marginLeft: '250px' }}
+
                       content={
                         <FormArea
                           ref={childRef as any}
@@ -127,7 +128,7 @@ export const SelectService = React.forwardRef<
                       forceRender
                       trigger={['click']}
                       placement='bottom'
-                      // open={false}
+                      open={false}
                     >
                       <Col
                         className="w-full"
@@ -142,7 +143,7 @@ export const SelectService = React.forwardRef<
                           bordered
                           rootClassName="card"
                           aria-selected={selected === item?.id}
-                          onClick={() => selectHandler(item?.id)}
+                          onSelect={() => selectHandler(item?.id)}
                           item={item}
                         />
                       </Col>
@@ -151,10 +152,10 @@ export const SelectService = React.forwardRef<
                 })}
             </Row>
           )}
-          {/* <FormArea
+          <FormArea
             ref={childRef as any}
             selected={services.find((item) => item?.id === selected) as any}
-          /> */}
+          />
         </div>
       </div>
       <Footer hideBackButton onSubmit={handleNext} onOkProps={onOkProps} />
