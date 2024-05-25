@@ -103,21 +103,26 @@ export const SelectService = React.forwardRef<
     loading: childRef.current?.loading,
   };
 
+  const iconLayout: React.SVGProps<SVGSVGElement> = {
+    width: 50,
+    height: 50
+  }
+
   const getLogo = React.useCallback((name: string) => {
     name = name?.toLowerCase();
     if (name.startsWith('github')) {
-      return <Github />;
+      return <Github {...iconLayout} />;
     } else if (name.startsWith('jira')) {
-      return <Jira />
+      return <Jira {...iconLayout} />
     } else if (name.startsWith('servicenow')) {
-      return <Servicenow />
+      return <Servicenow {...iconLayout} />
     }
     else if (name.startsWith('gitlab')) {
-      return <Gitlab />;
+      return <Gitlab {...iconLayout} />;
     } else if (name.startsWith('bitbucket')) {
-      return <Bitbucket />;
+      return <Bitbucket {...iconLayout} />;
     } else if (name.startsWith('ado')) {
-      return <ADO />;
+      return <ADO {...iconLayout} />;
     }
   }, []);
 
@@ -158,7 +163,7 @@ export const SelectService = React.forwardRef<
                         aria-selected={selected === item?.id}
                         onClick={() => selectHandler(item?.id)}
                       >
-                        <Space align="start">
+                        <Space align="center" size={15}>
                           {getLogo(item?.serviceProfile?.name)}
                           <Space direction="vertical">
                             {item?.serviceProfile?.name && (
@@ -166,11 +171,6 @@ export const SelectService = React.forwardRef<
                                 {item?.serviceProfile?.name}
                               </Typography.Text>
                             )}
-                            {/* {item?.serviceProfile?.description && (
-                              <Typography.Text type="secondary">
-                                {item?.serviceProfile?.description}
-                              </Typography.Text>
-                            )} */}
                           </Space>
                         </Space>
                       </Card>
