@@ -28,6 +28,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
    const getAllTickets = async () => {
       try {
          const resp = await API.services.getAllCollection(selectedOrganization, { integrationId: integration?.id });
+
          const { data } = resp?.data;
          setCollectionsState(data)
       } catch (error) {
