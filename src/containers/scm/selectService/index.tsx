@@ -115,29 +115,27 @@ export const SelectService = React.forwardRef<
           {loading && <Skeleton />}
           {!loading && (
             <Row ref={rowRef} className="w-full" gutter={[20, 20]}>
-              {Array.isArray(services) &&
-                services.map((item, index) => {
-                  return (
-
-                    <Col
-                      className="w-full"
-                      span={24}
-                      md={12}
-                      xl={10}
-                      xxl={6}
-                      key={index}
-                    >
-                      <ProviderCard
-                        style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
-                        bordered
-                        rootClassName="card"
-                        aria-selected={selected === item?.id}
-                        onClick={() => selectHandler(item?.id)}
-                        item={item}
-                      />
-                    </Col>
-                  );
-                })}
+              {Array.isArray(services) && services.map((item, index) => {
+                return (
+                  <Col
+                    className="w-full"
+                    span={24}
+                    md={12}
+                    xl={10}
+                    xxl={6}
+                    key={index}
+                  >
+                    <ProviderCard
+                      style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
+                      bordered
+                      rootClassName="card"
+                      aria-selected={selected === item?.id}
+                      onClick={() => selectHandler(item?.id)}
+                      item={item}
+                    />
+                  </Col>
+                );
+              })}
             </Row>
           )}
           <FormArea
