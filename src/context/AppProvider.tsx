@@ -11,7 +11,7 @@ type ContextTypes = {
   organization?: string;
   current?: number;
   selectedService?: string;
-  selectedOrganization?: string;
+  selectedOrganization?: string | 'default';
   selectedRepo?: string;
   conclusion?: string;
   selectedBranch?: string;
@@ -96,7 +96,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
-  const setSelectedOrganization = (arg) => {
+  const setSelectedOrganization = (arg: string | 'default') => {
     setSearch((prev) => {
       prev.set('selectedOrganization', arg);
       return prev;
@@ -141,8 +141,8 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setSearch((prev) => {
       return {
         domain, current: '0',
-        organization: prev.get('organization'), 
-        userName: prev.get('userName'), 
+        organization: prev.get('organization'),
+        userName: prev.get('userName'),
         appTitle: prev.get('appTitle'),
         accessKey: prev.get('accessKey') ?? '',
       }
