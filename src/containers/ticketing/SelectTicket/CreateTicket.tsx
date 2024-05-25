@@ -73,14 +73,12 @@ const formDetails = [
       label: 'Description',
       type: 'text',
       fieldType: <Input />,
-      required: true,
    },
    {
       name: 'priority',
       label: 'Priority',
       type: 'enum',
       fieldType: <Select />,
-      required: true,
       options: [
          {
             label: 'High',
@@ -96,14 +94,7 @@ const formDetails = [
             value: 'low'
          }
       ]
-   },
-   {
-      name: 'status',
-      label: 'Status',
-      type: 'text',
-      fieldType: <Input />,
-      required: true,
-   },
+   }
 ]
 
 function FormComp(props: FormTypes) {
