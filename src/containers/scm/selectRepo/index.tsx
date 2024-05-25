@@ -8,6 +8,7 @@ import { Payload, ReposTypes } from './type';
 import { List } from 'antd';
 
 import { DownloadOutlined } from '@ant-design/icons';
+import { handleError } from '../../../utils/error';
 
 export const SelectRepo = React.forwardRef<
   HTMLDivElement,

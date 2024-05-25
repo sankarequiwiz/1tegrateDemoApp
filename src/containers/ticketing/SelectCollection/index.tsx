@@ -1,8 +1,7 @@
-import React, { HTMLProps, useCallback, useEffect, useState } from 'react';
+import React, { HTMLProps, useCallback, useEffect } from 'react';
 
 import {
    Badge,
-   Button,
    Dropdown,
    List,
    ListProps,
@@ -10,13 +9,12 @@ import {
    Space,
    Spin,
    Tag,
-   Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, EyeOutlined,  } from '@ant-design/icons';
 import { handleError } from '../../../utils/error';
 
 const Enum = {
