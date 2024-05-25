@@ -1,37 +1,19 @@
-import React, { HTMLProps, useCallback, useEffect } from 'react';
+import React, { HTMLProps, useEffect } from 'react';
 
 import {
-   Badge,
-   Dropdown,
    List,
    ListProps,
-   Menu,
    Radio,
    Space,
    Spin,
-   Tag,
    Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { EllipsisOutlined, EyeOutlined, } from '@ant-design/icons';
 import { Errors, handleError } from '../../../utils/error';
 
-const Enum = {
-   priority: {
-      high: {
-         color: '#FF0000'
-      },
-      medium: {
-         color: '#f50'
-      },
-      low: {
-         color: '#FFDB5C'
-      }
-   }
-}
 const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { integration, setCurrentStep, setSelectedCollection, current, selectedOrganization = 'default' } = React.useContext(AppContext);
@@ -50,10 +32,10 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
          setCollectionsState(data)
       } catch (error) {
          console.error(error);
-         setSelectedCollection('default');
          if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
             const [{ errorCode }] = error?.response?.data;
             if (errorCode === errorObj.getOrg().getNotFoundCode) {
+               setSelectedCollection('default');
                setCurrentStep(current + 1);
             }
          }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { HTMLProps } from 'react';
+import React, { HTMLProps, useRef } from 'react';
 import API from '../../../services';
 import {
   ButtonProps,
@@ -29,10 +29,13 @@ export const SelectService = React.forwardRef<
 >((props, ref) => {
   const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
+
   const childRef = React.useRef<{
     onIntegrate: (callBack: VoidFunction) => void;
     loading: boolean;
   }>();
+
+  const rowRef = useRef<HTMLDivElement>(null);
 
   const {
     setCurrentStep,
