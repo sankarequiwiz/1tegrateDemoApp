@@ -124,19 +124,22 @@ export const createWatch = async (
 
 /* Get all Ticketing */
 export const getAllCollection = async (
+	organizationId: string,
 	headers: { [key: string]: string }
 ) => {
 	return await fetch.get(
-		`/api/v1/ticketing/ADO-DemoOrg11/collections`,
+		`/api/demo/ticketing/${organizationId}/collections`,
 		{ headers }
 	);
 };
 
 export const getAllTickets = async (
+	organizationId: string,
+	collectionId: string,
 	headers: { [key: string]: string }
 ) => {
 	return await fetch.get(
-		`/api/v1/ticketing/ADO-DemoOrg11/collections`,
+		`/api/demo/ticketing/${organizationId}/collections/${collectionId}`,
 		{ headers }
 	);
 };

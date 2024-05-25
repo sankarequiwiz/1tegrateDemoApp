@@ -35,7 +35,7 @@ const Enum = {
 }
 
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const { setCurrentStep, current, } = React.useContext(AppContext);
+   const { setCurrentStep, current, integration, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
    const [ticketState] = React.useState([
       { id: 'uuid', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
       { id: 'uuid', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
@@ -45,12 +45,8 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
    ]);
 
    const getAllTickets = async () => {
-      const headers = {
-         integrationId: 'ac5bc316-b4a4-4b25-9a0a-1aaa30ae33f6',
-         organizationId: '4a321a7d-ee19-4e4a-b096-7de51c9e279e'
-      }
       try {
-         const resp = await API.services.getAllTickets(headers);
+         const resp = await API.services.getAllTickets(selectedOrganization, selectedCollection, { integrationId: integration?.id });
          console.log(resp);
       } catch (error) {
          console.error(error);
@@ -82,7 +78,7 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
-            // onSubmit={() => setCurrentStep(current + 1)}
+         // onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>
    );
@@ -98,7 +94,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
    const [type, setType] = useState<'create' | 'edit'>('create')
    const [_loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
-   const { selectedOrganization, integration } = React.useContext(AppContext);
+   const { integration, selectedOrganization } = React.useContext(AppContext);
 
    const onOpen = (type: 'edit' | 'create', arg?: { [key: string]: any }) => {
       setType(type);

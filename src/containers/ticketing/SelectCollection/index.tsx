@@ -33,22 +33,18 @@ const Enum = {
 }
 const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const { setCurrentStep, setSelectedCollection, current, } = React.useContext(AppContext);
+   const { integration, setCurrentStep, setSelectedCollection, current, selectedOrganization = 'default' } = React.useContext(AppContext);
    const [ticketState] = React.useState([
-      { id: 'uuid', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
-      { id: 'uuid', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
-      { id: 'uuid', type: 'STORY', priority: 'medium', description: 'Ticket Description', name: 'Ticket Name 3' },
-      { id: 'uuid', type: 'DOCUMENTATION', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 4' },
-      { id: 'uuid', type: 'INCIDENT', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 5' },
+      { id: '1', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
+      { id: '2', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
+      { id: '3', type: 'STORY', priority: 'medium', description: 'Ticket Description', name: 'Ticket Name 3' },
+      { id: '4', type: 'DOCUMENTATION', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 4' },
+      { id: '5', type: 'INCIDENT', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 5' },
    ]);
 
    const getAllTickets = async () => {
-      const headers = {
-         integrationId: 'ac5bc316-b4a4-4b25-9a0a-1aaa30ae33f6',
-         organizationId: '4a321a7d-ee19-4e4a-b096-7de51c9e279e'
-      }
       try {
-         const resp = await API.services.getAllCollection(headers);
+         const resp = await API.services.getAllCollection(selectedOrganization, { integrationId: integration?.id });
          console.log(resp);
       } catch (error) {
          console.error(error);
@@ -87,7 +83,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
-         // onSubmit={() => setCurrentStep(current + 1)}
+            onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>
    );
@@ -133,17 +129,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
 
    const handleSelect = (selected: string) => {
       setSelectedCollection(selectedCollection === selected ? '' : selected);
-    };
-
-   const menu = useCallback((_record: { [key: string]: any }) => {
-      return (
-         <Menu>
-            <Menu.Item onClick={handleCreateWatch} key="1" icon={<EyeOutlined />} >
-               <a >Create Watch</a>
-            </Menu.Item>
-         </Menu>
-      )
-   }, []);
+   };
 
    return (
       <Spin spinning={false} >
@@ -155,21 +141,11 @@ const ListComp = ({ dataSource }: ListTypes) => {
                return (
                   <List.Item
                      actions={[
-                        <Badge dot color={Enum.priority?.[item.priority?.toLowerCase()].color} />,
-                        <Tag>{item?.type}</Tag>
+                        isSelected && <a onClick={handleCreateWatch} key={1} >Create Watch</a>
                      ]}
                      onClick={() => {
                         handleSelect(item.id);
-                      }}
-                     extra={(
-                        [
-                           <Dropdown overlay={() => menu(item)} trigger={['click']}>
-                              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                 <EllipsisOutlined />
-                              </a>
-                           </Dropdown>
-                        ]
-                     )}
+                     }}
                   >
                      <List.Item.Meta
                         avatar={<Radio checked={isSelected} value={item.id} />}

@@ -107,7 +107,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
 
   const setSelectedCollection = (arg: string | 'default') => {
     setSearch((prev) => {
-      prev.set('selected', arg);
+      prev.set('selectedCollection', arg);
       return prev;
     });
   };
@@ -193,6 +193,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     selectedRepo: search.get('selectedRepo'),
     current: +search.get('current'),
     selectedOrganization: search.get('selectedOrganization'),
+    selectedCollection: search.get('selectedCollection'),
     integration: search.get('integration')
       ? JSON.parse(search.get('integration'))
       : undefined,
