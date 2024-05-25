@@ -124,9 +124,10 @@ export const SelectService = React.forwardRef<
                           selected={services.find((item) => item?.id === selected) as any}
                         />
                       }
+                      forceRender
                       trigger={['click']}
                       placement='bottom'
-                      open={false}
+                      // open={false}
                     >
                       <Col
                         className="w-full"
@@ -150,10 +151,10 @@ export const SelectService = React.forwardRef<
                 })}
             </Row>
           )}
-          <FormArea
+          {/* <FormArea
             ref={childRef as any}
             selected={services.find((item) => item?.id === selected) as any}
-          />
+          /> */}
         </div>
       </div>
       <Footer hideBackButton onSubmit={handleNext} onOkProps={onOkProps} />

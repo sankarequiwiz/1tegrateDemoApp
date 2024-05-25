@@ -36,7 +36,7 @@ const Enum = {
 
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, integration, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
-   const [ticketState] = React.useState([
+   const [ticketsState, setTicketsState] = React.useState([
       { id: 'uuid', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
       { id: 'uuid', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
       { id: 'uuid', type: 'STORY', priority: 'medium', description: 'Ticket Description', name: 'Ticket Name 3' },
@@ -47,7 +47,8 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
    const getAllTickets = async () => {
       try {
          const resp = await API.services.getAllTickets(selectedOrganization, selectedCollection, { integrationId: integration?.id });
-         console.log(resp);
+         const { data } = resp.data;
+         setTicketsState(data);
       } catch (error) {
          console.error(error);
       }
@@ -74,11 +75,11 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
                   }}
                ></div>
             </div>
-            <ListComp dataSource={ticketState} />
+            <ListComp dataSource={ticketsState} />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
-         // onSubmit={() => setCurrentStep(current + 1)}
+            onSubmit={() => setCurrentStep(0)}
          />
       </Space>
    );
@@ -153,7 +154,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
       <Spin spinning={false} >
          {contextHolder}
          <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <Typography.Title level={3}>List of tickets</Typography.Title>
+            <Typography.Title level={3}>List of ticket</Typography.Title>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
          <List

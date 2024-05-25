@@ -10,6 +10,7 @@ import {
    Space,
    Spin,
    Tag,
+   Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
@@ -34,7 +35,7 @@ const Enum = {
 const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { integration, setCurrentStep, setSelectedCollection, current, selectedOrganization = 'default' } = React.useContext(AppContext);
-   const [ticketState] = React.useState([
+   const [collectionsState, setCollectionsState] = React.useState([
       { id: '1', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
       { id: '2', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
       { id: '3', type: 'STORY', priority: 'medium', description: 'Ticket Description', name: 'Ticket Name 3' },
@@ -45,7 +46,8 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
    const getAllTickets = async () => {
       try {
          const resp = await API.services.getAllCollection(selectedOrganization, { integrationId: integration?.id });
-         console.log(resp);
+         const { data } = resp?.data;
+         setCollectionsState(data)
       } catch (error) {
          console.error(error);
          setSelectedCollection('default');
@@ -79,7 +81,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
                   }}
                ></div>
             </div>
-            <ListComp dataSource={ticketState} />
+            <ListComp dataSource={collectionsState} />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
@@ -134,6 +136,9 @@ const ListComp = ({ dataSource }: ListTypes) => {
    return (
       <Spin spinning={false} >
          {contextHolder}
+         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <Typography.Title level={3}>List of Collection</Typography.Title>
+         </Space>
          <List
             dataSource={dataSource}
             renderItem={(item: { [key: string]: any }) => {
