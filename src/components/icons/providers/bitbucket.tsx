@@ -4,7 +4,7 @@ import React from 'react';
 
 export const Bitbucket = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => {
    return (
-      <svg width="60" height="60" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="bitbucketLogo"
+      <svg width="50" height="50" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="bitbucketLogo"
          {...props}
          ref={ref}
       >
