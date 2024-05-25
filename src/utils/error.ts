@@ -12,13 +12,11 @@ export function handleError(error: Array<{ [key: string]: any }> | { [key: strin
 export class Errors {
    constructor() {
    }
-
    getErrorCodes(): { orgNotFound: string } {
       return {
          orgNotFound: 'OTG-41000003'
       }
    }
-
    getOrg() {
       return {
          getNotFoundCode: this.getErrorCodes()

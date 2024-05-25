@@ -45,7 +45,6 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
       setOrganization(data);
     } catch (error) {
       setSelectedOrganization('default');
-
       if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
         const [{ errorCode }] = error?.response?.data;
         if (errorCode === errorObj.getOrg().getNotFoundCode) {
@@ -58,8 +57,8 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
   };
 
   React.useEffect(() => {
-    getOrganization();
-  }, []);
+    if (current === 1)  getOrganization();
+  }, [current]);
 
   const onOkProps: ButtonProps = {
     disabled: !selectedOrganization,

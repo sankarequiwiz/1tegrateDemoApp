@@ -3,6 +3,7 @@ import { Branch } from '../containers/scm/Branch';
 import { SelectOrganization } from '../containers/scm/selectOrg';
 import { SelectRepo } from '../containers/scm/selectRepo';
 import { SelectService } from '../containers/scm/selectService';
+import { SelectCollection } from '../containers/ticketing/SelectCollection';
 import { SelectTicket } from '../containers/ticketing/SelectTicket';
 
 export const conclusionOption = [
@@ -65,7 +66,7 @@ export function getStepItems(args: Array<StepTypes> = []): {
       },
       {
         title: 'Select Collection',
-        container: <SelectOrganization />,
+        container: <SelectCollection />,
         key: '3',
       },
       {

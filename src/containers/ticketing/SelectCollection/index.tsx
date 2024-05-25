@@ -17,7 +17,6 @@ import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
 import { EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
-import { CreateTicketForm } from './CreateTicket';
 import { handleError } from '../../../utils/error';
 
 const Enum = {
@@ -34,7 +33,7 @@ const Enum = {
    }
 }
 
-const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
+const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, } = React.useContext(AppContext);
    const [ticketState] = React.useState([
       { id: 'uuid', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
@@ -93,23 +92,9 @@ type ListTypes = {
 } & ListProps<unknown>;
 
 const ListComp = ({ dataSource }: ListTypes) => {
-   const [open, setOpen] = useState<boolean>(false)
-   const [selected, setSelected] = useState<{ [key: string]: any }>();
-   const [type, setType] = useState<'create' | 'edit'>('create')
    const [_loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
    const { selectedOrganization, integration } = React.useContext(AppContext);
-
-   const onOpen = (type: 'edit' | 'create', arg?: { [key: string]: any }) => {
-      setType(type);
-      setSelected(arg);
-      setOpen(true);
-   }
-
-   const onCancel = () => {
-      setSelected(undefined);
-      setOpen(false);
-   }
 
    const handleCreateWatch = async (e: any) => {
       e.stopPropagation();
@@ -140,14 +125,9 @@ const ListComp = ({ dataSource }: ListTypes) => {
       }
    };
 
-
-
-   const menu = useCallback((record: { [key: string]: any }) => {
+   const menu = useCallback((_record: { [key: string]: any }) => {
       return (
          <Menu>
-            <Menu.Item key="0" icon={<EditOutlined />}>
-               <a onClick={() => onOpen('edit', record)} >Edit</a>
-            </Menu.Item>
             <Menu.Item onClick={handleCreateWatch} key="1" icon={<EyeOutlined />} >
                <a >Create Watch</a>
             </Menu.Item>
@@ -158,10 +138,6 @@ const ListComp = ({ dataSource }: ListTypes) => {
    return (
       <Spin spinning={false} >
          {contextHolder}
-         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <Typography.Title level={3}>List of tickets</Typography.Title>
-            <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
-         </Space>
          <List
             dataSource={dataSource}
             renderItem={(item: { [key: string]: any }) => {
@@ -189,9 +165,8 @@ const ListComp = ({ dataSource }: ListTypes) => {
                );
             }}
          />
-         <CreateTicketForm selected={selected} open={open} onCancel={onCancel} type={type} okText={type === 'create' ? 'Create' : 'Update'} />
       </Spin>
    );
 };
 
-export { SelectTicket };
+export { SelectCollection };
