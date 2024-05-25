@@ -97,6 +97,13 @@ const formDetails = [
          }
       ]
    },
+   {
+      name: 'status',
+      label: 'Status',
+      type: 'text',
+      fieldType: <Input />,
+      required: true,
+   },
 ]
 
 function FormComp(props: FormTypes) {
@@ -116,7 +123,7 @@ function FormComp(props: FormTypes) {
    const createTickets = async (values: { [key: string]: string }) => {
       try {
          const resp = await API.services.createTickets(
-            { ...values, "status": "To Do" },
+            values,
             headers,
             selectedOrganization,
             selectedCollection
