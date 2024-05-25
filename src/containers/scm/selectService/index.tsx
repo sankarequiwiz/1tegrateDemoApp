@@ -35,8 +35,6 @@ export const SelectService = React.forwardRef<
     loading: boolean;
   }>();
 
-  const rowRef = useRef<HTMLDivElement>(null);
-
   const {
     setCurrentStep,
     current,
@@ -120,8 +118,8 @@ export const SelectService = React.forwardRef<
                 services.map((item, index) => {
                   return (
                     <Popover
+                      key={index}
                       overlayStyle={{ width: 'calc(100% - 250px)', marginLeft: '250px' }}
-
                       content={
                         <FormArea
                           ref={childRef as any}
