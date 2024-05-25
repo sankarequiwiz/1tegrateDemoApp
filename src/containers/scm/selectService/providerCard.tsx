@@ -56,5 +56,6 @@ export const ProviderCard = React.forwardRef((props: CardProps & { item: Service
             </Space>
          </Space>
       </Card>
+
    )
 })

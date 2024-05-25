@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { HTMLProps } from 'react';
+import React, { HTMLProps, useRef } from 'react';
 import API from '../../../services';
 import {
   ButtonProps,
   Col,
-  Dropdown,
-  Popover,
   Row,
   Skeleton,
   Space,
@@ -30,10 +28,13 @@ export const SelectService = React.forwardRef<
 >((props, ref) => {
   const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
+
   const childRef = React.useRef<{
     onIntegrate: (callBack: VoidFunction) => void;
     loading: boolean;
   }>();
+
+  const rowRef = useRef<HTMLDivElement>(null);
 
   const {
     setCurrentStep,
@@ -113,48 +114,36 @@ export const SelectService = React.forwardRef<
           <Typography.Title level={5}>Available services</Typography.Title>
           {loading && <Skeleton />}
           {!loading && (
-            <Row className="w-full" gutter={[20, 20]}>
+            <Row ref={rowRef} className="w-full" gutter={[20, 20]}>
               {Array.isArray(services) &&
                 services.map((item, index) => {
                   return (
-                    <Popover
-                      content={
-                        <FormArea
-                          ref={childRef as any}
-                          selected={services.find((item) => item?.id === selected) as any}
-                        />
-                      }
-                      forceRender
-                      trigger={['click']}
-                      placement='bottom'
-                      // open={false}
+
+                    <Col
+                      className="w-full"
+                      span={24}
+                      md={12}
+                      xl={10}
+                      xxl={6}
+                      key={index}
                     >
-                      <Col
-                        className="w-full"
-                        span={24}
-                        md={12}
-                        xl={10}
-                        xxl={6}
-                        key={index}
-                      >
-                        <ProviderCard
-                          style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
-                          bordered
-                          rootClassName="card"
-                          aria-selected={selected === item?.id}
-                          onClick={() => selectHandler(item?.id)}
-                          item={item}
-                        />
-                      </Col>
-                    </Popover >
+                      <ProviderCard
+                        style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
+                        bordered
+                        rootClassName="card"
+                        aria-selected={selected === item?.id}
+                        onClick={() => selectHandler(item?.id)}
+                        item={item}
+                      />
+                    </Col>
                   );
                 })}
             </Row>
           )}
-          {/* <FormArea
+          <FormArea
             ref={childRef as any}
             selected={services.find((item) => item?.id === selected) as any}
-          /> */}
+          />
         </div>
       </div>
       <Footer hideBackButton onSubmit={handleNext} onOkProps={onOkProps} />

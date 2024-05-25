@@ -142,7 +142,7 @@ export const FormArea = React.forwardRef<
       <div {...props} ref={ref}>
          <Form layout="vertical" form={form}>
             {contextHolder}
-            <Card>
+            <Card >
                <Space direction='vertical'>
                   <Typography.Title level={5}>
                      {`Configure ${selected?.serviceProfile?.name} services`}
