@@ -10,8 +10,8 @@ export const setAccessKey = async (key: string) => {
 
 /* get services */
 type QueryParams = {
-  type: DomainTypes;
-  state: 'ACTIVE' | 'INACTIVE';
+	type: DomainTypes;
+	state: 'ACTIVE' | 'INACTIVE';
 };
 export const getServices = async (
 	params: QueryParams,
@@ -29,7 +29,7 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 };
 
 /* get all organization */
-export const getSCMOrganization = async (headers: AxiosHeaders,type) => {
+export const getSCMOrganization = async (headers: AxiosHeaders, type) => {
 	return await fetch.get(`/api/demo/${type}/organizations`, { headers });
 };
 
@@ -81,8 +81,8 @@ export const getAllPullRequest = async (
 };
 
 type RepositoryDownloadType = {
-  orgId: string;
-  repoId: string;
+	orgId: string;
+	repoId: string;
 };
 /* download the branch, repo, pullRequest  */
 export const repositoryDownload = async (
@@ -96,9 +96,9 @@ export const repositoryDownload = async (
 };
 
 type BranchDownloadType = {
-  orgId: string;
-  repoId: string;
-  branch: string;
+	orgId: string;
+	repoId: string;
+	branch: string;
 };
 /* download the branch  */
 export const branchDownload = async (
@@ -143,3 +143,7 @@ export const getAllTickets = async (
 		{ headers }
 	);
 };
+
+export const createTickets = async (payload: { [key: string]: any }, headers: {[key: string]: any }) => {
+	return await fetch.post('/api/demo/ticketing/1tegrate/collections/MyProject/tickets', payload, { headers })
+}

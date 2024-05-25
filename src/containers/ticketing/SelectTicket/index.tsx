@@ -1,4 +1,4 @@
-import React, { HTMLProps, useCallback, useEffect, useState } from 'react';
+import React, { HTMLProps, useCallback, useEffect, useRef, useState } from 'react';
 
 import {
    Badge,
@@ -75,7 +75,7 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
                   }}
                ></div>
             </div>
-            <ListComp dataSource={ticketsState} />
+            <ListComp dataSource={ticketsState} getAllTickets={getAllTickets} />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
@@ -87,15 +87,18 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
 
 type ListTypes = {
    dataSource?: { [key: string]: any }[]
+   getAllTickets?: () => void;
 } & ListProps<unknown>;
 
-const ListComp = ({ dataSource }: ListTypes) => {
+const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
    const [type, setType] = useState<'create' | 'edit'>('create')
    const [_loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
    const { integration, selectedOrganization } = React.useContext(AppContext);
+
+   const actionRef = useRef<{ onOk: () => Promise<any> }>(null);
 
    const onOpen = (type: 'edit' | 'create', arg?: { [key: string]: any }) => {
       setType(type);
@@ -162,13 +165,14 @@ const ListComp = ({ dataSource }: ListTypes) => {
             renderItem={(item: { [key: string]: any }) => {
                return (
                   <List.Item
+                     key={item?.id}
                      actions={[
-                        <Badge dot color={Enum.priority?.[item.priority?.toLowerCase()].color} />,
-                        <Tag>{item?.type}</Tag>
+                        <Badge key={1} dot color={Enum.priority?.[item.priority?.toLowerCase()].color} />,
+                        <Tag key={2} >{item?.type}</Tag>
                      ]}
                      extra={(
                         [
-                           <Dropdown overlay={() => menu(item)} trigger={['click']}>
+                           <Dropdown overlay={() => menu(item)} trigger={['click']} key={1}>
                               <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                  <EllipsisOutlined />
                               </a>
@@ -184,7 +188,23 @@ const ListComp = ({ dataSource }: ListTypes) => {
                );
             }}
          />
-         <CreateTicketForm selected={selected} open={open} onCancel={onCancel} type={type} okText={type === 'create' ? 'Create' : 'Update'} />
+         <CreateTicketForm
+            selected={selected}
+            open={open}
+            onCancel={onCancel}
+            type={type}
+            okText={type === 'create' ? 'Create' : 'Update'}
+            actionRef={actionRef}
+            onOk={async () => {
+               actionRef.current.onOk().then((isSuccess) => {
+                  if (isSuccess) {
+                     messageApi.success({ content: 'Ticket created successfully' })
+                     onCancel();
+                     getAllTickets();
+                  };
+               })
+            }}
+         />
       </Spin>
    );
 };

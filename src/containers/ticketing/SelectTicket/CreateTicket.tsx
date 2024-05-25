@@ -1,10 +1,13 @@
-import { Badge, Form, Input, Modal, ModalProps, Select } from 'antd';
-import React, { useEffect } from 'react';
+import { Badge, Form, Input, Modal, ModalProps, Select, message } from 'antd';
+import React, { useEffect, useImperativeHandle } from 'react';
+import API from '../../../services';
+import { AppContext } from '../../../context/AppProvider';
 
 
 type FormTypes = {
    type: 'edit' | 'create'
    selected?: { [key: string]: any }
+   actionRef?: any
 } & ModalProps;
 
 
@@ -18,7 +21,7 @@ const formDetails = [
       options: [
          {
             label: 'Bug',
-            value: 'BUG',
+            value: 'Bug',
          },
          {
             label: 'Feature Request',
@@ -34,7 +37,7 @@ const formDetails = [
          },
          {
             label: 'Task',
-            value: 'TASK'
+            value: 'Task'
          },
          {
             label: 'Incident',
@@ -97,30 +100,62 @@ const formDetails = [
 ]
 
 function FormComp(props: FormTypes) {
-   const { open, type, selected, onCancel: onCancelProp, ...rest } = props;
+   const { open, type, selected, onCancel: onCancelProp, actionRef, ...rest } = props;
+   const { integration } = React.useContext(AppContext);
+   const [messageApi, contextHolder] = message.useMessage();
 
    const [form] = Form.useForm();
 
-   const onOk = () => {
-      form.validateFields().then((resp) => {
-         let formValues = resp;
-         console.log(formValues);
-      }).catch((err) => {
-         console.error(err);
-      })
-   }
+   const headers = { integrationId: integration?.id }
 
    const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
       onCancelProp(e);
       form.resetFields();
    }
 
+   const createTickets = async (values: { [key: string]: string }) => {
+      try {
+         const resp = await API.services.createTickets({ ...values, "status": "To Do" }, headers);
+         onCancel(undefined);
+         return resp;
+      } catch (error) {
+         const errorProp = error?.response?.data;
+         console.error(errorProp);
+         let content = 'something went wrong!'
+         if (Array.isArray(errorProp) && errorProp.length) {
+            const [message] = errorProp;
+            content = message?.errorMessage || message?.message;
+         }
+         messageApi.error({ content })
+         return false;
+      }
+   }
+
+   const onOk = async () => {
+      try {
+         const resp = await form.validateFields()
+         let formValues = resp;
+
+         if (type === 'create') {
+            return await createTickets(formValues);
+         }
+
+      } catch (error) {
+         console.error(error);
+      };
+   }
+
+   useImperativeHandle(actionRef, () => {
+      return { onOk }
+   }, [type])
+
    useEffect(() => {
       form.setFieldsValue(selected)
    }, [selected])
 
    return (
-      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Edit'} Ticket`} {...rest} onCancel={onCancel} onOk={onOk}>
+      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Edit'} Ticket`} {...rest} onCancel={onCancel}>
+         {contextHolder}
          <Form layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
                const { label, name, fieldType, options, type, required = false } = item;

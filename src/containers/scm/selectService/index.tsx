@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { HTMLProps, useRef } from 'react';
+import React, { HTMLProps } from 'react';
 import API from '../../../services';
 import {
   ButtonProps,
