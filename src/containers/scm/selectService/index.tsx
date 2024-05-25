@@ -102,11 +102,11 @@ export const SelectService = React.forwardRef<
     if (name.startsWith('github')) {
       return (
         <svg
-          height="32"
+          height="50"
           aria-hidden="true"
           viewBox="0 0 16 16"
           version="1.1"
-          width="32"
+          width="50"
           data-view-component="true"
           className="octicon octicon-mark-github v-align-middle color-fg-default"
         >
@@ -115,7 +115,7 @@ export const SelectService = React.forwardRef<
       );
     } else if (name.startsWith('jira')) {
       return (
-        <svg height="30" preserveAspectRatio="xMidYMid" width="28" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 -30.632388516510233 255.324 285.95638851651023">
+        <svg height="45" preserveAspectRatio="xMidYMid" width="45" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 -30.632388516510233 255.324 285.95638851651023">
           <linearGradient id="a">
             <stop offset=".18" stop-color="#0052cc" />
             <stop offset="1" stop-color="#2684ff" />
@@ -129,7 +129,7 @@ export const SelectService = React.forwardRef<
       )
     } else if (name.startsWith('servicenow')) {
       return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 64 64">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64">
           <path d="M32.195 3.312A32.267 32.267 0 0 0 9.949 58.883a6.346 6.346 0 0 0 8.264.43 23.035 23.035 0 0 1 27.445 0 6.364 6.364 0 0 0 8.389-.43A32.267 32.267 0 0 0 32.195 3.312m-.18 48.275a15.632 15.632 0 0 1-16.133-16.026 16.044 16.044 0 1 1 32.07 0 15.614 15.614 0 0 1-16.026 16.026" fill-rule="evenodd" fill="#81b5a1" />
         </svg>
       )
@@ -137,8 +137,8 @@ export const SelectService = React.forwardRef<
     else if (name.startsWith('gitlab')) {
       return (
         <svg
-          width="31"
-          height="32"
+          width="45"
+          height="45"
           viewBox="0 0 32 32"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -168,8 +168,8 @@ export const SelectService = React.forwardRef<
     } else if (name.startsWith('bitbucket')) {
       return (
         <img
-          width="34"
-          height="32"
+          width="40"
+          height="40"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0OncSEQCPit3dLLOLGlf-9lntTMTyxvnCsQ&s"
           alt="Bit Bucket"
         />
@@ -178,8 +178,8 @@ export const SelectService = React.forwardRef<
       return (
         <svg
           fill="none"
-          width="34"
-          height="34"
+          width="50"
+          height="50"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
