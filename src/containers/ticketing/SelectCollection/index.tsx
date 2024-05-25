@@ -17,13 +17,7 @@ import { Errors, handleError } from '../../../utils/error';
 const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { integration, setCurrentStep, setSelectedCollection, current, selectedOrganization = 'default' } = React.useContext(AppContext);
-   const [collectionsState, setCollectionsState] = React.useState([
-      { id: '1', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
-      { id: '2', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
-      { id: '3', type: 'STORY', priority: 'medium', description: 'Ticket Description', name: 'Ticket Name 3' },
-      { id: '4', type: 'DOCUMENTATION', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 4' },
-      { id: '5', type: 'INCIDENT', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 5' },
-   ]);
+   const [collectionsState, setCollectionsState] = React.useState([]);
 
    const getAllTickets = async () => {
       try {

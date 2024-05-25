@@ -144,6 +144,11 @@ export const getAllTickets = async (
 	);
 };
 
-export const createTickets = async (payload: { [key: string]: any }, headers: {[key: string]: any }) => {
-	return await fetch.post('/api/demo/ticketing/1tegrate/collections/MyProject/tickets', payload, { headers })
+export const createTickets = async (
+	payload: { [key: string]: any },
+	headers: { [key: string]: any },
+	orgId: string,
+	collectionId: string
+) => {
+	return await fetch.post(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets`, payload, { headers })
 }

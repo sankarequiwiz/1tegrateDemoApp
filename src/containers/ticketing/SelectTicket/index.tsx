@@ -36,13 +36,7 @@ const Enum = {
 
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, integration, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
-   const [ticketsState, setTicketsState] = React.useState([
-      { id: 'uuid', type: 'TASK', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 1' },
-      { id: 'uuid', type: 'BUG', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 2' },
-      { id: 'uuid', type: 'STORY', priority: 'medium', description: 'Ticket Description', name: 'Ticket Name 3' },
-      { id: 'uuid', type: 'DOCUMENTATION', priority: 'low', description: 'Ticket Description', name: 'Ticket Name 4' },
-      { id: 'uuid', type: 'INCIDENT', priority: 'high', description: 'Ticket Description', name: 'Ticket Name 5' },
-   ]);
+   const [ticketsState, setTicketsState] = React.useState([]);
 
    const getAllTickets = async () => {
       try {

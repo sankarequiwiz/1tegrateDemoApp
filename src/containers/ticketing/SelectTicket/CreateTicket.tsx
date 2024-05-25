@@ -101,7 +101,7 @@ const formDetails = [
 
 function FormComp(props: FormTypes) {
    const { open, type, selected, onCancel: onCancelProp, actionRef, ...rest } = props;
-   const { integration } = React.useContext(AppContext);
+   const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
    const [messageApi, contextHolder] = message.useMessage();
 
    const [form] = Form.useForm();
@@ -115,7 +115,12 @@ function FormComp(props: FormTypes) {
 
    const createTickets = async (values: { [key: string]: string }) => {
       try {
-         const resp = await API.services.createTickets({ ...values, "status": "To Do" }, headers);
+         const resp = await API.services.createTickets(
+            { ...values, "status": "To Do" },
+            headers,
+            selectedOrganization,
+            selectedCollection
+         );
          onCancel(undefined);
          return resp;
       } catch (error) {
