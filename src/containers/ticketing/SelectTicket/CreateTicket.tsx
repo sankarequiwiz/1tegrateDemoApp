@@ -94,7 +94,13 @@ const formDetails = [
             value: 'low'
          }
       ]
-   }
+   },
+   {
+      name: 'status',
+      label: 'Status',
+      type: 'text',
+      fieldType: <Input />,
+   },
 ]
 
 function FormComp(props: FormTypes) {
@@ -163,7 +169,7 @@ function FormComp(props: FormTypes) {
          const resp = await form.validateFields()
          let formValues = resp;
 
-         formValues = {...formValues, status: 'to do'}
+         formValues = { ...formValues, status: 'to do' }
 
          if (type === 'create') {
             return await createTicket(formValues);
