@@ -191,7 +191,7 @@ export const FormArea = React.forwardRef<
                                        {
                                           <Input
                                              style={{ width: '35rem' }}
-                                             placeholder={`Enter your ${field.type?.toString()?.toLowerCase()}`}
+                                             placeholder={`${field.name?.toString()}`}
                                           />
                                        }
                                     </Form.Item>
