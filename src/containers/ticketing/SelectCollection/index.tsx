@@ -6,7 +6,6 @@ import {
    Radio,
    Space,
    Spin,
-   Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
