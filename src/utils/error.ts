@@ -19,7 +19,7 @@ export class Errors {
    }
    getOrg() {
       return {
-         getNotFoundCode: this.getErrorCodes()
+         getNotFoundCode: this.getErrorCodes().orgNotFound
       }
    }
 }

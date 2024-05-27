@@ -61,7 +61,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
             <ListComp dataSource={collectionsState} />
          </Space>
          <Footer
-            onCancel={() => setCurrentStep(current - 1)}
+            onCancel={() => setCurrentStep(current - 2)}
             onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>
