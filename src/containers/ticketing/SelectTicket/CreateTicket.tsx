@@ -25,15 +25,15 @@ const formDetails = [
          },
          {
             label: 'Feature Request',
-            value: 'FEATURE_REQUEST'
+            value: 'Feature Request'
          },
          {
             label: 'Improvement',
-            value: 'IMPROVEMENT'
+            value: 'Feature Request'
          },
          {
             label: 'Story',
-            value: 'STORY',
+            value: 'Story',
          },
          {
             label: 'Task',
@@ -41,23 +41,23 @@ const formDetails = [
          },
          {
             label: 'Incident',
-            value: 'INCIDENT'
+            value: 'Incident'
          },
          {
             label: 'Support Request',
-            value: 'SUPPORT_REQUEST',
+            value: 'Support Request',
          },
          {
             label: 'Test Case',
-            value: 'TEST_CASE'
+            value: 'Test Case'
          },
          {
             label: 'Documentation',
-            value: 'DOCUMENTATION'
+            value: 'Documentation'
          },
          {
             label: 'Change Request',
-            value: 'CHANGE_REQUEST'
+            value: 'Change Request'
          }
       ]
    },
