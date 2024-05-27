@@ -10,7 +10,6 @@ import {
    Space,
    Spin,
    Tag,
-   Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
@@ -150,8 +149,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
    return (
       <Spin spinning={false} >
          {contextHolder}
-         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <Typography.Title level={3}>List of ticket</Typography.Title>
+         <Space style={{ width: '100%', alignItems:"end", display:"flex", flexDirection:"row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
          <List

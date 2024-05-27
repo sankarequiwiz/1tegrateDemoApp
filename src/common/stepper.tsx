@@ -70,7 +70,7 @@ export function getStepItems(args: Array<StepTypes> = []): {
         key: '3',
       },
       {
-        title: 'Select Ticketing',
+        title: 'Select Ticket',
         container: <SelectTicket />,
         key: '4',
       },

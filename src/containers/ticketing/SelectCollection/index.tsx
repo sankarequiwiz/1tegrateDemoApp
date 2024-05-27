@@ -6,7 +6,6 @@ import {
    Radio,
    Space,
    Spin,
-   Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
@@ -112,9 +111,6 @@ const ListComp = ({ dataSource }: ListTypes) => {
    return (
       <Spin spinning={false} >
          {contextHolder}
-         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <Typography.Title level={3}>List of Collection</Typography.Title>
-         </Space>
          <List
             dataSource={dataSource}
             renderItem={(item: { [key: string]: any }) => {
