@@ -25,15 +25,15 @@ const formDetails = [
          },
          {
             label: 'Feature Request',
-            value: 'FEATURE_REQUEST'
+            value: 'Feature Request'
          },
          {
             label: 'Improvement',
-            value: 'IMPROVEMENT'
+            value: 'Feature Request'
          },
          {
             label: 'Story',
-            value: 'STORY',
+            value: 'Story',
          },
          {
             label: 'Task',
@@ -41,23 +41,23 @@ const formDetails = [
          },
          {
             label: 'Incident',
-            value: 'INCIDENT'
+            value: 'Incident'
          },
          {
             label: 'Support Request',
-            value: 'SUPPORT_REQUEST',
+            value: 'Support Request',
          },
          {
             label: 'Test Case',
-            value: 'TEST_CASE'
+            value: 'Test Case'
          },
          {
             label: 'Documentation',
-            value: 'DOCUMENTATION'
+            value: 'Documentation'
          },
          {
             label: 'Change Request',
-            value: 'CHANGE_REQUEST'
+            value: 'Change Request'
          }
       ]
    },
@@ -94,7 +94,13 @@ const formDetails = [
             value: 'low'
          }
       ]
-   }
+   },
+   {
+      name: 'status',
+      label: 'Status',
+      type: 'text',
+      fieldType: <Input />,
+   },
 ]
 
 function FormComp(props: FormTypes) {
@@ -111,7 +117,7 @@ function FormComp(props: FormTypes) {
       form.resetFields();
    }
 
-   const createTickets = async (values: { [key: string]: string }) => {
+   const createTicket = async (values: { [key: string]: string }) => {
       try {
          const resp = await API.services.createTickets(
             values,
@@ -134,13 +140,37 @@ function FormComp(props: FormTypes) {
       }
    }
 
+   const editTicket = async (values: { [key: string]: string }) => {
+      try {
+         const resp = await API.services.editTickets(
+            values,
+            headers,
+            selectedOrganization,
+            selectedCollection,
+            selected?.id
+         );
+         onCancel(undefined);
+         return resp;
+      } catch (error) {
+         const errorProp = error?.response?.data;
+         console.error(errorProp);
+         let content = 'something went wrong!'
+         if (Array.isArray(errorProp) && errorProp.length) {
+            const [message] = errorProp;
+            content = message?.errorMessage || message?.message;
+         }
+         messageApi.error({ content })
+         return false;
+      }
+   }
+
    const onOk = async () => {
       try {
          const resp = await form.validateFields()
-         let formValues = resp;
-
          if (type === 'create') {
-            return await createTickets(formValues);
+            return await createTicket(resp);
+         } else {
+            return await editTicket(resp);
          }
 
       } catch (error) {

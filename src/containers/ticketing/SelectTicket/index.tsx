@@ -192,7 +192,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
             onOk={async () => {
                actionRef.current.onOk().then((isSuccess) => {
                   if (isSuccess) {
-                     messageApi.success({ content: 'Ticket created successfully' })
+                     messageApi.success({ content: `Ticket ${type}ed successfully` })
                      onCancel();
                      getAllTickets();
                   };
