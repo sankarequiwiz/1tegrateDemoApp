@@ -3,7 +3,6 @@ import React, { useEffect, useImperativeHandle } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
 
-
 type FormTypes = {
    type: 'edit' | 'create'
    selected?: { [key: string]: any }
