@@ -22,7 +22,6 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
    const getAllTickets = async () => {
       try {
          const resp = await API.services.getAllCollection(selectedOrganization, { integrationId: integration?.id });
-
          const { data } = resp?.data;
          setCollectionsState(data)
       } catch (error) {
@@ -61,7 +60,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
             <ListComp dataSource={collectionsState} />
          </Space>
          <Footer
-            onCancel={() => setCurrentStep(current - 2)}
+            onCancel={() => setCurrentStep(current - (selectedOrganization === 'default' ? 2 : 1))}
             onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>
