@@ -179,7 +179,7 @@ export const FormArea = React.forwardRef<
                                        <Typography.Text strong>
                                           {field.required && <span style={{ color: 'red' }}>*</span>}
                                           <span >
-                                             {field.type?.toString()}
+                                             {field.name?.toString()}
                                           </span>
                                        </Typography.Text>
                                     </div>

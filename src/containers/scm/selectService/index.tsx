@@ -22,6 +22,7 @@ import { FormArea } from './formArea';
 import { ProviderCard } from './providerCard';
 
 type VoidFunction = () => void;
+type ObjType = { [key: string]: any }
 
 export const SelectService = React.forwardRef<
   HTMLDivElement,
@@ -44,6 +45,19 @@ export const SelectService = React.forwardRef<
     domain,
   } = React.useContext(AppContext);
 
+  function compare(a: ObjType, b: ObjType) {
+    const bandA = a.serviceProfile.name.toUpperCase();
+    const bandB = b.serviceProfile.name.toUpperCase();
+
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = 1;
+    } else if (bandA < bandB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
   const getServices = async () => {
     setLoading(true);
     const headers = { key };
@@ -53,7 +67,10 @@ export const SelectService = React.forwardRef<
         headers
       );
       if (resp && resp.data.data) {
-        setServices(resp.data.data);
+        const data = resp.data.data;
+        data?.sort(compare)
+        console.log(data);
+        setServices(data);
       }
     } catch (error) {
       console.log(error);
