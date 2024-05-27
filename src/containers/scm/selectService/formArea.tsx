@@ -147,7 +147,6 @@ export const FormArea = React.forwardRef<
                   <Typography.Title level={5}>
                      {`Configure ${selected?.serviceProfile?.name} services`}
                   </Typography.Title>
-
                   <Space direction="vertical">
                      {fields?.length > 1 && (
                         <Space direction="vertical">
@@ -178,9 +177,9 @@ export const FormArea = React.forwardRef<
                                  <div key={index}>
                                     <div style={{ margin: '.5rem 0' }}>
                                        <Typography.Text strong>
-                                          <span style={{ color: 'red' }}>*</span>
+                                          {field.required && <span style={{ color: 'red' }}>*</span>}
                                           <span >
-                                             {`Please enter your ${field.type?.toString()?.toLowerCase()}`}
+                                             {field.type?.toString()}
                                           </span>
                                        </Typography.Text>
                                     </div>
