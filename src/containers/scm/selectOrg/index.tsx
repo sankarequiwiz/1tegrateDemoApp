@@ -117,7 +117,7 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
       description: `Watch for ${fullBodySelected.login} repository`,
       type: 'HOOK',
       resource: {
-        type: 'ORGANIZATION',
+        type: 'SCM_ORGANIZATION',
         organization: {
           id: selectedOrganization,
         },

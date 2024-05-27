@@ -80,7 +80,7 @@ export const SelectRepo = React.forwardRef<
       description: `Watch for ${fullBodySelected.description} repository`,
       type: 'HOOK',
       resource: {
-        type: 'REPOSITORY',
+        type: 'SCM_REPOSITORY',
         repository: {
           id: selectedRepo,
         },

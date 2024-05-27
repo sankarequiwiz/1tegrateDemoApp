@@ -31,7 +31,7 @@ export type Payload = {
   description?: string;
   type: 'HOOK';
   resource: {
-    type: 'ORGANIZATION' | 'REPOSITORY';
+    type: 'SCM_ORGANIZATION' | 'SCM_REPOSITORY';
     organization: {
       id: string;
     };
