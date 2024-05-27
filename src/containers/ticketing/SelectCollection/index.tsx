@@ -112,9 +112,6 @@ const ListComp = ({ dataSource }: ListTypes) => {
    return (
       <Spin spinning={false} >
          {contextHolder}
-         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <Typography.Title level={3}>List of Collection</Typography.Title>
-         </Space>
          <List
             dataSource={dataSource}
             renderItem={(item: { [key: string]: any }) => {

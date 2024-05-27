@@ -151,7 +151,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
       <Spin spinning={false} >
          {contextHolder}
          <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <Typography.Title level={3}>List of ticket</Typography.Title>
+            <Typography.Title level={3}> </Typography.Title>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
          <List
