@@ -167,12 +167,8 @@ function FormComp(props: FormTypes) {
    const onOk = async () => {
       try {
          const resp = await form.validateFields()
-         let formValues = resp;
-
-         formValues = { ...formValues, status: 'to do' }
-
          if (type === 'create') {
-            return await createTicket(formValues);
+            return await createTicket(resp);
          } else {
             return await editTicket(resp);
          }
