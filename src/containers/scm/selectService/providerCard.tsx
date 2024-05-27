@@ -11,6 +11,7 @@ import { ADO } from '../../../components/icons/providers/ado';
 import { Jira } from '../../../components/icons/providers/jira';
 import { ServiceTypes } from "./types";
 import { AppContext } from "../../../context/AppProvider";
+import { Trello } from "../../../components/icons/providers/trello";
 
 export const ProviderCard = React.forwardRef((props: CardProps & { item: ServiceTypes }, ref: LegacyRef<HTMLDivElement>) => {
    const { item, onSelect, ...rest } = props;
@@ -33,6 +34,8 @@ export const ProviderCard = React.forwardRef((props: CardProps & { item: Service
          return <Bitbucket />;
       } else if (name.startsWith('ado')) {
          return <ADO />;
+      }else if(name.startsWith('trello')){
+         return <Trello />
       }
    }, [item]);
 
