@@ -69,7 +69,6 @@ export const SelectService = React.forwardRef<
       if (resp && resp.data.data) {
         const data = resp.data.data;
         data?.sort(compare)
-        console.log(data);
         setServices(data);
       }
     } catch (error) {

@@ -36,6 +36,13 @@ export const FormArea = React.forwardRef<
       return [];
    }, [selected]);
 
+   const flwType = React.useMemo(() => {
+      if (fields.length === 1) {
+         return fields[0]?.type
+      }
+      return 'not_set';
+   }, [fields]);
+
    const integrationPayloadKey = {
       API_KEY: {
          value: 'apiKey'
@@ -75,7 +82,7 @@ export const FormArea = React.forwardRef<
                            id: selected?.serviceProfile.id,
                         },
                         accessPointConfig: {
-                           type: resp.integrationType || 'APIKEY_FLW',
+                           type: flwType,
                         },
                         ...resp,
                      },

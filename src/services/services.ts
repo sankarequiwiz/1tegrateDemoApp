@@ -139,7 +139,7 @@ export const getAllTickets = async (
 	headers: { [key: string]: string }
 ) => {
 	return await fetch.get(
-		`/api/demo/ticketing/${organizationId}/collections/${collectionId}`,
+		`/api/demo/ticketing/${organizationId}/collections/${collectionId}/tickets`,
 		{ headers }
 	);
 };
