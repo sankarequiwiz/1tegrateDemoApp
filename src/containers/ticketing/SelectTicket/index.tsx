@@ -10,7 +10,6 @@ import {
    Space,
    Spin,
    Tag,
-   Typography,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
