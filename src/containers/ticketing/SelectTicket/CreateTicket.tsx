@@ -111,7 +111,7 @@ function FormComp(props: FormTypes) {
       form.resetFields();
    }
 
-   const createTickets = async (values: { [key: string]: string }) => {
+   const createTicket = async (values: { [key: string]: string }) => {
       try {
          const resp = await API.services.createTickets(
             values,
@@ -134,13 +134,41 @@ function FormComp(props: FormTypes) {
       }
    }
 
+   const editTicket = async (values: { [key: string]: string }) => {
+      try {
+         const resp = await API.services.editTickets(
+            values,
+            headers,
+            selectedOrganization,
+            selectedCollection,
+            selected?.id
+         );
+         onCancel(undefined);
+         return resp;
+      } catch (error) {
+         const errorProp = error?.response?.data;
+         console.error(errorProp);
+         let content = 'something went wrong!'
+         if (Array.isArray(errorProp) && errorProp.length) {
+            const [message] = errorProp;
+            content = message?.errorMessage || message?.message;
+         }
+         messageApi.error({ content })
+         return false;
+      }
+   }
+
    const onOk = async () => {
       try {
          const resp = await form.validateFields()
          let formValues = resp;
 
+         formValues = {...formValues, status: 'to do'}
+
          if (type === 'create') {
-            return await createTickets(formValues);
+            return await createTicket(formValues);
+         } else {
+            return await editTicket(resp);
          }
 
       } catch (error) {
