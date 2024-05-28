@@ -16,7 +16,6 @@ const formDetails = [
       type: 'enum',
       label: 'Type',
       fieldType: <Select />,
-      required: true,
       options: [
          {
             label: 'Bug',
