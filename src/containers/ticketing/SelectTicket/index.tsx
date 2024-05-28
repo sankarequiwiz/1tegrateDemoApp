@@ -149,7 +149,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
    return (
       <Spin spinning={false} >
          {contextHolder}
-         <Space style={{ width: '100%', alignItems:"end", display:"flex", flexDirection:"row-reverse", marginBottom: '1rem' }}>
+         <Space style={{ width: '100%', alignItems: "end", display: "flex", flexDirection: "row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
          <List
@@ -190,7 +190,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
             onOk={async () => {
                actionRef.current.onOk().then((isSuccess) => {
                   if (isSuccess) {
-                     messageApi.success({ content: `Ticket ${type}ed successfully` })
+                     messageApi.success({ content: `Ticket ${type === 'create' ? 'created' : 'edited'} successfully` })
                      onCancel();
                      getAllTickets();
                   };
