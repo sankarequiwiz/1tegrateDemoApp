@@ -159,8 +159,8 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
                   <List.Item
                      key={item?.id}
                      actions={[
-                        <Badge key={1} dot color={Enum?.priority?.[item?.priority?.toLowerCase()]?.color} />,
-                        <Tag key={2} >{item?.type}</Tag>
+                        item?.priority && <Badge key={1} dot color={Enum?.priority?.[item?.priority?.toLowerCase()]?.color} />,
+                        item?.type && <Tag key={2} >{item?.type}</Tag>
                      ]}
                      extra={(
                         [
