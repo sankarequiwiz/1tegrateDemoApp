@@ -177,7 +177,7 @@ const ListComp = ({ dataSource, getAllTickets, loading }: ListTypes) => {
                      )}
                   >
                      <List.Item.Meta
-                        title={item?.name}
+                        title={item?.name ?? item?.id}
                         description={item?.description}
                      />
                   </List.Item>
