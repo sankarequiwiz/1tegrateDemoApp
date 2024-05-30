@@ -1,4 +1,4 @@
-import React, { HTMLProps, useEffect } from 'react';
+import React, { HTMLProps, useEffect, useState } from 'react';
 
 import {
    List,
@@ -17,8 +17,10 @@ const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { integration, setCurrentStep, setSelectedCollection, current, selectedOrganization = 'default' } = React.useContext(AppContext);
    const [collectionsState, setCollectionsState] = React.useState([]);
+   const [loading, setLoading] = useState<boolean>(false);
 
    const getAllTickets = async () => {
+      setLoading(true);
       try {
          const resp = await API.services.getAllCollection(selectedOrganization, { integrationId: integration?.id });
          const { data } = resp?.data;
@@ -32,6 +34,8 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
                setCurrentStep(current + 1);
             }
          }
+      } finally {
+         setLoading(false);
       }
    }
 
@@ -56,7 +60,7 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
                   }}
                ></div>
             </div>
-            <ListComp dataSource={collectionsState} />
+            <ListComp loading={loading} dataSource={collectionsState} />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - (selectedOrganization === 'default' ? 2 : 1))}
@@ -68,9 +72,10 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
 
 type ListTypes = {
    dataSource?: { [key: string]: any }[]
+   loading?: boolean
 } & ListProps<unknown>;
 
-const ListComp = ({ dataSource }: ListTypes) => {
+const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
    const [_loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
    const { integration, selectedCollection, setSelectedCollection } = React.useContext(AppContext);
@@ -109,7 +114,7 @@ const ListComp = ({ dataSource }: ListTypes) => {
    };
 
    return (
-      <Spin spinning={false} >
+      <Spin spinning={(_loading || loadingProp)} >
          {contextHolder}
          <List
             dataSource={dataSource}

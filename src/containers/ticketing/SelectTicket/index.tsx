@@ -36,14 +36,18 @@ const Enum = {
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, integration, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
    const [ticketsState, setTicketsState] = React.useState([]);
+   const [loading, setLoading] = useState<boolean>(false)
 
    const getAllTickets = async () => {
+      setLoading(true);
       try {
          const resp = await API.services.getAllTickets(selectedOrganization, selectedCollection, { integrationId: integration?.id });
          const { data } = resp.data;
          setTicketsState(data);
       } catch (error) {
          console.error(error);
+      } finally {
+         setLoading(false);
       }
    }
 
@@ -68,7 +72,7 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
                   }}
                ></div>
             </div>
-            <ListComp dataSource={ticketsState} getAllTickets={getAllTickets} />
+            <ListComp loading={loading} dataSource={ticketsState} getAllTickets={getAllTickets} />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
@@ -81,9 +85,10 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
 type ListTypes = {
    dataSource?: { [key: string]: any }[]
    getAllTickets?: () => void;
+   loading?: boolean
 } & ListProps<unknown>;
 
-const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
+const ListComp = ({ dataSource, getAllTickets, loading }: ListTypes) => {
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
    const [type, setType] = useState<'create' | 'edit'>('create')
@@ -104,15 +109,14 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
       setOpen(false);
    }
 
-   const handleCreateWatch = async (e: any) => {
-      e.stopPropagation();
+   const handleCreateWatch = async (ticket: any) => {
       setLoading(true);
       const fullBodySelected = dataSource.find(
-         (item) => item.id === selectedOrganization
+         (item) => item.id === ticket?.id
       );
       const payload = {
-         name: `web-gateway-service-${fullBodySelected?.login}`,
-         description: `Watch for ${fullBodySelected.login} repository`,
+         name: `web-gateway-service-${fullBodySelected?.id}`,
+         description: `Watch for ${fullBodySelected.id} repository`,
          type: 'HOOK',
          resource: {
             type: 'ORGANIZATION',
@@ -139,7 +143,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
             <Menu.Item key="0" icon={<EditOutlined />}>
                <a onClick={() => onOpen('edit', record)} >Update Ticket</a>
             </Menu.Item>
-            <Menu.Item onClick={handleCreateWatch} key="1" icon={<EyeOutlined />} >
+            <Menu.Item onClick={() => handleCreateWatch(record)} key="1" icon={<EyeOutlined />} >
                <a >Create Watch</a>
             </Menu.Item>
          </Menu>
@@ -147,7 +151,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
    }, []);
 
    return (
-      <Spin spinning={false} >
+      <Spin spinning={(loading || _loading)} >
          {contextHolder}
          <Space style={{ width: '100%', alignItems: "end", display: "flex", flexDirection: "row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
