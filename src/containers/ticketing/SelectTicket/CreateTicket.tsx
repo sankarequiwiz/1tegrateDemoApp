@@ -9,55 +9,13 @@ type FormTypes = {
    actionRef?: any
 } & ModalProps;
 
-
 const formDetails = [
    {
       name: 'type',
-      type: 'enum',
+      type: 'text',
       label: 'Type',
-      fieldType: <Select />,
-      options: [
-         {
-            label: 'Bug',
-            value: 'Bug',
-         },
-         {
-            label: 'Feature Request',
-            value: 'Feature Request'
-         },
-         {
-            label: 'Improvement',
-            value: 'Feature Request'
-         },
-         {
-            label: 'Story',
-            value: 'Story',
-         },
-         {
-            label: 'Task',
-            value: 'Task'
-         },
-         {
-            label: 'Incident',
-            value: 'Incident'
-         },
-         {
-            label: 'Support Request',
-            value: 'Support Request',
-         },
-         {
-            label: 'Test Case',
-            value: 'Test Case'
-         },
-         {
-            label: 'Documentation',
-            value: 'Documentation'
-         },
-         {
-            label: 'Change Request',
-            value: 'Change Request'
-         }
-      ]
+      fieldType: <Input />,
+      required: true,
    },
    {
       name: 'name',
@@ -71,6 +29,7 @@ const formDetails = [
       label: 'Description',
       type: 'text',
       fieldType: <Input />,
+      required: true,
    },
    {
       name: 'priority',
@@ -91,13 +50,15 @@ const formDetails = [
             label: 'Low',
             value: 'low'
          }
-      ]
+      ],
+      required: true,
    },
    {
       name: 'status',
       label: 'Status',
       type: 'text',
       fieldType: <Input />,
+      required: true,
    },
 ]
 
@@ -185,9 +146,9 @@ function FormComp(props: FormTypes) {
    }, [selected])
 
    return (
-      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Edit'} Ticket`} {...rest} onCancel={onCancel}>
+      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Update'} Ticket`} {...rest} onCancel={onCancel}>
          {contextHolder}
-         <Form layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
+         <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
                const { label, name, fieldType, options, type, required = false } = item;
                let props = {}
@@ -195,7 +156,7 @@ function FormComp(props: FormTypes) {
                   props = { options };
                }
                return (
-                  <Form.Item rules={[{ required }]} label={label} key={index} name={name}>
+                  <Form.Item  rules={[{ required }]} label={label} key={index} name={name}>
                      {React.cloneElement(fieldType, {
                         placeholder: `${type === 'text' ? 'Enter' : 'Select'} the ${label?.toLowerCase()}`,
                         ...props

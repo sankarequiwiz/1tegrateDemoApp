@@ -137,7 +137,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
       return (
          <Menu>
             <Menu.Item key="0" icon={<EditOutlined />}>
-               <a onClick={() => onOpen('edit', record)} >Edit</a>
+               <a onClick={() => onOpen('edit', record)} >Update Ticket</a>
             </Menu.Item>
             <Menu.Item onClick={handleCreateWatch} key="1" icon={<EyeOutlined />} >
                <a >Create Watch</a>
@@ -190,7 +190,7 @@ const ListComp = ({ dataSource, getAllTickets }: ListTypes) => {
             onOk={async () => {
                actionRef.current.onOk().then((isSuccess) => {
                   if (isSuccess) {
-                     messageApi.success({ content: `Ticket ${type === 'create' ? 'created' : 'updated'} successfully` })
+                     messageApi.success({ content: `Ticket ${type === 'create' ? 'created' : 'updated'} successfully.` })
                      onCancel();
                      getAllTickets();
                   };
