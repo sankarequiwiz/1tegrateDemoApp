@@ -1,23 +1,11 @@
 import { EditOutlined, EllipsisOutlined, EyeOutlined, } from '@ant-design/icons';
-import { Badge, Dropdown, List, Menu, Tag, message } from 'antd';
+import {  Dropdown, List, Menu, Tag, message } from 'antd';
 import React, { LegacyRef } from 'react';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services/index';
 import { handleError } from '../../../utils/error';
 
-const Enum = {
-   priority: {
-      high: {
-         color: '#FF0000'
-      },
-      medium: {
-         color: '#f50'
-      },
-      low: {
-         color: '#FFDB5C'
-      }
-   }
-}
+
 type ItemTypes = { [key: string]: any; };
 type ListItemType = {
    item?: ItemTypes
