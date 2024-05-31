@@ -1,14 +1,11 @@
 import React, { HTMLProps, useEffect, useRef, useState } from 'react';
 import {
-   Badge,
    Button,
-   Dropdown,
    List,
    ListProps,
    PaginationProps,
    Space,
    Spin,
-   Tag,
    message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
@@ -22,6 +19,7 @@ const defaultPagination = {
    pageSize: 5,
    current: 1,
    showSizeChanger: false,
+   showQuickJumper: true
 }
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, integration, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
