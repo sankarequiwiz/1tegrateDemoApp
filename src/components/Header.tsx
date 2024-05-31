@@ -48,6 +48,61 @@ const domain = [
     label: 'Ticketing Integrations Demo',
     key: 'TICKETING',
   },
+  {
+    label: 'Container registry',
+    value: 'CONTAINER_REGISTRY',
+    disabled: true,
+},
+{
+    value: 'NOTIFICATIONS AND COMMUNICATIONS',
+    label: 'Notifications and Communications',
+    disabled: true,
+},
+{
+    value: 'VULNERABILITY MANAGEMENT',
+    label: 'Vulnerability management',
+    disabled: true,
+},
+{
+    value: 'INCIDENT MANAGEMENT',
+    label: 'Incident Management',
+    disabled: true,
+},
+{
+    value: 'SIEM',
+    label: 'SIEM',
+    disabled: true,
+},
+{
+    value: 'EDR AND XDR',
+    label: 'EDR & XDR',
+    disabled: true,
+},
+{
+    value: 'FILE STORAGE AND CONTENT MANAGEMENT',
+    label: 'File storage & Content management',
+    disabled: true,
+},
+{
+    value: 'CRM',
+    label: 'CRM',
+    disabled: true,
+},
+{
+    value: 'HR AND BENEFITS',
+    label: 'HR & Benefits',
+    disabled: true,
+},
+{
+    value: 'MARKETING',
+    label: 'Marketing',
+    disabled: true,
+},
+{
+    value: 'ACCOUNTING AND ERP',
+    disabled: true,
+    label: 'Accounting & ERP',
+}
 ];
 
 const warningMsg =
