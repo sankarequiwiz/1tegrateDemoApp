@@ -74,7 +74,6 @@ export const ListItem = React.forwardRef((props: ListItemType, ref: LegacyRef<HT
             ref={ref}
             key={item?.id}
             actions={[
-               item?.priority && <Badge key={1} dot color={Enum?.priority?.[item?.priority?.toLowerCase()]?.color} />,
                item?.type && <Tag key={2} >{item?.type}</Tag>
             ]}
             extra={(
