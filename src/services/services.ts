@@ -153,6 +153,10 @@ export const createTickets = async (
 	return await fetch.post(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets`, payload, { headers })
 }
 
+export const getTicket = async (id: string, orgId: string, collectionId: string, headers: { [key: string]: any }) => {
+	return await fetch.get(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets/${id}`, { headers })
+}
+
 export const editTickets = async (
 	payload: { [key: string]: any },
 	headers: { [key: string]: any },

@@ -1,12 +1,11 @@
-import React, { HTMLProps, useCallback, useEffect, useRef, useState } from 'react';
-
+import React, { HTMLProps, useEffect, useRef, useState } from 'react';
 import {
    Badge,
    Button,
    Dropdown,
    List,
    ListProps,
-   Menu,
+   PaginationProps,
    Space,
    Spin,
    Tag,
@@ -15,35 +14,50 @@ import {
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { CreateTicketForm } from './CreateTicket';
-import { handleError } from '../../../utils/error';
+import { ListItem } from './Item';
 
-const Enum = {
-   priority: {
-      high: {
-         color: '#FF0000'
-      },
-      medium: {
-         color: '#f50'
-      },
-      low: {
-         color: '#FFDB5C'
-      }
-   }
+const defaultPagination = {
+   pageSize: 5,
+   current: 1,
+   showSizeChanger: false,
 }
-
 const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
    const { setCurrentStep, current, integration, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
    const [ticketsState, setTicketsState] = React.useState([]);
-   const [loading, setLoading] = useState<boolean>(false)
+   const [loading, setLoading] = useState<boolean>(false);
+   const [paginationState, setPagination] = useState<PaginationProps>(defaultPagination);
 
-   const getAllTickets = async () => {
+   const headers = { integrationId: integration?.id };
+
+   const getTicketsById = async (payload) => {
+      try {
+         const { data } = await API.services.getTicket(payload?.id, selectedOrganization, selectedCollection, headers);
+         return { ...data };
+      } catch (err) {
+         console.log(`error while get ticket by id ${payload?.id}`)
+      }
+   }
+
+   const getAllTickets = async (pagination: PaginationProps = defaultPagination) => {
+      const { current, pageSize } = pagination;
       setLoading(true);
       try {
-         const resp = await API.services.getAllTickets(selectedOrganization, selectedCollection, { integrationId: integration?.id });
-         const { data } = resp.data;
-         setTicketsState(data);
+         const resp = await API.services.getAllTickets(selectedOrganization, selectedCollection, headers);
+         const { data, pagination: newPagination } = resp.data;
+         const end = pageSize * current;
+         const start = end - pageSize;
+
+         const withoutName = data.filter((item) => !item.name).slice(start, end)
+         const fullBody = await Promise.all(withoutName.map(getTicketsById));
+         const newData = data.map((item: { [key: string]: any }) => {
+            const exist = fullBody.find((i) => i.id === item.id);
+            if (exist) return exist;
+            return item;
+         })
+         setTicketsState(newData);
+         setPagination({ ...pagination, total: newPagination?.total })
       } catch (error) {
          console.error(error);
       } finally {
@@ -52,7 +66,7 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
    }
 
    useEffect(() => {
-      getAllTickets();
+      getAllTickets(paginationState);
    }, [])
 
    return (
@@ -72,7 +86,7 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
                   }}
                ></div>
             </div>
-            <ListComp loading={loading} dataSource={ticketsState} getAllTickets={getAllTickets} />
+            <ListComp paginationState={paginationState} loading={loading} dataSource={ticketsState} getAllTickets={getAllTickets} />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
@@ -84,19 +98,20 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
 
 type ListTypes = {
    dataSource?: { [key: string]: any }[]
-   getAllTickets?: () => void;
+   getAllTickets?: (pagination: { [key: string]: any }) => void;
    loading?: boolean
+   paginationState?: PaginationProps
 } & ListProps<unknown>;
 
-const ListComp = ({ dataSource, getAllTickets, loading }: ListTypes) => {
+const ListComp = ({ paginationState, dataSource, getAllTickets, loading }: ListTypes) => {
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
-   const [type, setType] = useState<'create' | 'edit'>('create')
-   const [_loading, setLoading] = React.useState<boolean>(false);
+   const [type, setType] = useState<'create' | 'edit'>('create');
+
    const [messageApi, contextHolder] = message.useMessage();
-   const { integration, selectedOrganization } = React.useContext(AppContext);
 
    const actionRef = useRef<{ onOk: () => Promise<any> }>(null);
+   const listRef = useRef<{ loading?: boolean }>(null);
 
    const onOpen = (type: 'edit' | 'create', arg?: { [key: string]: any }) => {
       setType(type);
@@ -109,80 +124,24 @@ const ListComp = ({ dataSource, getAllTickets, loading }: ListTypes) => {
       setOpen(false);
    }
 
-   const handleCreateWatch = async (ticket: any) => {
-      setLoading(true);
-      const fullBodySelected = dataSource.find(
-         (item) => item.id === ticket?.id
-      );
-      const payload = {
-         name: `web-gateway-service-${fullBodySelected?.id}`,
-         description: `Watch for ${fullBodySelected.id} repository`,
-         type: 'HOOK',
-         resource: {
-            type: 'ORGANIZATION',
-            organization: {
-               id: selectedOrganization,
-            },
-         },
-      };
-      try {
-         await API.services.createWatch(payload, integration.id);
-         messageApi.success({ content: 'Watch created successfully' });
-      } catch (error) {
-         console.log(error);
-         const errorMessage = error?.response?.data, status = error?.response?.status;
-         messageApi.error({ content: handleError(errorMessage, status) ?? 'Watch creation failed' });
-      } finally {
-         setLoading(false);
-      }
-   };
-
-   const menu = useCallback((record: { [key: string]: any }) => {
-      return (
-         <Menu>
-            <Menu.Item key="0" icon={<EditOutlined />}>
-               <a onClick={() => onOpen('edit', record)} >Update Ticket</a>
-            </Menu.Item>
-            <Menu.Item onClick={() => handleCreateWatch(record)} key="1" icon={<EyeOutlined />} >
-               <a >Create Watch</a>
-            </Menu.Item>
-         </Menu>
-      )
-   }, []);
-
    return (
-      <Spin spinning={(loading || _loading)} >
+      <Spin spinning={(loading || (listRef?.current?.loading ?? false))} >
          {contextHolder}
          <Space style={{ width: '100%', alignItems: "end", display: "flex", flexDirection: "row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
          <List
-            dataSource={dataSource}
-            renderItem={(item: { [key: string]: any }) => {
-               return (
-                  <List.Item
-                     key={item?.id}
-                     actions={[
-                        item?.priority && <Badge key={1} dot color={Enum?.priority?.[item?.priority?.toLowerCase()]?.color} />,
-                        item?.type && <Tag key={2} >{item?.type}</Tag>
-                     ]}
-                     extra={(
-                        [
-                           <Dropdown overlay={() => menu(item)} trigger={['click']} key={1}>
-                              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                 <EllipsisOutlined />
-                              </a>
-                           </Dropdown>
-                        ]
-                     )}
-                  >
-                     <List.Item.Meta
-                        title={item?.name ?? item?.id}
-                        description={item?.description}
-                     />
-                  </List.Item>
-               );
+            style={{ marginBottom: '10px' }}
+            pagination={{
+               ...paginationState,
+               onChange: (current: number, pageSize: number) => {
+                  getAllTickets({ ...paginationState, current, pageSize })
+               }
             }}
+            dataSource={dataSource}
+            renderItem={(item: { [key: string]: any }) => (
+               <ListItem onOpen={onOpen} item={item} dataSource={dataSource} />
+            )}
          />
          <CreateTicketForm
             selected={selected}
@@ -196,7 +155,7 @@ const ListComp = ({ dataSource, getAllTickets, loading }: ListTypes) => {
                   if (isSuccess) {
                      messageApi.success({ content: `Ticket ${type === 'create' ? 'created' : 'updated'} successfully.` })
                      onCancel();
-                     getAllTickets();
+                     getAllTickets(defaultPagination);
                   };
                })
             }}

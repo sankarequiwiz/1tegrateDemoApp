@@ -1,5 +1,5 @@
 import { Badge, Form, Input, Modal, ModalProps, Select, message } from 'antd';
-import React, { useEffect, useImperativeHandle } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
 
@@ -66,6 +66,7 @@ function FormComp(props: FormTypes) {
    const { open, type, selected, onCancel: onCancelProp, actionRef, ...rest } = props;
    const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
    const [messageApi, contextHolder] = message.useMessage();
+   const [creating, setCreating] = useState(false)
 
    const [form] = Form.useForm();
 
@@ -77,6 +78,7 @@ function FormComp(props: FormTypes) {
    }
 
    const createTicket = async (values: { [key: string]: string }) => {
+      setCreating(true);
       try {
          const resp = await API.services.createTickets(
             values,
@@ -96,6 +98,8 @@ function FormComp(props: FormTypes) {
          }
          messageApi.error({ content })
          return false;
+      } finally {
+         setCreating(false);
       }
    }
 
@@ -146,7 +150,10 @@ function FormComp(props: FormTypes) {
    }, [selected])
 
    return (
-      <Modal open={open} title={`${type === 'create' ? 'Create' : 'Update'} Ticket`} {...rest} onCancel={onCancel}>
+      <Modal
+         open={open}
+         okButtonProps={{ loading: creating }}
+         title={`${type === 'create' ? 'Create' : 'Update'} Ticket`} {...rest} onCancel={onCancel}>
          {contextHolder}
          <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
@@ -156,7 +163,7 @@ function FormComp(props: FormTypes) {
                   props = { options };
                }
                return (
-                  <Form.Item  rules={[{ required }]} label={label} key={index} name={name}>
+                  <Form.Item rules={[{ required }]} label={label} key={index} name={name}>
                      {React.cloneElement(fieldType, {
                         placeholder: `${type === 'text' ? 'Enter' : 'Select'} the ${label?.toLowerCase()}`,
                         ...props
