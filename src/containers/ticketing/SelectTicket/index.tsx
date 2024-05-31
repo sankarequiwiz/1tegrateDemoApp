@@ -31,8 +31,9 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
 
    const getTicketsById = async (payload) => {
       try {
-         const { data } = await API.services.getTicket(payload?.id, selectedOrganization, selectedCollection, headers);
-         return { ...data };
+         return (await API.services.getTicket(
+            payload?.id, selectedOrganization, selectedCollection, headers
+         )).data;
       } catch (err) {
          console.log(`error while get ticket by id ${payload?.id}`)
       }
