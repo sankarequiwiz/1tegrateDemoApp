@@ -154,7 +154,7 @@ const ListComp = ({ paginationState, dataSource, getAllTickets, loading }: ListT
                   if (isSuccess) {
                      messageApi.success({ content: `Ticket ${type === 'create' ? 'created' : 'updated'} successfully.` })
                      onCancel();
-                     getAllTickets(defaultPagination);
+                     getAllTickets(type === 'create' ? defaultPagination : paginationState);
                   };
                })
             }}

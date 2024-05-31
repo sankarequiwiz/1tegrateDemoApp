@@ -153,7 +153,10 @@ function FormComp(props: FormTypes) {
       <Modal
          open={open}
          okButtonProps={{ loading: creating }}
-         title={`${type === 'create' ? 'Create' : 'Update'} Ticket`} {...rest} onCancel={onCancel}>
+         title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
+         {...rest}
+         onCancel={onCancel}
+      >
          {contextHolder}
          <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
