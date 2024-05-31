@@ -34,23 +34,8 @@ const formDetails = [
    {
       name: 'priority',
       label: 'Priority',
-      type: 'enum',
-      fieldType: <Select />,
-      options: [
-         {
-            label: 'High',
-            value: 'high',
-            emoji: <Badge dot />
-         },
-         {
-            label: 'Medium',
-            value: 'medium'
-         },
-         {
-            label: 'Low',
-            value: 'low'
-         }
-      ],
+      type: 'text',
+      fieldType: <Input />,
       required: true,
    },
    {
@@ -160,16 +145,11 @@ function FormComp(props: FormTypes) {
          {contextHolder}
          <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
             {formDetails.map((item, index) => {
-               const { label, name, fieldType, options, type, required = false } = item;
-               let props = {}
-               if (type === 'enum') {
-                  props = { options };
-               }
+               const { label, name, fieldType, type, required = false } = item;
                return (
                   <Form.Item rules={[{ required }]} label={label} key={index} name={name}>
                      {React.cloneElement(fieldType, {
                         placeholder: `${type === 'text' ? 'Enter' : 'Select'} the ${label?.toLowerCase()}`,
-                        ...props
                      })}
                   </Form.Item>
                )
