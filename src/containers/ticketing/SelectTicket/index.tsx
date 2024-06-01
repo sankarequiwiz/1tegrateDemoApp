@@ -47,10 +47,9 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
          const { data, pagination: newPagination } = resp.data;
          const end = pageSize * current;
          const start = end - pageSize;
-
          const withoutName = data.filter((item) => !item.name).slice(start, end)
          const fullBody = await Promise.all(withoutName.map(getTicketsById));
-         const newData = data.map((item: { [key: string]: any }) => {
+         const newData = data.slice(start, end).map((item: { [key: string]: any }) => {
             const exist = fullBody.find((i) => i.id === item.id);
             if (exist) return exist;
             return item;
