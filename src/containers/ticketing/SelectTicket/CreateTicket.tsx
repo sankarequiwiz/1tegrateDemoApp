@@ -1,4 +1,4 @@
-import {  Form, Input, Modal, ModalProps, message } from 'antd';
+import { Form, Input, Modal, ModalProps, message } from 'antd';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
@@ -51,7 +51,7 @@ function FormComp(props: FormTypes) {
    const { open, type, selected, onCancel: onCancelProp, actionRef, ...rest } = props;
    const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
    const [messageApi, contextHolder] = message.useMessage();
-   const [creating, setCreating] = useState(false)
+   const [creating, setCreating] = useState(false);
 
    const [form] = Form.useForm();
 
@@ -89,9 +89,15 @@ function FormComp(props: FormTypes) {
    }
 
    const editTicket = async (values: { [key: string]: string }) => {
+      const dirtyFiels = {};
+      Object.entries(values).map(([key, value]) => {
+         if (!selected[key] || selected[key] !== value) {
+            dirtyFiels[key] = value;
+         }
+      })
       try {
          const resp = await API.services.editTickets(
-            values,
+            dirtyFiels,
             headers,
             selectedOrganization,
             selectedCollection,

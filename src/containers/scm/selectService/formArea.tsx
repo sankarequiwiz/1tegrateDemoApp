@@ -21,7 +21,7 @@ export const FormArea = React.forwardRef<
    HTMLDivElement,
    HTMLProps<HTMLDivElement> & FormAreaTypes
 >(({ selected, ...props }, ref) => {
-   const { organization, setIntegration, domain: type } = React.useContext(AppContext);
+   const { organization, setIntegration, domain: type ,} = React.useContext(AppContext);
    const [loading, setLoading] = React.useState<boolean>(false);
 
    const [messageApi, contextHolder] = message.useMessage();
@@ -70,7 +70,7 @@ export const FormArea = React.forwardRef<
                   }
                   resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
                })
-
+               console.log(resp)
                const formValues: Payload = {
                   name: `${selected?.serviceProfile?.name} integration`,
                   type,
