@@ -42,7 +42,6 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
       setLoading(true);
       const resp = await API.services.getSCMOrganization(headers as any, domain.toLowerCase());
       const { data } = resp.data;
-      console.table(data)
       setOrganization(data);
     } catch (error) {
       if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {

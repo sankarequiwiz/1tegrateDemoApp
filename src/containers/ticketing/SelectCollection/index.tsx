@@ -24,7 +24,6 @@ const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEleme
       try {
          const resp = await API.services.getAllCollection(selectedOrganization, { integrationId: integration?.id });
          const { data } = resp?.data;
-         console.table(data)
          setCollectionsState(data)
       } catch (error) {
          console.error(error);

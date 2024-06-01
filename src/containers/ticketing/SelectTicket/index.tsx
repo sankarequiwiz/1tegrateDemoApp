@@ -54,7 +54,6 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
             if (exist) return exist;
             return item;
          })
-         console.table(newData)
          setTicketsState(newData);
          setPagination({ ...pagination, total: newPagination?.total })
       } catch (error) {
