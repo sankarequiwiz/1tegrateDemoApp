@@ -1,7 +1,6 @@
 import React, { HTMLProps, useMemo } from 'react';
 
 import {
-  Button,
   ButtonProps,
   Radio,
   ListProps,
