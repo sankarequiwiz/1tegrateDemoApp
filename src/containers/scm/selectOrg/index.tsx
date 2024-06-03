@@ -8,6 +8,7 @@ import {
   Space,
   Spin,
   message,
+  Skeleton,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -96,7 +97,7 @@ type ListTypes = {
   dataSource: Array<OrganizationTypes>;
 } & ListProps<unknown>;
 
-const ListComp = ({ dataSource, ...props }: ListTypes) => {
+const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) => {
   const { setSelectedOrganization, selectedOrganization, integration } =
     React.useContext(AppContext);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -138,38 +139,42 @@ const ListComp = ({ dataSource, ...props }: ListTypes) => {
   return (
     <Spin spinning={loading} tip="Creating...">
       {contextHolder}
-      <List
-        {...props}
-        dataSource={dataSource}
-        renderItem={(item: OrganizationTypes) => {
-          const isSelected = item.id === selectedOrganization;
-          return (
-            <List.Item
-              onClick={() => {
-                handleSelect(item.id);
-              }}
-              actions={[
-                (
-                  <Button
-                    loading={item?.isLoading}
-                    onClick={handleCreateWatch}
-                    type="link"
-                    key={1}
-                  >
-                    Create Watch
-                  </Button>
-                ),
-              ]}
-            >
-              <List.Item.Meta
-                avatar={<Radio checked={isSelected} value={item.id} />}
-                title={<a>{item?.login}</a>}
-                description={item?.description}
-              />
-            </List.Item>
-          );
-        }}
-      />
+      {
+        loadingProps ? <Skeleton /> : (
+          <List
+            {...props}
+            dataSource={dataSource}
+            renderItem={(item: OrganizationTypes) => {
+              const isSelected = item.id === selectedOrganization;
+              return (
+                <List.Item
+                  onClick={() => {
+                    handleSelect(item.id);
+                  }}
+                  actions={[
+                    (
+                      <Button
+                        loading={item?.isLoading}
+                        onClick={handleCreateWatch}
+                        type="link"
+                        key={1}
+                      >
+                        Create Watch
+                      </Button>
+                    ),
+                  ]}
+                >
+                  <List.Item.Meta
+                    avatar={<Radio checked={isSelected} value={item.id} />}
+                    title={<a>{item?.login}</a>}
+                    description={item?.description}
+                  />
+                </List.Item>
+              );
+            }}
+          />
+        )
+      }
     </Spin>
   );
 };
