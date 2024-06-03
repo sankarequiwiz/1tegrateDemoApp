@@ -6,7 +6,6 @@ import {
    PaginationProps,
    Space,
    Spin,
-   message,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';

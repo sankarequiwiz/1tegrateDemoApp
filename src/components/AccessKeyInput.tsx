@@ -4,7 +4,6 @@ import {
   Form,
   Input,
   Modal,
-  ModalProps,
   message,
 } from 'antd';
 import React, { Fragment } from 'react';
