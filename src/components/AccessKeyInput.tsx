@@ -131,6 +131,13 @@ const UserPersona = React.forwardRef(
                   >
                     <Input placeholder="Enter the organization name" />
                   </Form.Item>
+                  <Form.Item
+                    name={'companyKey'}
+                    style={{ width: '100%' }}
+                    label={'Company key'}
+                  >
+                    <Input placeholder="Enter the Company key" />
+                  </Form.Item>
                 </Form>
               </div>
             );

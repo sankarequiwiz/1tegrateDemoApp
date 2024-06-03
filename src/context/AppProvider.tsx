@@ -20,8 +20,10 @@ type ContextTypes = {
   selectedCommit?: string;
   appTitle?: string;
   selectedCollection?: string;
+  companykey?:string;
 
   setAppTitle?: (appTitle: string) => void;
+  setCompanykey?: (companyKey: string) => void;
   setUserName?: (userName: string) => void;
   setAccessKey?: (accessKey: string) => void;
   setSelectedCommit?: (selectedCommit: string) => void;
@@ -165,6 +167,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
+  const setCompanykey = (newCommit: string) => {
+    setSearch((prev) => {
+      prev.set('companyKey', newCommit.toString());
+      return prev;
+    });
+  };
+
   const contextValues: ContextTypes = {
     setAccessKey,
     setDomain,
@@ -178,11 +187,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setSelectedBranch,
     setUserName,
     setAppTitle,
+    setCompanykey,
     setSelectedPullReq,
     setSelectedCommit,
     setSelectedCollection,
     organization: search.get('organization'),
     userName: search.get('userName'),
+    companykey: search.get('companyKey'),
     accessKey: search.get('accessKey'),
     appTitle: search.get('appTitle'),
     selectedCommit: search.get('selectedCommit'),
