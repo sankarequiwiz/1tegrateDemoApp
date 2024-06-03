@@ -70,7 +70,6 @@ export const FormArea = React.forwardRef<
                   }
                   resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
                })
-               console.log(resp)
                const formValues: Payload = {
                   name: `${selected?.serviceProfile?.name} integration`,
                   type,
