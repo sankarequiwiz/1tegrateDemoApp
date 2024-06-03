@@ -74,8 +74,11 @@ function FormComp(props: FormTypes) {
             selectedOrganization,
             selectedCollection
          );
-         onCancel(undefined);
          messageApi.success({ content: `Ticket created successfully.` });
+         setTimeout(() => {
+            getAllTickets(defaultPagination)
+         }, 2000)
+         onCancel();
       } catch (error) {
          const errorProp = error?.response?.data;
          console.error(errorProp);
@@ -107,7 +110,10 @@ function FormComp(props: FormTypes) {
             selected?.id
          );
          onCancel(undefined);
-         messageApi.success({ content: `Ticket updated successfully.` });;
+         messageApi.success({ content: `Ticket updated successfully.` });
+         setTimeout(() => {
+            getAllTickets(paginationState);
+         }, 2000)
       } catch (error) {
          const errorProp = error?.response?.data;
          console.error(errorProp);
@@ -128,10 +134,6 @@ function FormComp(props: FormTypes) {
          } else {
             await editTicket(resp);
          }
-         setTimeout(() => {
-            getAllTickets(type === 'edit' ? paginationState : defaultPagination)
-         }, 100)
-         onCancel();
       } catch (error) {
          console.error(error);
       };

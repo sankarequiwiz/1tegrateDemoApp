@@ -4,6 +4,7 @@ import {
    List,
    ListProps,
    PaginationProps,
+   Skeleton,
    Space,
    Spin,
 } from 'antd';
@@ -135,19 +136,23 @@ const ListComp = (
          <Space style={{ width: '100%', alignItems: "end", display: "flex", flexDirection: "row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
-         <List
-            style={{ marginBottom: '10px' }}
-            pagination={{
-               ...paginationState,
-               onChange: (current: number, pageSize: number) => {
-                  getAllTickets({ ...paginationState, current, pageSize })
-               }
-            }}
-            dataSource={dataSource}
-            renderItem={(item: { [key: string]: any }) => (
-               <ListItem onOpen={onOpen} item={item} dataSource={dataSource} />
-            )}
-         />
+         {
+            loading ? <Skeleton /> : (
+               <List
+                  style={{ marginBottom: '10px' }}
+                  pagination={{
+                     ...paginationState,
+                     onChange: (current: number, pageSize: number) => {
+                        getAllTickets({ ...paginationState, current, pageSize })
+                     }
+                  }}
+                  dataSource={dataSource}
+                  renderItem={(item: { [key: string]: any }) => (
+                     <ListItem onOpen={onOpen} item={item} dataSource={dataSource} />
+                  )}
+               />
+            )
+         }
          <CreateTicketForm
             selected={selected}
             open={open}
