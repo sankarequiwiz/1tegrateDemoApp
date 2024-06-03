@@ -1,5 +1,5 @@
 import { Form, Input, Modal, ModalProps, PaginationProps, message } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
 import { defaultPagination } from '.';
@@ -130,7 +130,7 @@ function FormComp(props: FormTypes) {
          }
          setTimeout(() => {
             getAllTickets(type === 'edit' ? paginationState : defaultPagination)
-         }, 1000)
+         }, 100)
          onCancel();
       } catch (error) {
          console.error(error);

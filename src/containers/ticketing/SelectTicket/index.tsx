@@ -83,7 +83,12 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
                   }}
                ></div>
             </div>
-            <ListComp paginationState={paginationState} loading={loading} dataSource={ticketsState} getAllTickets={getAllTickets} />
+            <ListComp
+               paginationState={paginationState}
+               loading={loading}
+               dataSource={ticketsState}
+               getAllTickets={getAllTickets}
+            />
          </Space>
          <Footer
             onCancel={() => setCurrentStep(current - 1)}
@@ -100,7 +105,13 @@ type ListTypes = {
    loading?: boolean
 } & ListProps<unknown>;
 
-const ListComp = ({ paginationState, dataSource, getAllTickets, loading }: ListTypes) => {
+const ListComp = (
+   {
+      paginationState,
+      dataSource,
+      getAllTickets,
+      loading,
+   }: ListTypes) => {
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
    const [type, setType] = useState<'create' | 'edit'>('create');
