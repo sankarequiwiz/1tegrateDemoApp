@@ -132,7 +132,7 @@ const ListComp = (
    }
 
    return (
-      <Spin spinning={(loading || (listRef?.current?.loading ?? false))} >
+      <>
          <Space style={{ width: '100%', alignItems: "end", display: "flex", flexDirection: "row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
@@ -163,7 +163,7 @@ const ListComp = (
             paginationState={paginationState}
             getAllTickets={getAllTickets}
          />
-      </Spin>
+      </>
    );
 };
 

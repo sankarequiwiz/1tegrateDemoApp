@@ -4,6 +4,7 @@ import {
    List,
    ListProps,
    Radio,
+   Skeleton,
    Space,
    Spin,
    message,
@@ -76,7 +77,7 @@ type ListTypes = {
 } & ListProps<unknown>;
 
 const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
-   const [_loading, setLoading] = React.useState<boolean>(false);
+   const [loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
    const { integration, selectedCollection, setSelectedCollection } = React.useContext(AppContext);
 
@@ -114,30 +115,34 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
    };
 
    return (
-      <Spin spinning={(_loading || loadingProp)} >
+      <Spin spinning={(loading)} >
          {contextHolder}
-         <List
-            dataSource={dataSource}
-            renderItem={(item: { [key: string]: any }) => {
-               const isSelected = item.id === selectedCollection;
-               return (
-                  <List.Item
-                     actions={[
-                        isSelected && <a onClick={handleCreateWatch} key={1} >Create Watch</a>
-                     ]}
-                     onClick={() => {
-                        handleSelect(item.id);
-                     }}
-                  >
-                     <List.Item.Meta
-                        avatar={<Radio checked={isSelected} value={item.id} />}
-                        title={item?.name}
-                        description={item?.description}
-                     />
-                  </List.Item>
-               );
-            }}
-         />
+         {
+            loadingProp ? <Skeleton /> : (
+               <List
+                  dataSource={dataSource}
+                  renderItem={(item: { [key: string]: any }) => {
+                     const isSelected = item.id === selectedCollection;
+                     return (
+                        <List.Item
+                           actions={[
+                              isSelected && <a onClick={handleCreateWatch} key={1} >Create Watch</a>
+                           ]}
+                           onClick={() => {
+                              handleSelect(item.id);
+                           }}
+                        >
+                           <List.Item.Meta
+                              avatar={<Radio checked={isSelected} value={item.id} />}
+                              title={item?.name}
+                              description={item?.description}
+                           />
+                        </List.Item>
+                     );
+                  }}
+               />
+            )
+         }
       </Spin>
    );
 };
