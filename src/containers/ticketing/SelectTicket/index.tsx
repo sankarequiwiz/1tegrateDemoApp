@@ -6,7 +6,6 @@ import {
    PaginationProps,
    Skeleton,
    Space,
-   Spin,
 } from 'antd';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
@@ -118,7 +117,6 @@ const ListComp = (
    const [type, setType] = useState<'create' | 'edit'>('create');
 
    const actionRef = useRef<{ onOk: () => Promise<any> }>(null);
-   const listRef = useRef<{ loading?: boolean }>(null);
 
    const onOpen = (type: 'edit' | 'create', arg?: { [key: string]: any }) => {
       setType(type);
