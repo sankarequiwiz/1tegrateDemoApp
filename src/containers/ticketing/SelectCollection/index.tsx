@@ -1,4 +1,4 @@
-import React, { HTMLProps, useEffect, useState } from 'react';
+import React, { HTMLProps, useEffect, useMemo, useState } from 'react';
 
 import {
    List,
@@ -13,6 +13,7 @@ import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
 import { Errors, handleError } from '../../../utils/error';
+import utils from '../../../utils';
 
 const errorObj = new Errors();
 const SelectCollection = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
@@ -79,7 +80,13 @@ type ListTypes = {
 const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
    const [loading, setLoading] = React.useState<boolean>(false);
    const [messageApi, contextHolder] = message.useMessage();
-   const { integration, selectedCollection, setSelectedCollection } = React.useContext(AppContext);
+   const {
+      integration,
+      selectedCollection,
+      domain,
+      selectedOrganization,
+      setSelectedCollection,
+   } = React.useContext(AppContext);
 
    const handleCreateWatch = async (e: any) => {
       e.stopPropagation();
@@ -88,13 +95,16 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
          (item) => item.id === selectedCollection
       );
       const payload = {
-         name: `web-gateway-service-${fullBodySelected?.login}`,
-         description: `Watch for ${fullBodySelected.login} repository`,
+         name: `web-gateway-service-${fullBodySelected?.name}`,
+         description: `Watch for ${fullBodySelected.name} repository`,
          type: 'HOOK',
          resource: {
-            type: 'ORGANIZATION',
+            type: `${domain}_COLLECTIONS`,
+            collections: {
+               id: selectedCollection
+            },
             organization: {
-               id: selectedCollection,
+               id: selectedOrganization,
             },
          },
       };
@@ -109,6 +119,11 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
          setLoading(false);
       }
    };
+
+   const isWatchEnabled = useMemo(() => {
+      const watch = new utils.watch.Watch(domain);
+      return watch.isAvailable({ level: 'collection' })
+   }, [domain]);
 
    const handleSelect = (selected: string) => {
       setSelectedCollection(selectedCollection === selected ? '' : selected);
@@ -126,7 +141,7 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
                      return (
                         <List.Item
                            actions={[
-                              isSelected && <a onClick={handleCreateWatch} key={1} >Create Watch</a>
+                              (isWatchEnabled && isSelected) && <a onClick={handleCreateWatch} key={1} >Create Watch</a>
                            ]}
                            onClick={() => {
                               handleSelect(item.id);

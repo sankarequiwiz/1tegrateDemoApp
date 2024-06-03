@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ButtonProps, Space, Button, Radio, Spin, message } from 'antd';
-import React, { HTMLProps } from 'react';
+import { ButtonProps, Space, Button, Radio, Spin, message, MenuProps, Dropdown } from 'antd';
+import React, { HTMLProps, useMemo } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
 import { Payload, ReposTypes } from './type';
 import { List } from 'antd';
 
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
 import { handleError } from '../../../utils/error';
+import utils from '../../../utils';
 
 export const SelectRepo = React.forwardRef<
   HTMLDivElement,
@@ -21,6 +22,7 @@ export const SelectRepo = React.forwardRef<
     selectedRepo,
     selectedOrganization,
     integration,
+    domain
   } = React.useContext(AppContext);
   const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
   const [downloading, setDownloading] = React.useState<boolean>(false);
@@ -31,6 +33,7 @@ export const SelectRepo = React.forwardRef<
   const getHeaders = () => {
     return { integrationId: integration.id };
   };
+
   const getRepos = async () => {
     try {
       setLoading(true);
@@ -69,8 +72,7 @@ export const SelectRepo = React.forwardRef<
     }
   };
 
-  const handleCreateWatch = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleCreateWatch = async () => {
     setLoading(true);
     const fullBodySelected = Repositories.find(
       (item) => item?.id?.toString() === selectedRepo
@@ -100,6 +102,33 @@ export const SelectRepo = React.forwardRef<
       setLoading(false);
     }
   };
+
+  const isWatchEnabled = useMemo(() => {
+    const watch = new utils.watch.Watch(domain);
+    return watch.isAvailable({ level: 'repository' })
+  }, [domain]);
+
+  const items: MenuProps['items'] = [
+    {
+      label: "Create Watch",
+      key: '0',
+      style: { display: isWatchEnabled ? 'block' : 'none' },
+      icon: <EyeOutlined />,
+      onClick: (e) => {
+        e.domEvent.stopPropagation();
+        handleCreateWatch()
+      }
+    },
+    {
+      label: 'Download',
+      key: '1',
+      icon: <DownloadOutlined />,
+      onClick: (e) => {
+        e.domEvent.stopPropagation();
+        downloadHandler();
+      }
+    }
+  ];
 
   React.useEffect(() => {
     getRepos();
@@ -140,28 +169,22 @@ export const SelectRepo = React.forwardRef<
               return (
                 <List.Item
                   actions={[
-                    isSelected && (
-                      <Button type="link" key={1} onClick={handleCreateWatch}>
-                        Create Watch
-                      </Button>
-                    ),
-                    <Button
-                      type="link"
-                      onClick={downloadHandler}
-                      icon={<DownloadOutlined />}
-                      key={2}
-                      style={{ display: isSelected ? 'block' : 'none' }}
-                    >
-                      Download
-                    </Button>,
+                    isSelected && <Dropdown key={1} menu={{ items }} trigger={['click']}>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ padding: '.2rem', background: 'transparent', outline: 'none', border: 'none', cursor: 'pointer' }}
+                      >
+                        <EllipsisOutlined />
+                      </button>
+                    </Dropdown>
                   ]}
+                  onClick={() => handleSelect(item.id?.toString())}
                 >
                   <List.Item.Meta
                     avatar={
                       <Radio
                         checked={isSelected}
                         value={item.id}
-                        onChange={(e) => handleSelect(e.target.value)}
                       />
                     }
                     title={<a>{item?.fullName}</a>}

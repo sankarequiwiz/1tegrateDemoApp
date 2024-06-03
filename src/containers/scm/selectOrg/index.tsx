@@ -1,4 +1,4 @@
-import React, { HTMLProps } from 'react';
+import React, { HTMLProps, useMemo } from 'react';
 
 import {
   Button,
@@ -16,6 +16,7 @@ import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services/index';
 import { OrganizationTypes, Payload } from './type';
 import { Errors, handleError } from '../../../utils/error';
+import utils from '../../../utils';
 import { List } from 'antd';
 
 const errorObj = new Errors();
@@ -98,8 +99,12 @@ type ListTypes = {
 } & ListProps<unknown>;
 
 const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) => {
-  const { setSelectedOrganization, selectedOrganization, integration } =
-    React.useContext(AppContext);
+  const {
+    setSelectedOrganization,
+    selectedOrganization,
+    integration,
+    domain,
+  } = React.useContext(AppContext);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -107,18 +112,16 @@ const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) =>
     setSelectedOrganization(selectedOrganization === selected ? '' : selected);
   };
 
-  const handleCreateWatch = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateWatch = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.stopPropagation();
     setLoading(true);
-    const fullBodySelected = dataSource.find(
-      (item) => item.id === selectedOrganization
-    );
+    const fullBodySelected = dataSource.find((item) => item.id === selectedOrganization);
     const payload: Payload = {
       name: `web-gateway-service-${fullBodySelected?.login}`,
       description: `Watch for ${fullBodySelected.login} repository`,
       type: 'HOOK',
       resource: {
-        type: 'SCM_ORGANIZATION',
+        type: `${domain}_ORGANIZATION` as any,
         organization: {
           id: selectedOrganization,
         },
@@ -135,6 +138,12 @@ const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) =>
       setLoading(false);
     }
   };
+
+
+  const isWatchEnabled = useMemo(() => {
+    const watch = new utils.watch.Watch(domain);
+    return watch.isAvailable({ level: 'organization' })
+  }, [domain]);
 
   return (
     <Spin spinning={loading} tip="Creating...">
@@ -153,14 +162,13 @@ const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) =>
                   }}
                   actions={[
                     (
-                      <Button
-                        loading={item?.isLoading}
+                      (isWatchEnabled && isSelected) && <a
                         onClick={handleCreateWatch}
                         type="link"
                         key={1}
                       >
                         Create Watch
-                      </Button>
+                      </a>
                     ),
                   ]}
                 >
