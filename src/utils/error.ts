@@ -2,12 +2,17 @@ export function handleError(error: Array<{ [key: string]: any }> | { [key: strin
    let message = 'Something went wrong!';
    if (typeof error === 'object' && Array.isArray(error) && error.length) {
       const [messageArr] = error;
-      message = messageArr?.errorMessage;
+      const errorObj = new Errors();
+      message = errorObj.getMessageForCode(messageArr?.errorCode) ?? messageArr?.errorMessage;
    } else if (typeof message === 'object' && !Array.isArray(error)) {
       message = error?.message || error?.errorMessage;
    }
    return message;
 }
+
+const errorMessages: { [key: string]: string } = {
+   'OTG-3200403': 'Watchdog configuration not found'
+};
 
 export class Errors {
    constructor() {
@@ -21,5 +26,8 @@ export class Errors {
       return {
          getNotFoundCode: this.getErrorCodes().orgNotFound
       }
+   }
+   getMessageForCode(code: string) {
+      return errorMessages?.[code]
    }
 }
