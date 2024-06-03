@@ -1,12 +1,15 @@
-import { Form, Input, Modal, ModalProps, message } from 'antd';
+import { Form, Input, Modal, ModalProps, PaginationProps, message } from 'antd';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
+import { defaultPagination } from '.';
 
 type FormTypes = {
    type: 'edit' | 'create'
    selected?: { [key: string]: any }
    actionRef?: any
+   getAllTickets?: (pagination: { [key: string]: any }) => void;
+   paginationState?: PaginationProps
 } & ModalProps;
 
 const formDetails = [
@@ -48,7 +51,7 @@ const formDetails = [
 ]
 
 function FormComp(props: FormTypes) {
-   const { open, type, selected, onCancel: onCancelProp, actionRef, ...rest } = props;
+   const { open, type, selected, onCancel: onCancelProp, getAllTickets, paginationState } = props;
    const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
    const [messageApi, contextHolder] = message.useMessage();
    const [creating, setCreating] = useState(false);
@@ -57,7 +60,7 @@ function FormComp(props: FormTypes) {
 
    const headers = { integrationId: integration?.id }
 
-   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+   const onCancel = (e?: React.MouseEvent<HTMLButtonElement>) => {
       onCancelProp(e);
       form.resetFields();
    }
@@ -65,14 +68,14 @@ function FormComp(props: FormTypes) {
    const createTicket = async (values: { [key: string]: string }) => {
       setCreating(true);
       try {
-         const resp = await API.services.createTickets(
+         await API.services.createTickets(
             values,
             headers,
             selectedOrganization,
             selectedCollection
          );
          onCancel(undefined);
-         return resp;
+         messageApi.success({ content: `Ticket created successfully.` });
       } catch (error) {
          const errorProp = error?.response?.data;
          console.error(errorProp);
@@ -82,7 +85,7 @@ function FormComp(props: FormTypes) {
             content = message?.errorMessage || message?.message;
          }
          messageApi.error({ content })
-         return false;
+
       } finally {
          setCreating(false);
       }
@@ -91,12 +94,12 @@ function FormComp(props: FormTypes) {
    const editTicket = async (values: { [key: string]: string }) => {
       const dirtyFields = {};
       Object.entries(values).map(([key, value]) => {
-         if (!selected[key] || selected[key] !== value) {
+         if (!selected?.[key] || selected?.[key] !== value) {
             dirtyFields[key] = value;
          }
       })
       try {
-         const resp = await API.services.editTickets(
+         await API.services.editTickets(
             dirtyFields,
             headers,
             selectedOrganization,
@@ -104,7 +107,7 @@ function FormComp(props: FormTypes) {
             selected?.id
          );
          onCancel(undefined);
-         return resp;
+         messageApi.success({ content: `Ticket updated successfully.` });;
       } catch (error) {
          const errorProp = error?.response?.data;
          console.error(errorProp);
@@ -114,7 +117,6 @@ function FormComp(props: FormTypes) {
             content = message?.errorMessage || message?.message;
          }
          messageApi.error({ content })
-         return false;
       }
    }
 
@@ -122,46 +124,47 @@ function FormComp(props: FormTypes) {
       try {
          const resp = await form.validateFields()
          if (type === 'create') {
-            return await createTicket(resp);
+            await createTicket(resp);
          } else {
-            return await editTicket(resp);
+            await editTicket(resp);
          }
-
+         setTimeout(() => {
+            getAllTickets(type === 'edit' ? paginationState : defaultPagination)
+         }, 1000)
+         onCancel();
       } catch (error) {
          console.error(error);
       };
    }
 
-   useImperativeHandle(actionRef, () => {
-      return { onOk }
-   }, [type])
-
    useEffect(() => {
       form.setFieldsValue(selected)
-   }, [selected])
+   }, [selected, type])
 
    return (
-      <Modal
-         open={open}
-         okButtonProps={{ loading: creating }}
-         title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
-         {...rest}
-         onCancel={onCancel}
-      >
+      <div>
          {contextHolder}
-         <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
-            {formDetails.map((item, index) => {
-               const { label, name, fieldType, type, required = false } = item;
-               return (
-                  <Form.Item rules={[{ required }]} label={label} key={index} name={name}>
-                     {React.cloneElement(fieldType, {
-                        placeholder: `${type === 'text' ? 'Enter' : 'Select'} the ${label?.toLowerCase()}`,
-                     })}
-                  </Form.Item>
-               )
-            })}
-         </Form>
-      </Modal>
+         <Modal
+            open={open}
+            okButtonProps={{ loading: creating }}
+            title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
+            onOk={onOk}
+            onCancel={onCancel}
+         >
+            <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
+               {formDetails.map((item, index) => {
+                  const { label, name, fieldType, type, required = false } = item;
+                  return (
+                     <Form.Item rules={[{ required }]} label={label} key={index} name={name}>
+                        {React.cloneElement(fieldType, {
+                           placeholder: `${type === 'text' ? 'Enter' : 'Select'} the ${label?.toLowerCase()}`,
+                        })}
+                     </Form.Item>
+                  )
+               })}
+            </Form>
+         </Modal>
+      </div>
    )
 }
 

@@ -15,8 +15,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import { CreateTicketForm } from './CreateTicket';
 import { ListItem } from './Item';
 
-const defaultPagination = {
-   pageSize: 5,
+export const defaultPagination = {
+   pageSize: 10,
    current: 1,
    showSizeChanger: false,
    showQuickJumper: true
@@ -97,16 +97,14 @@ const SelectTicket = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>
 type ListTypes = {
    dataSource?: { [key: string]: any }[]
    getAllTickets?: (pagination: { [key: string]: any }) => void;
-   loading?: boolean
    paginationState?: PaginationProps
+   loading?: boolean
 } & ListProps<unknown>;
 
 const ListComp = ({ paginationState, dataSource, getAllTickets, loading }: ListTypes) => {
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
    const [type, setType] = useState<'create' | 'edit'>('create');
-
-   const [messageApi, contextHolder] = message.useMessage();
 
    const actionRef = useRef<{ onOk: () => Promise<any> }>(null);
    const listRef = useRef<{ loading?: boolean }>(null);
@@ -124,7 +122,6 @@ const ListComp = ({ paginationState, dataSource, getAllTickets, loading }: ListT
 
    return (
       <Spin spinning={(loading || (listRef?.current?.loading ?? false))} >
-         {contextHolder}
          <Space style={{ width: '100%', alignItems: "end", display: "flex", flexDirection: "row-reverse", marginBottom: '1rem' }}>
             <Button type='primary' onClick={() => onOpen('create')} icon={<PlusOutlined />} >Create Ticket</Button>
          </Space>
@@ -148,15 +145,8 @@ const ListComp = ({ paginationState, dataSource, getAllTickets, loading }: ListT
             type={type}
             okText={type === 'create' ? 'Create' : 'Update'}
             actionRef={actionRef}
-            onOk={async () => {
-               actionRef.current.onOk().then((isSuccess) => {
-                  if (isSuccess) {
-                     messageApi.success({ content: `Ticket ${type === 'create' ? 'created' : 'updated'} successfully.` })
-                     onCancel();
-                     getAllTickets(type === 'create' ? defaultPagination : paginationState);
-                  };
-               })
-            }}
+            paginationState={paginationState}
+            getAllTickets={getAllTickets}
          />
       </Spin>
    );

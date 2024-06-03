@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   Modal,
+  ModalProps,
   message,
 } from 'antd';
 import React, { Fragment } from 'react';
@@ -18,7 +19,7 @@ import { WatchContext } from '../context/WatchContext';
 type FloatButtonContextTypes = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
+const placement = { left: 24, bottom: 10 };
 const FloatButtonContext = React.createContext<FloatButtonContextTypes>(null);
 
 export const FloatingActionComp = React.forwardRef(() => {
@@ -29,9 +30,9 @@ export const FloatingActionComp = React.forwardRef(() => {
       <FloatButton.Group
         trigger="click"
         type="primary"
-        style={{ left: 24, bottom: 10 }}
+        style={placement}
         icon={<SettingOutlined />}
-        onClick={() => setOpen(true)}
+        onOpenChange={setOpen}
         open={open}
       >
         <AccessKeyForm />
@@ -94,7 +95,7 @@ const UserPersona = React.forwardRef(
                 setOrganization(organization);
                 handleClose();
               })
-              .catch(() => {});
+              .catch(() => { });
           }}
           children={(() => {
             return (
@@ -191,6 +192,7 @@ const AccessKeyForm = React.forwardRef(
           open={isOpen}
           okButtonProps={{ loading: isSetting }}
           onCancel={handleClose}
+          wrapProps={{ onClick: (e: { [key: string]: any }) => e.stopPropagation() }}
           onOk={() => {
             form
               .validateFields()
@@ -220,7 +222,7 @@ const AccessKeyForm = React.forwardRef(
                   seIsLoading(false);
                 }
               })
-              .catch(() => {});
+              .catch(() => { });
           }}
           children={(() => {
             return (
