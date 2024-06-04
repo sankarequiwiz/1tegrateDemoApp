@@ -8,6 +8,11 @@ export const setAccessKey = async (key: string) => {
 	return await fetch.post('/api/demo/apiKey', { key });
 };
 
+/* set accessKey */
+export const getAccessKey = async () => {
+	return await fetch.get('/api/demo/apiKey');
+};
+
 /* get services */
 type QueryParams = {
 	type: DomainTypes;
