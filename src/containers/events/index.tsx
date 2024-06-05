@@ -43,7 +43,7 @@ export const Events = React.forwardRef<
         <Col span={5} className="event-selector">
           <EventList onSelect={onSelect} dataSource={events as any} />
         </Col>
-        <Col span={18}>
+        <Col span={19}>
           <EventContent className="event-content" />
         </Col>
       </Row>
