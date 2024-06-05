@@ -17,7 +17,7 @@ import { WatchContext, WatchEvents } from '../context/WatchContext';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nord } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { EventMessageIcon } from './Events';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Item } = AntList;
 
