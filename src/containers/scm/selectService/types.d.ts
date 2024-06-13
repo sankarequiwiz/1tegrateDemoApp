@@ -30,6 +30,7 @@ export type AccessPointConfigsTypes = {
       label: string;
       name: string;
       required: boolean;
+      property: string
     },
   ];
 };

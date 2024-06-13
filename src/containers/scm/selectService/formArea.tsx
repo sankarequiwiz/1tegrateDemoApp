@@ -10,6 +10,7 @@ type fieldTypeConfigTypes = {
    label: string;
    name: string;
    required: boolean;
+   property: string
 };
 
 type FormAreaTypes = {
@@ -43,33 +44,26 @@ export const FormArea = React.forwardRef<
       return 'not_set';
    }, [fields]);
 
-   const integrationPayloadKey = {
-      API_KEY: {
-         value: 'apiKey'
-      },
-      USERNAME: {
-         value: 'username'
-      },
-      PASSWORD: {
-         value: 'password'
-      },
-      DOMAIN: {
-         value: 'domain'
-      }
-   }
+   // const integrationPayloadKey = {
+   //    API_KEY: {
+   //       value: 'apiKey'
+   //    },
+   //    USERNAME: {
+   //       value: 'username'
+   //    },
+   //    PASSWORD: {
+   //       value: 'password'
+   //    },
+   //    DOMAIN: {
+   //       value: 'domain'
+   //    }
+   // }
 
    const onIntegrate = (callback) => {
       if (organization) {
          form
             .validateFields()
             .then(async (resp) => {
-               Object.entries(resp).map(([key, value]) => {
-                  delete resp[key];
-                  if (!integrationPayloadKey?.[key]) {
-                     alert(`${key} is not configured in mapper`)
-                  }
-                  resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
-               })
                const formValues: Payload = {
                   name: `${selected?.serviceProfile?.name} integration`,
                   type,
@@ -191,7 +185,7 @@ export const FormArea = React.forwardRef<
                                     </div>
                                     <Form.Item
                                        key={index}
-                                       name={field.type}
+                                       name={field.property}
                                        rules={[{ required: field.required }]}
                                     >
                                        {
