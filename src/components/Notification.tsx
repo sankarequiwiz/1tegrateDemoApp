@@ -17,7 +17,7 @@ import { WatchContext, WatchEvents } from '../context/WatchContext';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nord } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { EventMessageIcon } from './Events';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Item } = AntList;
 
@@ -106,6 +106,7 @@ export const List = React.forwardRef<
 >(({ listProps, onSelect, setOpen, ...props }, ref) => {
   const { clearEvents } = React.useContext(WatchContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleEventSelect = (selected: WatchEvents) => {
     onSelect && onSelect(selected);
@@ -123,7 +124,7 @@ export const List = React.forwardRef<
             size="small"
             type="primary"
             onClick={() => {
-              navigate('/events');
+              navigate(`/events/${location?.search}`);
               setOpen(false);
             }}
           >
@@ -167,7 +168,6 @@ export const Notification = React.forwardRef<
 
   React.useEffect(() => {
     socket.onConnect = () => {
-      console.log('websocket connected!');
       socket.subscribe('/topic/events', (message) => {
         setEvents(JSON.parse(message?.body));
       });

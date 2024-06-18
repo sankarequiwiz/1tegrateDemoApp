@@ -1,7 +1,7 @@
 import { DomainTypes } from "../types/type";
 
 type ConfigType = {
-   level?: 'organization' | 'collection' | 'repository'
+   level?: 'organization' | 'collection' | 'repository' | 'ticket'
 }
 
 const setup = {
@@ -19,6 +19,9 @@ const setup = {
       },
       collection: {
          watch: true
+      },
+      ticket: {
+         watch: false
       }
    }
 }

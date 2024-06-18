@@ -9,6 +9,7 @@ import { Servicenow } from '../../../components/icons/providers/servicenow';
 import { Bitbucket } from '../../../components/icons/providers/bitbucket';
 import { ADO } from '../../../components/icons/providers/ado';
 import { Jira } from '../../../components/icons/providers/jira';
+import { Salesforce } from '../../../components/icons/providers/salesforce';
 import { ServiceTypes } from "./types";
 import { AppContext } from "../../../context/AppProvider";
 import { Trello } from "../../../components/icons/providers/trello";
@@ -36,6 +37,8 @@ export const ProviderCard = React.forwardRef((props: CardProps & { item: Service
          return <ADO />;
       }else if(name.startsWith('trello')){
          return <Trello />
+      } else if(name.startsWith('salesforce')){
+         return <Salesforce />
       }
    }, [item]);
 

@@ -84,6 +84,7 @@ const UserPersona = React.forwardRef(
           title={`Kindly set up the following details based on the customer's specifications:`}
           open={isOpen}
           onCancel={handleClose}
+          wrapProps={{ onClick: (e: { [key: string]: any }) => e.stopPropagation() }}
           onOk={() => {
             form
               .validateFields()
@@ -94,7 +95,7 @@ const UserPersona = React.forwardRef(
                 setOrganization(organization);
                 handleClose();
               })
-              .catch(() => { });
+              .catch((error) => {console.log(error) });
           }}
           children={(() => {
             return (
