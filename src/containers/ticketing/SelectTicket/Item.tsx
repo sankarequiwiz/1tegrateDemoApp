@@ -1,9 +1,10 @@
 import { EditOutlined, EllipsisOutlined, EyeOutlined, } from '@ant-design/icons';
-import {  Dropdown, List, Menu, Tag, message } from 'antd';
-import React, { LegacyRef } from 'react';
+import { Dropdown, List, Menu, Tag, message } from 'antd';
+import React, { LegacyRef, useMemo } from 'react';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services/index';
 import { handleError } from '../../../utils/error';
+import utils from '../../../utils';
 
 
 type ItemTypes = { [key: string]: any; };
@@ -16,7 +17,7 @@ export const ListItem = React.forwardRef((props: ListItemType, ref: LegacyRef<HT
    const { item, dataSource, onOpen: onOpenProp } = props;
    const [messageApi, contextHolder] = message.useMessage();
 
-   const { integration, selectedOrganization = 'default' } = React.useContext(AppContext);
+   const { integration, selectedOrganization = 'default', domain } = React.useContext(AppContext);
 
 
    const handleCreateWatch = async (ticket: any) => {
@@ -45,14 +46,24 @@ export const ListItem = React.forwardRef((props: ListItemType, ref: LegacyRef<HT
       }
    };
 
+   const isWatchEnabled = useMemo(() => {
+      const watch = new utils.watch.Watch(domain);
+      return watch.isAvailable({ level: 'ticket' })
+   }, [domain]);
+
    const menu = (
       <Menu>
          <Menu.Item key="0" icon={<EditOutlined />}>
             <a onClick={() => onOpenProp('edit', item)} >Update Ticket</a>
          </Menu.Item>
-         <Menu.Item onClick={() => handleCreateWatch(item)} key="1" icon={<EyeOutlined />} >
-            <a >Create Watch</a>
-         </Menu.Item>
+         {
+            isWatchEnabled && (
+
+               <Menu.Item onClick={() => handleCreateWatch(item)} key="1" icon={<EyeOutlined />} >
+                  <a >Create Watch</a>
+               </Menu.Item>
+            )
+         }
       </Menu>
    );
 

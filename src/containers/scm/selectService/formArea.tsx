@@ -55,7 +55,14 @@ export const FormArea = React.forwardRef<
       },
       DOMAIN: {
          value: 'domain'
+      },
+      CLIENT_ID: {
+         value: "clientId"
+      },
+      CLIENT_SECRET :{
+         value : "clientSecret"
       }
+
    }
 
    const onIntegrate = (callback) => {
