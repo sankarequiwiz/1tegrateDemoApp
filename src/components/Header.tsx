@@ -49,7 +49,7 @@ const domain = [
     key: 'TICKETING',
   },
   {
-    label: 'Container registry',
+    label: 'Packages & Container registry',
     value: 'CONTAINER_REGISTRY',
     disabled: true,
 },
