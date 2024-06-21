@@ -7,6 +7,7 @@ import { EventContent } from './eventContent';
 import { WatchContext } from '../../context/WatchContext';
 import { Button, Col, Row, Space } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 type EventContextType = {
   selected?: { [key: string]: any };
@@ -53,6 +54,7 @@ export const Events = React.forwardRef<
                 navigate(`/${location?.search}`);
               }}
               type='link'
+              icon={<ArrowLeftOutlined />}
             >
               Go Back
             </Button>
