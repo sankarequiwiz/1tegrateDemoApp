@@ -19,7 +19,7 @@ export class Errors {
    }
    getErrorCodes(): { orgNotFound: string } {
       return {
-         orgNotFound: 'OTG-41000003'
+         orgNotFound: 'OTG-00000001'
       }
    }
    getOrg() {
