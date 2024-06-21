@@ -5,7 +5,8 @@ import { useLayout } from '../../hooks/useLayout';
 import { EventList } from './eventList';
 import { EventContent } from './eventContent';
 import { WatchContext } from '../../context/WatchContext';
-import { Col, Row } from 'antd';
+import { Button, Col, Row, Space } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type EventContextType = {
   selected?: { [key: string]: any };
@@ -18,6 +19,8 @@ export const Events = React.forwardRef<
 >((props, ref) => {
   const { style } = useLayout();
   const { events } = React.useContext(WatchContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [selected, setSelected] = React.useState<{
     item: { [key: string]: unknown };
@@ -44,7 +47,17 @@ export const Events = React.forwardRef<
           <EventList onSelect={onSelect} dataSource={events as any} />
         </Col>
         <Col span={19}>
-          <EventContent className="event-content" />
+          <Space style={{ width: '100%' }} direction='vertical'>
+            <Button
+              onClick={() => {
+                navigate(`/${location?.search}`);
+              }}
+              type='link'
+            >
+              Go Back
+            </Button>
+            <EventContent className="event-content" />
+          </Space>
         </Col>
       </Row>
     </EventContext.Provider>

@@ -17,6 +17,26 @@ type FormAreaTypes = {
    selected: ServiceTypes;
 };
 
+const integrationPayloadKey = {
+   API_KEY: {
+      value: 'apiKey'
+   },
+   USERNAME: {
+      value: 'username'
+   },
+   PASSWORD: {
+      value: 'password'
+   },
+   DOMAIN: {
+      value: 'domain'
+   },
+   CLIENT_ID: {
+      value: "clientId"
+   },
+   CLIENT_SECRET :{
+      value : "clientSecret"
+   }
+}
 
 export const FormArea = React.forwardRef<
    HTMLDivElement,
@@ -49,6 +69,13 @@ export const FormArea = React.forwardRef<
          form
             .validateFields()
             .then(async (resp) => {
+               Object.entries(resp).map(([key, value]) => {
+                  delete resp[key];
+                  if (!integrationPayloadKey?.[key]) {
+                     alert(`${key} is not configured in mapper`)
+                  }
+                  resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
+               })
                const formValues: Payload = {
                   name: `${selected?.serviceProfile?.name} integration`,
                   type,
@@ -170,7 +197,7 @@ export const FormArea = React.forwardRef<
                                     </div>
                                     <Form.Item
                                        key={index}
-                                       name={field.property}
+                                       name={field.type}
                                        rules={[{ required: field.required }]}
                                     >
                                        {
