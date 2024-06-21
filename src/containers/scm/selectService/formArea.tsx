@@ -44,28 +44,6 @@ export const FormArea = React.forwardRef<
       return 'not_set';
    }, [fields]);
 
-   const integrationPayloadKey = {
-      API_KEY: {
-         value: 'apiKey'
-      },
-      USERNAME: {
-         value: 'username'
-      },
-      PASSWORD: {
-         value: 'password'
-      },
-      DOMAIN: {
-         value: 'domain'
-      },
-      CLIENT_ID: {
-         value: "clientId"
-      },
-      CLIENT_SECRET :{
-         value : "clientSecret"
-      }
-
-   }
-
    const onIntegrate = (callback) => {
       if (organization) {
          form
