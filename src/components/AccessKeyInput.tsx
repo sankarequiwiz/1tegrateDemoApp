@@ -188,7 +188,7 @@ const AccessKeyForm = React.forwardRef(
           icon={<KeyOutlined />}
         />
         <Modal
-          title="Please enter 1tegrate Access key for your organization:"
+          title="Please enter Unizo Access key for your organization:"
           open={isOpen}
           okButtonProps={{ loading: isSetting }}
           onCancel={handleClose}

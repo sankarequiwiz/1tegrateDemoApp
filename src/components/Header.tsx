@@ -41,11 +41,11 @@ const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
 
 const domain = [
   {
-    label: 'SCM Integrations Demo',
+    label: 'Source Control',
     key: 'SCM',
   },
   {
-    label: 'Ticketing Integrations Demo',
+    label: 'Ticketing',
     key: 'TICKETING',
   },
   {
@@ -54,7 +54,7 @@ const domain = [
     disabled: true,
 },
 {
-    value: 'NOTIFICATIONS AND COMMUNICATIONS',
+    value: 'Notifications & Communications',
     label: 'Notifications and Communications',
     disabled: true,
 },
