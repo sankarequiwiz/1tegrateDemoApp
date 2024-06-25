@@ -108,7 +108,7 @@ type Payload = {
         id: string;
       };
       accessPointConfig: {
-        type: 'APIKEY_FLW' | 'EMAIL' | '';
+        type: 'APIKEY_FLW' | 'EMAIL' | 'OAUTH_PASSWORD_FLW';
       };
       emailAddress?: string;
       apiKey: string;
