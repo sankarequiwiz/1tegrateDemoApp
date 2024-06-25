@@ -29,7 +29,7 @@ export type OrganizationTypes = {
 export type Payload = {
   name?: string;
   description?: string;
-  type: 'HOOK';
+  type: 'Webhook';
   resource: {
     type: 'ORGANIZATION' | 'REPOSITORY';
     organization: {
