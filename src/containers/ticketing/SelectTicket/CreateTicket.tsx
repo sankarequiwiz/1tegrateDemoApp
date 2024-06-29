@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
 import { defaultPagination } from '.';
-import {MetaDataConfigTypes} from "./type"
+import { MetaDataConfigTypes } from "./type"
 
 type FormTypes = {
    type: 'edit' | 'create'
@@ -19,129 +19,6 @@ const fieldType = {
    LIST_STRING: <Select />,
 }
 
-
-const formFieldss = [
-   {
-      type: "TEXT_STRING",
-      id: "ticket_name",
-      key: "ticket_name",
-      label: "name",
-      labelKey: "ticket-name",
-      property: "name",
-      helpText: "name help text",
-      placeholderValue: "Enter name here",
-      required: true
-   },
-   {
-      type: "TEXT_STRING",
-      id: "ticket_type",
-      key: "ticket_type",
-      label: "type",
-      labelKey: "ticket-type",
-      property: "type",
-      helpText: "type help text",
-      placeholderValue: "Enter type here",
-      required: true
-   },
-   {
-      type: "TEXT_STRING",
-      id: "ticket_priority",
-      key: "ticket_priority",
-      label: "priority",
-      labelKey: "ticket-priority",
-      property: "priority",
-      helpText: "priority help text",
-      placeholderValue: "Enter priority here",
-      required: true
-   },
-   // {
-   //    type: "TEXT_STRING",
-   //    id: "ticket_description",
-   //    key: "ticket_description",
-   //    label: "description",
-   //    labelKey: "ticket-description",
-   //    property: "description",
-   //    helpText: "type help text",
-   //    placeholderValue: "Enter description here",
-   //    required: true
-   // },
-
-   {
-      type: "TEXT_STRING",
-      id: "ticket_status",
-      key: "ticket_status",
-      label: "status",
-      labelKey: "ticket-status",
-      property: "status",
-      helpText: "type help text",
-      placeholderValue: "Enter status here",
-      required: true
-   },
-
-   {
-      type: "LIST_STRING",
-      id: "ticket_assignees",
-      key: "ticket_assignees",
-      required: false
-   },
-   {
-      type: "TEXT_NUMBER",
-      id: "ticket_priority",
-      key: "ticket_priority",
-      required: false
-   },
-   {
-      type: "TEXT_NUMBER",
-      id: "ticket_dueDate",
-      key: "ticket_dueDate",
-      required: false
-   },
-   {
-      type: "TEXT_NUMBER",
-      id: "ticket_status",
-      key: "ticket_status",
-      required: false
-   }
-]
-
-const formDetails = [
-   {
-      name: 'type',
-      type: 'text',
-      label: 'Type',
-      fieldType: <Input />,
-      required: true,
-   },
-   {
-      name: 'name',
-      label: 'Title',
-      type: 'text',
-      fieldType: <Input />,
-      required: true,
-   },
-   {
-      name: 'description',
-      label: 'Description',
-      type: 'text',
-      fieldType: <Input />,
-      required: true,
-   },
-   {
-      name: 'priority',
-      label: 'Priority',
-      type: 'text',
-      fieldType: <Input />,
-      required: true,
-   },
-   {
-      name: 'status',
-      label: 'Status',
-      type: 'text',
-      fieldType: <Input />,
-      required: true,
-   },
-]
-
 function FormComp(props: FormTypes) {
    const { open, type, selected, onCancel: onCancelProp, getAllTickets, paginationState } = props;
    const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
@@ -152,8 +29,6 @@ function FormComp(props: FormTypes) {
    const [form] = Form.useForm();
 
    const headers = { integrationId: integration?.id }
-   // const headerss = { integrationId: integration?.id , organizationid: "4a321a7d-ee19-4e4a-b096-7de51c9e279e"}
-
 
    const onCancel = (e?: React.MouseEvent<HTMLButtonElement>) => {
       onCancelProp(e);
@@ -233,11 +108,12 @@ function FormComp(props: FormTypes) {
          console.error(error);
       };
    }
+
    const payload = {
       type: "TICKET_CREATE"
    }
-   const fetchFormFields = async () => {
 
+   const fetchFormFields = async () => {
       try {
          const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload, headers);
          setFormFields(response.data.data);
@@ -246,59 +122,53 @@ function FormComp(props: FormTypes) {
       }
    };
 
-
-
    useEffect(() => {
-      form.setFieldsValue(selected)
+      if (type === 'edit') {
+         form.setFieldsValue(selected)
+      } else {
+         form.setFieldsValue(formFields.reduce((acc, cur) => {
+            const { defaultValue } = cur;
+            if (defaultValue) {
+               acc = { ...acc, [defaultValue.key]: defaultValue.value }
+            }
+            return acc;
+         }, {}))
+      }
    }, [selected, type])
-
-
 
    useEffect(() => {
       fetchFormFields()
    }, []);
-   console.log("Dataconifgfileds data is prinitng here", formFields)
+
    return (
       <div>
-      {contextHolder}
-      <Modal
-         open={open}
-         okButtonProps={{ loading: creating }}
-         title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
-         onOk={onOk}
-         onCancel={onCancel}
-      >
-         <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
-            {formFields.map((item, index) => {
-               const { label, type, placeholderValue: placeholder, property, required = false, attributes:options } = item;
-               // if (type === "LIST_STRING") {
-               //    return (
-               //       <Form.Item rules={[{ required }]} label={label} key={index} name={property}>
-               //          <Select placeholder={placeholder}>
-               //             {attributes.map((attr, idx) => (
-               //                <Select.Option key={idx} value={attr.value}>
-               //                   {attr.value}
-               //                </Select.Option>
-               //             ))}
-               //          </Select>
-               //       </Form.Item>
-               //    );
-               // }
-               let fieldProps={}
-               if(type=="LIST_STRING"){
-                  fieldProps={...fieldProps, options}
-               }
-               return (
-                  <Form.Item rules={[{ required }]} label={label} key={index} name={property}>
-                     {React.cloneElement(fieldType[type], {
-                        placeholder,...fieldProps
-                     })}
-                  </Form.Item>
-               );
-            })}
-         </Form>
-      </Modal>
-   </div>
+         {contextHolder}
+         <Modal
+            open={open}
+            okButtonProps={{ loading: creating }}
+            title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
+            onOk={onOk}
+            onCancel={onCancel}
+         >
+            <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
+               {formFields.map((item, index) => {
+                  const { label, type, placeholderValue: placeholder, property, required = false, attributes: options } = item;
+                  let fieldProps = {};
+                  if (type == "TEXT_NUMBER") {
+                     fieldProps = { ...fieldProps, options }
+                  }
+                  return (
+                     <Form.Item rules={[{ required }]} label={label} key={index} name={property}>
+                        {React.cloneElement(fieldType[type], {
+                           placeholder,
+                           ...fieldProps
+                        })}
+                     </Form.Item>
+                  );
+               })}
+            </Form>
+         </Modal>
+      </div>
    )
 }
 
