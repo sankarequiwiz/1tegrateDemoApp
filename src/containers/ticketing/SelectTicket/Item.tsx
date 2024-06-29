@@ -27,7 +27,7 @@ export const ListItem = React.forwardRef((props: ListItemType, ref: LegacyRef<HT
       const payload = {
          name: `web-gateway-service-${fullBodySelected?.id}`,
          description: `Watch for ${fullBodySelected.id} repository`,
-         type: 'HOOK',
+         type: 'Webhook',
          resource: {
             type: 'ORGANIZATION',
             organization: {

@@ -171,3 +171,7 @@ export const editTickets = async (
 ) => {
 	return await fetch.put(`/api/demo/ticketing/${orgId}/collections/${collections}/tickets/${ticketId}`, payload, { headers })
 }
+
+export const metaDataConfig = async (orgId: string, collectionId: string, payload: { [key: string]: any },headers: { [key: string]: any }) => {
+	return await fetch.post(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets/metadataConfig`,payload, { headers })
+}

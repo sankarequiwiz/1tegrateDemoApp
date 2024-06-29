@@ -118,7 +118,7 @@ const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) =>
     const payload: Payload = {
       name: `web-gateway-service-${fullBodySelected?.login}`,
       description: `Watch for ${fullBodySelected.login} repository`,
-      type: 'HOOK',
+      type: 'Webhook',
       resource: {
         type: `${domain}_ORGANIZATION` as any,
         organization: {

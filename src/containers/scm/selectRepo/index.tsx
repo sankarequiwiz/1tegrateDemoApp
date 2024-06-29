@@ -80,7 +80,7 @@ export const SelectRepo = React.forwardRef<
     const payload: Payload = {
       name: `web-gateway-service-${fullBodySelected?.fullName}`,
       description: `Watch for ${fullBodySelected.description} repository`,
-      type: 'HOOK',
+      type: 'Webhook',
       resource: {
         type: 'SCM_REPOSITORY',
         repository: {

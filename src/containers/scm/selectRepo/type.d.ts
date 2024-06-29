@@ -148,7 +148,7 @@ export type ReposTypes = {
 export type Payload = {
   name?: string;
   description?: string;
-  type: 'HOOK';
+  type: 'Webhook';
   resource: {
     type: 'SCM_ORGANIZATION' | 'SCM_REPOSITORY';
     organization?: {
