@@ -40,3 +40,27 @@ export type Payload = {
     };
   };
 };
+
+
+export type FieldType = "LIST_STRING"|"TEXT_NUMBER"|"TEXT_STRING";
+ 
+export type MetaDataConfigTypes = {
+        type: FieldType,
+        id: string,
+        key: string,
+        label: string,
+        labelKey: string,
+        property: string,
+        helpText: string,
+        placeholderValue: string,
+        required: boolean,
+        defaultValue?: {
+            key: string,
+            label: string,
+            value: string
+        },
+        attributes?: FieldType extends 'LIST_STRING' ? {
+            key: string,
+            value: string
+        }[] : never
+}
