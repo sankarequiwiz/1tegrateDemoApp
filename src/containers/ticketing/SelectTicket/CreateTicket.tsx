@@ -126,15 +126,16 @@ function FormComp(props: FormTypes) {
       if (type === 'edit') {
          form.setFieldsValue(selected)
       } else {
-         form.setFieldsValue(formFields.reduce((acc, cur) => {
+         const values = formFields.reduce((acc, cur) => {
             const { defaultValue } = cur;
             if (defaultValue) {
-               acc = { ...acc, [defaultValue.key]: defaultValue.value }
+               acc = { ...acc, [defaultValue.key?.split('_')[1]]: defaultValue?.value ?? '' }
             }
             return acc;
-         }, {}))
+         }, {});
+         form.setFieldsValue(values)
       }
-   }, [selected, type])
+   }, [selected, type, open])
 
    useEffect(() => {
       fetchFormFields()
@@ -150,11 +151,16 @@ function FormComp(props: FormTypes) {
             onOk={onOk}
             onCancel={onCancel}
          >
-            <Form requiredMark={false} layout='vertical' style={{ padding: '.5rem 0rem' }} form={form}>
+            <Form
+               requiredMark={false}
+               layout='vertical'
+               style={{ padding: '.5rem 0rem' }}
+               form={form}
+            >
                {formFields.map((item, index) => {
                   const { label, type, placeholderValue: placeholder, property, required = false, attributes: options } = item;
                   let fieldProps = {};
-                  if (type == "TEXT_NUMBER") {
+                  if (type == "LIST_STRING") {
                      fieldProps = { ...fieldProps, options }
                   }
                   return (
