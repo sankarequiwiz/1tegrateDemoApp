@@ -1,0 +1,25 @@
+
+$ant-design-card-border-width: 1px;
+$tile-gap: 20px;
+$tile-min-width: 250px;
+
+.responsive-grid-with-detail-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax($tile-min-width, 1fr));
+    gap: $tile-gap;
+}
+
+.detailsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: calc($tile-gap / 2 * -1);
+
+    grid-row: 1 / 2;
+    grid-column: 1 / -1;
+}
+
+.detailsPanel__triangle {
+    margin-bottom: -$ant-design-card-border-width;
+    z-index: 10;
+}
