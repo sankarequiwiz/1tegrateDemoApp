@@ -50,7 +50,7 @@ const domain = [
   },
   {
     label: 'Packages & Container registry',
-    key: 'BINARY',
+    key: 'PCR',
   },
   {
     label: 'Notifications & Communications',

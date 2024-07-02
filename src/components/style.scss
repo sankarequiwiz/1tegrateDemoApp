@@ -1,11 +1,11 @@
 
 $ant-design-card-border-width: 1px;
 $tile-gap: 20px;
-$tile-min-width: 250px;
+$tile-min-width: 210px;
 
 .responsive-grid-with-detail-panel {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax($tile-min-width, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax($tile-min-width, $tile-min-width));
     gap: $tile-gap;
 }
 

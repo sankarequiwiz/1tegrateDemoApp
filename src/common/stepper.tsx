@@ -73,7 +73,7 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         key: '4',
       },
     ],
-    BINARY:[
+    PCR:[
       {
         title: 'Select Services',
         container: <SelectService />,

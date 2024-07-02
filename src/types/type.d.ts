@@ -1,1 +1,1 @@
-export type DomainTypes = 'SCM' | 'TICKETING'| 'BINARY';
+export type DomainTypes = 'SCM' | 'TICKETING'| 'PCR';

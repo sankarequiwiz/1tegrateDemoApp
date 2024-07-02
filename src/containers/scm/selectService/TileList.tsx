@@ -1,4 +1,4 @@
-import React, { HTMLProps, useState } from 'react';
+import React, { HTMLProps } from 'react';
 import { ServiceTypes } from './types';
 import { ProviderCard } from './providerCard';
 import { AppContext } from '../../../context/AppProvider';
