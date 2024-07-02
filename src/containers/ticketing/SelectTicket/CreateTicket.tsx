@@ -129,7 +129,7 @@ function FormComp(props: FormTypes) {
          const values = formFields.reduce((acc, cur) => {
             const { defaultValue } = cur;
             if (defaultValue) {
-               acc = { ...acc, [defaultValue.key?.split('_')[1]]: defaultValue?.value ?? '' }
+               acc = { ...acc, [defaultValue.key]: defaultValue?.value ?? '' }
             }
             return acc;
          }, {});
