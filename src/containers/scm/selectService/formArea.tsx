@@ -1,6 +1,6 @@
 import React, { HTMLProps } from "react";
 import { Payload, ServiceTypes } from "./types";
-import { Card, Form, Input, Radio, Space, Typography, message } from "antd";
+import { Button, Card, Col, Form, Input, Radio, Row, Space, Typography, message } from "antd";
 import { AppContext } from "../../../context/AppProvider";
 import API from '../../../services';
 import FormItem from "antd/es/form/FormItem";
@@ -33,8 +33,8 @@ const integrationPayloadKey = {
    CLIENT_ID: {
       value: "clientId"
    },
-   CLIENT_SECRET :{
-      value : "clientSecret"
+   CLIENT_SECRET: {
+      value: "clientSecret"
    }
 }
 
@@ -42,7 +42,13 @@ export const FormArea = React.forwardRef<
    HTMLDivElement,
    HTMLProps<HTMLDivElement> & FormAreaTypes
 >(({ selected, ...props }, ref) => {
-   const { organization, setIntegration, domain: type ,} = React.useContext(AppContext);
+   const {
+      organization,
+      setIntegration,
+      setCurrentStep,
+      current,
+      domain: type,
+   } = React.useContext(AppContext);
    const [loading, setLoading] = React.useState<boolean>(false);
 
    const [messageApi, contextHolder] = message.useMessage();
@@ -64,7 +70,7 @@ export const FormArea = React.forwardRef<
       return 'not_set';
    }, [fields]);
 
-   const onIntegrate = (callback) => {
+   const onIntegrate = () => {
       if (organization) {
          form
             .validateFields()
@@ -93,13 +99,14 @@ export const FormArea = React.forwardRef<
                      },
                   },
                };
-
                setLoading(true);
                try {
                   const resp = await API.services.createIntegrations(formValues);
                   const { data } = resp;
                   setIntegration(data);
-                  setTimeout(callback, 1000);
+                  setTimeout(() => {
+                     setCurrentStep(current + 1)
+                  }, 1000);
                } catch (error) {
                   let errorMessage: string = 'Something went wrong';
                   if (error.response.status === 400) {
@@ -127,10 +134,6 @@ export const FormArea = React.forwardRef<
       }
    };
 
-   React.useImperativeHandle(ref, (): any => {
-      return { onIntegrate, loading };
-   });
-
    const fieldConfigs: Array<fieldTypeConfigTypes> = React.useMemo(() => {
       if (!fields) return undefined;
       if (fields.length === 1) {
@@ -155,66 +158,73 @@ export const FormArea = React.forwardRef<
       <div {...props} ref={ref}>
          <Form layout="vertical" form={form}>
             {contextHolder}
-            <Card >
-               <Space direction='vertical'>
-                  <Typography.Title level={5}>
-                     {`Configure ${selected?.serviceProfile?.name} services`}
-                  </Typography.Title>
-                  <Space direction="vertical">
-                     {fields?.length > 1 && (
+            <Row gutter={[20, 20]}>
+               <Col span={24}>
+                  <Card >
+                     <Space direction='vertical'>
+                        <Typography.Title level={5}>
+                           {`Configure ${selected?.serviceProfile?.name} services`}
+                        </Typography.Title>
                         <Space direction="vertical">
-                           <div>
-                              <Typography.Text strong>
-                                 Select the integration type
-                              </Typography.Text>
-                           </div>
-                           <FormItem name={'integrationType'} rules={[{ required: true }]}>
-                              <Radio.Group>
-                                 <Space direction="vertical">
-                                    {fields.map((field, index) => {
-                                       return (
-                                          <Radio value={field.type} key={index}>
-                                             {field?.label}
-                                          </Radio>
-                                       );
-                                    })}
-                                 </Space>
-                              </Radio.Group>
-                           </FormItem>
-                        </Space>
-                     )}
-                     <Space direction="vertical" className="w-full">
-                        {fieldConfigs &&
-                           fieldConfigs.map(({ ...field }, index) => {
-                              return (
-                                 <div key={index}>
-                                    <div style={{ margin: '.5rem 0' }}>
-                                       <Typography.Text strong>
-                                          {field.required && <span style={{ color: 'red' }}>*</span>}
-                                          <span >
-                                             {field.name?.toString()}
-                                          </span>
-                                       </Typography.Text>
-                                    </div>
-                                    <Form.Item
-                                       key={index}
-                                       name={field.type}
-                                       rules={[{ required: field.required }]}
-                                    >
-                                       {
-                                          <Input
-                                             style={{ width: '35rem' }}
-                                             placeholder={`${field.name?.toString()}`}
-                                          />
-                                       }
-                                    </Form.Item>
+                           {fields?.length > 1 && (
+                              <Space direction="vertical">
+                                 <div>
+                                    <Typography.Text strong>
+                                       Select the integration type
+                                    </Typography.Text>
                                  </div>
-                              );
-                           })}
+                                 <FormItem name={'integrationType'} rules={[{ required: true }]}>
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          {fields.map((field, index) => {
+                                             return (
+                                                <Radio value={field.type} key={index}>
+                                                   {field?.label}
+                                                </Radio>
+                                             );
+                                          })}
+                                       </Space>
+                                    </Radio.Group>
+                                 </FormItem>
+                              </Space>
+                           )}
+                           <Space direction="vertical" className="w-full">
+                              {fieldConfigs &&
+                                 fieldConfigs.map(({ ...field }, index) => {
+                                    return (
+                                       <div key={index}>
+                                          <div style={{ margin: '.5rem 0' }}>
+                                             <Typography.Text strong>
+                                                {field.required && <span style={{ color: 'red' }}>*</span>}
+                                                <span >
+                                                   {field.name?.toString()}
+                                                </span>
+                                             </Typography.Text>
+                                          </div>
+                                          <Form.Item
+                                             key={index}
+                                             name={field.type}
+                                             rules={[{ required: field.required }]}
+                                          >
+                                             {
+                                                <Input
+                                                   style={{ width: '35rem' }}
+                                                   placeholder={`${field.name?.toString()}`}
+                                                />
+                                             }
+                                          </Form.Item>
+                                       </div>
+                                    );
+                                 })}
+                           </Space>
+                        </Space>
                      </Space>
-                  </Space>
-               </Space>
-            </Card>
+                  </Card>
+               </Col>
+               <Col style={{ display: 'flex', justifyContent: 'flex-end' }} span={24}>
+                  <Button loading={loading} onClick={onIntegrate} type="primary">Next</Button>
+               </Col>
+            </Row>
          </Form>
       </div>
    );

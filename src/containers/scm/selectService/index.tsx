@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { HTMLProps } from 'react';
+import React, { HTMLProps, useState } from 'react';
 import API from '../../../services';
 import {
   ButtonProps,
@@ -34,12 +34,11 @@ export const SelectService = React.forwardRef<
   }>();
 
   const {
-    setCurrentStep,
-    current,
     selectedService: selected,
     accessKey: key,
     domain,
   } = React.useContext(AppContext);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   function compare(a: ObjType, b: ObjType) {
     const bandA = a.serviceProfile.name.toUpperCase();
@@ -69,17 +68,15 @@ export const SelectService = React.forwardRef<
       }
     } catch (error) {
       console.log(error);
-      setServices([])
+      // setServices([])
     } finally {
       setLoading(false);
     }
   };
 
-  const handleNext = () => {
-    childRef.current.onIntegrate(() => {
-      setCurrentStep(current + 1)
-    });
-  };
+  const onSelectTile = (index: number) => {
+    setSelectedIndex(selectedIndex === index ? null : index);
+  }
 
   React.useEffect(() => {
     getServices();
@@ -101,6 +98,7 @@ export const SelectService = React.forwardRef<
   const onOkProps: ButtonProps = {
     disabled: !selected,
     loading: childRef.current?.loading,
+    style: { display: 'none' }
   };
 
   return (
@@ -121,6 +119,8 @@ export const SelectService = React.forwardRef<
           <Typography.Title level={5}>Available services</Typography.Title>
           {loading ? <Skeleton /> : <TileList
             items={services}
+            selectedIndex={selectedIndex}
+            onSelectTile={onSelectTile}
             formContent={
               <FormArea
                 ref={childRef as any}
@@ -130,7 +130,7 @@ export const SelectService = React.forwardRef<
           />}
         </div>
       </div>
-      <Footer hideBackButton onSubmit={handleNext} onOkProps={onOkProps} />
+      <Footer hideBackButton onOkProps={onOkProps} />
     </Space>
   );
 });

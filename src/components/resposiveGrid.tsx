@@ -8,6 +8,8 @@ import { Card} from "antd";
 
 import "./style.scss";
 
+const detailedPanelColor = '#eeeeee';
+
 export type SvgUpTrianglePropsType = {
    className?: string;
    leftOffset?: number;
@@ -23,8 +25,8 @@ const SvgUpTriangle = ({ className, leftOffset }: SvgUpTrianglePropsType) => {
          style={{ marginLeft: (leftOffset || 0) + 20 }}
       >
          <path
-            fill="#fff"
-            stroke="#f0f0f0"
+            fill={detailedPanelColor}
+            stroke={detailedPanelColor}
             d="M1 21h34L18 2z"
             strokeDasharray="0 34 50"
             strokeWidth="1"
@@ -85,7 +87,7 @@ const ResponsiveGridWithDetailPanel = ({
                className="detailsPanel__triangle"
                leftOffset={((selectedIndex || 0) % gridColumnCount) * colWidth}
             />
-            <Card style={{ padding: "10px" }} key={"details:" + selectedIndex}>
+            <Card style={{ padding: "10px", backgroundColor: detailedPanelColor }} key={"details:" + selectedIndex}>
                {detailPanelContent}
             </Card>
          </div>

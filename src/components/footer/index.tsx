@@ -31,7 +31,6 @@ const footerRootStyle: React.CSSProperties = {
 };
 
 
-
 const footerRightStyle: React.CSSProperties = {
 
 	display: 'flex',

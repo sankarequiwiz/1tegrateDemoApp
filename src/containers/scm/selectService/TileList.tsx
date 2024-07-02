@@ -7,26 +7,35 @@ import GridExampleUsage from '../../../components/resposiveGrid';
 type TileListProps = {
    items?: Array<ServiceTypes>
    formContent?: React.JSX.Element | null | undefined | boolean
+   onSelectTile?: (selectedIndex: number) => void;
+   selectedIndex?: number
 }
 
 export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & TileListProps>(
    (props, ref) => {
-      const { items = [], formContent = null } = props;
+      const {
+         items = [],
+         onSelectTile,
+         selectedIndex,
+         formContent = null,
+         ...rest
+      } = props;
 
       const {
          setSelectedService: setSelected,
          selectedService: selected,
       } = React.useContext(AppContext);
 
-      const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
       const selectHandler = (arg, index) => {
          setSelected(arg);
-         setSelectedIndex(index)
+         if (typeof onSelectTile === 'function') {
+            onSelectTile(index)
+         }
       };
 
       return (
-         <div {...props} ref={ref}>
+         <div {...rest} ref={ref}>
             <GridExampleUsage
                selectedIndex={selectedIndex}
                detailedPanel={formContent}
@@ -37,9 +46,12 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
                            key={index}
                            style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
                            bordered
+                           selected={selectedIndex === index}
                            rootClassName="card"
                            aria-selected={selected === item?.id}
-                           onSelect={() => selectHandler(item?.id, index)}
+                           onSelectProvider={() => {
+                              selectHandler(item?.id, index)
+                           }}
                            item={item}
                         />
                      )
