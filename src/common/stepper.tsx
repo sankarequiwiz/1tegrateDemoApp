@@ -73,5 +73,27 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         key: '4',
       },
     ],
+    BINARY:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+      {
+        title: 'Select Organization ',
+        container: <SelectOrganization />,
+        key: '2',
+      },
+      {
+        title: 'Select Collection',
+        container: <SelectCollection />,
+        key: '3',
+      },
+      {
+        title: 'Select Ticket',
+        container: <SelectTicket />,
+        key: '4',
+      },
+    ],
   };
 }

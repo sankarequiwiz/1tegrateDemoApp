@@ -40,7 +40,7 @@ export function Main() {
 			};
 		}
 	}, [conclusion]);
-
+console.log(getStepItems([getConclusion()]), domain ,"latestcon")
 	const items = React.useMemo(() => {
 		return getStepItems([getConclusion()])[domain];
 	}, [domain, getConclusion]);

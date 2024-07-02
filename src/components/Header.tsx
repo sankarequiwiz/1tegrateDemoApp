@@ -50,8 +50,7 @@ const domain = [
   },
   {
     label: 'Packages & Container registry',
-    value: 'CONTAINER_REGISTRY',
-    disabled: true,
+    key: 'BINARY',
   },
   {
     label: 'Notifications & Communications',
@@ -133,6 +132,7 @@ export const Header = React.forwardRef<
       key,
       onClick: () => {
         setDomain(key as DomainTypes)
+        
         Events.trigger('event:update_domain', {});
       },
       ...rest,
