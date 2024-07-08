@@ -13,7 +13,7 @@ import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 
 import API from '../../../services/index';
-import { OrganizationTypes, Payload } from './type';
+import {  Payload } from './type';
 import { Errors, handleError } from '../../../utils/error';
 import utils from '../../../utils';
 import { List } from 'antd';
@@ -30,7 +30,7 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
     domain } = React.useContext(AppContext);
 
   const [organization, setOrganization] = React.useState<
-    Array<OrganizationTypes>
+    Array<any>
   >([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -41,7 +41,7 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
   const getOrganization = async () => {
     try {
       setLoading(true);
-      const resp = await API.services.getSCMOrganization(headers as any, domain);
+      const resp = await API.services.getSCMOrganizationPcr(headers as any, domain);
       const { data } = resp.data;
       setOrganization(data);
     } catch (error) {
@@ -94,7 +94,7 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
 });
 
 type ListTypes = {
-  dataSource: Array<OrganizationTypes>;
+  dataSource: Array<any>;
 } & ListProps<unknown>;
 
 const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) => {
@@ -152,7 +152,7 @@ const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) =>
           <List
             {...props}
             dataSource={dataSource}
-            renderItem={(item: OrganizationTypes) => {
+            renderItem={(item: any) => {
               const isSelected = item.id === selectedOrganization;
               return (
                 <List.Item
@@ -173,7 +173,7 @@ const ListComp = ({ dataSource, loading: loadingProps, ...props }: ListTypes) =>
                 >
                   <List.Item.Meta
                     avatar={<Radio checked={isSelected} value={item.id} />}
-                    title={<a>{item?.login}</a>}
+                    title={<a>{item?.name}</a>}
                     description={item?.description}
                   />
                 </List.Item>

@@ -4,14 +4,16 @@ import React, { HTMLProps, useMemo } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { Payload, ReposTypes } from './type';
+import { Payload,  } from './type';
 import { List } from 'antd';
 
 import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
-import { handleError } from '../../../utils/error';
+import { Errors,handleError } from '../../../utils/error';
 import utils from '../../../utils';
 
-export const SelectRepo = React.forwardRef<
+
+const errorObj = new Errors();
+export const SelectRepoPcr = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
 >((props, ref) => {
@@ -24,20 +26,20 @@ export const SelectRepo = React.forwardRef<
     integration,
     domain
   } = React.useContext(AppContext);
-  const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
+  const [Repositories, setRepos] = React.useState<Array<any>>([]);
   const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [messageApi, contextHolder] = message.useMessage();
 
   const getHeaders = () => {
-    return { integrationId: integration.id };
+    return { integrationId: integration.id,};
   };
  
   const getRepos = async () => {
     try {
       setLoading(true);
-      const resp = await API.services.getRepo(
+      const resp = await API.services.getRepoPcr(
         selectedOrganization,
         getHeaders(),
         domain
@@ -46,6 +48,13 @@ export const SelectRepo = React.forwardRef<
       setRepos(data);
     } catch (error) {
       console.log(error);
+      if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
+        const [{ errorCode }] = error?.response?.data;
+        if (errorCode === errorObj.getOrg().getNotFoundCode) {
+          setSelectedRepo('default');
+           setCurrentStep(current + 1);
+        }
+     }
     } finally {
       setLoading(false);
     }
@@ -188,8 +197,8 @@ export const SelectRepo = React.forwardRef<
                         value={item.id}
                       />
                     }
-                    title={<a>{item?.fullName}</a>}
-                    description={item?.description}
+                    title={<a>{item?.id}</a>}
+                    description={item?.name}
                   />
                 </List.Item>
               );

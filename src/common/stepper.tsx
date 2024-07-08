@@ -1,4 +1,7 @@
 import { StepperItemsTypes } from '../components/stepper';
+import { Tag } from '../containers/pcr/Tag';
+import { Artifact } from '../containers/pcr/selectArtifact/Artifact'
+import { SelectRepoPcr } from '../containers/pcr/selectRepo';
 import { Branch } from '../containers/scm/Branch';
 import { SelectOrganization } from '../containers/scm/selectOrg';
 import { SelectRepo } from '../containers/scm/selectRepo';
@@ -85,13 +88,18 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         key: '2',
       },
       {
-        title: 'Select Collection',
-        container: <SelectCollection />,
+        title: 'Select Repository',
+        container: <SelectRepoPcr />,
         key: '3',
       },
       {
-        title: 'Select Ticket',
-        container: <SelectTicket />,
+        title: 'Select Artifact',
+        container: <Artifact />,
+        key: '4',
+      },
+      {
+        title: 'Select Tag',
+        container: <Tag />,
         key: '4',
       },
     ],
