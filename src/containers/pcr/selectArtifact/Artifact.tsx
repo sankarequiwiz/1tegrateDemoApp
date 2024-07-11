@@ -7,8 +7,10 @@ import API from '../../../services';
 import { List } from 'antd';
 
 import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
-import { handleError } from '../../../utils/error';
+import { Errors, handleError } from '../../../utils/error';
 import utils from '../../../utils';
+
+const errorObj = new Errors();
 export const Artifact = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
@@ -46,6 +48,13 @@ export const Artifact = React.forwardRef<
       setRepos(data);
     } catch (error) {
       console.log(error);
+      if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
+        const [{ errorCode }] = error?.response?.data;
+        if (errorCode === errorObj.getOrg().getNotFoundCode) {
+          setSelectedArtifact('default');
+           setCurrentStep(current + 1);
+        }
+     }
     } finally {
       setLoading(false);
     }
