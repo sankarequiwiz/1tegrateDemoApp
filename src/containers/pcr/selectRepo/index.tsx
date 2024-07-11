@@ -197,8 +197,8 @@ export const SelectRepoPcr = React.forwardRef<
                         value={item.id}
                       />
                     }
-                    title={<a>{item?.id}</a>}
-                    description={item?.name}
+                    title={<a>{item?.name}</a>}
+                    description={item?.id}
                   />
                 </List.Item>
               );

@@ -23,7 +23,6 @@ export const Artifact = React.forwardRef<
     integration,
     domain
   } = React.useContext(AppContext);
-  console.log(selectedArtifact)
   const [Repositories, setRepos] = React.useState<Array<any>>([]);
   const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -189,8 +188,8 @@ export const Artifact = React.forwardRef<
                         value={item.id}
                       />
                     }
-                    title={<a>{item?.id}</a>}
-                    description={item?.name}
+                    title={<a>{item?.name}</a>}
+                    description={item?.id}
                   />
                 </List.Item>
               );

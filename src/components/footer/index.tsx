@@ -8,13 +8,13 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 
 export type FooterProps = {
 
-  onSubmit?: () => void;
+	onSubmit?: () => void;
 
-  onCancel?: () => void;
+	onCancel?: () => void;
 
-  onOkProps?: ButtonProps;
+	onOkProps?: ButtonProps;
 
-  hideBackButton?: boolean;
+	hideBackButton?: boolean;
 
 };
 
@@ -43,9 +43,9 @@ const footerRightStyle: React.CSSProperties = {
 
 export const Footer = React.forwardRef<
 
-  HTMLDivElement,
+	HTMLDivElement,
 
-  HTMLProps<HTMLDivElement> & FooterProps
+	HTMLProps<HTMLDivElement> & FooterProps
 
 >(
 

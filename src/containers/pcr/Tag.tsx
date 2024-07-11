@@ -8,6 +8,7 @@ import {
   message,
 } from 'antd';
 import React, { HTMLProps } from 'react';
+import { Footer } from '../../components/footer/index'
 import { AppContext } from '../../context/AppProvider';
 import API from '../../services';
 
@@ -17,7 +18,7 @@ export const Tag = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
 >(() => {
-  const { integration, selectedOrganization, selectedRepo,domain,selectedArtifact } =
+  const { integration, selectedOrganization, selectedRepo, domain, selectedArtifact } =
     React.useContext(AppContext);
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -44,7 +45,7 @@ export const Tag = React.forwardRef<
       setLoading(false);
     }
   };
-console.log(selectedRepo,selectedArtifact)
+  console.log(selectedRepo, selectedArtifact)
   React.useEffect(() => {
     getAllTags();
   }, []);
@@ -56,15 +57,18 @@ console.log(selectedRepo,selectedArtifact)
         height: '100%',
         flexDirection: 'column',
         gap: '1rem',
+        flex:1,
+        justifyContent:"space-between"
       }}
     >
       <Space
         direction="vertical"
         className="w-full"
-        style={{ height: '100%', justifyContent: 'space-between' }}
+        style={{ height: '100%', justifyContent: 'space-between',flex:1}}
       >
-        <Space direction="vertical" style={{ width: '100%' }}>
+        <Space direction="vertical" style={{ width: '100%',height:"100%",flex:1}}>
           <ListComp
+          style={{height:"100% "}}
             getHeaders={getHeaders}
             dataSource={tags}
             loading={loading}
@@ -82,7 +86,7 @@ type ListTypes = {
 
 const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
   const [downloading, setDownloading] = React.useState<boolean>(false);
-  const { selectedOrganization, selectedRepo } = React.useContext(AppContext);
+  const { selectedOrganization, selectedRepo, current, setCurrentStep, } = React.useContext(AppContext);
   const [messageApi, contextHolder] = message.useMessage();
 
   const downloadHandler = async (id: string) => {
@@ -102,28 +106,43 @@ const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
   };
 
   return (
-    <Spin spinning={downloading} tip="Downloading...">
-      {contextHolder}
-      <List
-        {...props}
-        dataSource={dataSource}
-        renderItem={(item: any) => (
-          <List.Item
-            actions={[
-              <Button
-                onClick={() => downloadHandler(item?.id)}
-                icon={<DownloadOutlined />}
-                type="link"
-                key={1}
+    <Space
+      direction="vertical"
+      className="w-full"
+      style={{ height: '100%', justifyContent: 'space-between', flex: 1 }}
+      
+    >
+      <Spin spinning={downloading} tip="Downloading..."  style={{ height: '100%' }}>
+        {contextHolder}
+        <Space direction="vertical" style={{ width: '100%',flex: 1, height:'100%'}}>
+          <List
+            {...props}
+            dataSource={dataSource}
+            renderItem={(item: any) => (
+              <List.Item
+                actions={[
+                  <Button
+                    onClick={() => downloadHandler(item?.id)}
+                    icon={<DownloadOutlined />}
+                    type="link"
+                    key={1}
+                  >
+                    Download
+                  </Button>,
+                ]}
               >
-                Download
-              </Button>,
-            ]}
-          >
-            <List.Item.Meta title={<a>{item.name}</a>} description={item.url} />
-          </List.Item>
-        )}
+                <List.Item.Meta title={<a>{item.name}</a>} description={item.url} />
+              </List.Item>
+            )}
+          />
+        </Space>       
+      </Spin>
+
+      <Footer
+        onCancel={() => setCurrentStep(current - 1)}
+        onOkProps={{style:{display:"none"}
+      }}
       />
-    </Spin>
+    </Space>
   );
 };
