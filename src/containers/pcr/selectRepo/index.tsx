@@ -92,7 +92,7 @@ export const SelectRepoPcr = React.forwardRef<
       description: `Watch for ${fullBodySelected.description} repository`,
       type: 'Webhook',
       resource: {
-        type: 'SCM_REPOSITORY',
+        type: 'PCR_REPOSITORY',
         repository: {
           id: selectedRepo,
         },

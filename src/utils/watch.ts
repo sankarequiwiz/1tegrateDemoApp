@@ -23,6 +23,17 @@ const setup = {
       ticket: {
          watch: false
       }
+   },
+   PCR: {
+      organization: {
+         watch: false
+      },
+      repository: {
+         watch: true
+      },
+      artifact: {
+         watch: false
+      }
    }
 }
 

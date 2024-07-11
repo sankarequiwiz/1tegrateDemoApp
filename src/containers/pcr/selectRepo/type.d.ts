@@ -150,7 +150,7 @@ export type Payload = {
   description?: string;
   type: 'Webhook';
   resource: {
-    type: 'SCM_ORGANIZATION' | 'SCM_REPOSITORY';
+    type: 'PCR_ORGANIZATION' | 'PCR_REPOSITORY';
     organization?: {
       id: string;
     };
