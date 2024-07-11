@@ -1,35 +1,36 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Button,
-  List,
-  ListProps,
-  Space,
-  Spin,
-  message,
-} from 'antd';
-import React, { HTMLProps } from 'react';
-import { Footer } from '../../components/footer/index'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ButtonProps, Space, Spin, message, MenuProps, Dropdown } from 'antd';
+import React, { HTMLProps, useMemo } from 'react';
+import { Footer } from '../../components/footer/index';
 import { AppContext } from '../../context/AppProvider';
-import API from '../../services';
+import API from '../../services/';
+import { List } from 'antd';
 
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
+import { handleError } from '../../utils/error';
+import utils from '../../utils';
+
 
 export const Tag = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
->(() => {
-  const { integration, selectedOrganization, selectedRepo, domain, selectedArtifact } =
-    React.useContext(AppContext);
+>((props, ref) => {
+  const { integration, selectedOrganization, selectedRepo, domain, selectedArtifact,setCurrentStep ,current} =
+      React.useContext(AppContext);
+  const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
+  
+    const [tags, SetTags] = React.useState<Array<any>>();
 
-  const [tags, SetTags] = React.useState<Array<any>>();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const getHeaders = () => {
-    return { integrationId: integration?.id };
+    return { integrationId: integration.id,};
   };
-
+ 
   const getAllTags = async () => {
     try {
+      setLoading(true);
       const resp = await API.services.getAllTags(
         selectedOrganization,
         getHeaders(),
@@ -45,64 +46,90 @@ export const Tag = React.forwardRef<
       setLoading(false);
     }
   };
-  console.log(selectedRepo, selectedArtifact)
+
+  const downloadHandler = async () => {
+    setDownloading(true);
+    try {
+      await API.services.repositoryDownload(
+        {
+          orgId: selectedOrganization,
+          repoId: selectedRepo,
+        },
+        getHeaders()
+      );
+      messageApi.success('Repository downloaded successfully.');
+    } catch (error) {
+      console.error(error);
+      messageApi.error('Failed to download the repository');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  const handleCreateWatch = async () => {
+    setLoading(true);
+    const fullBodySelected = tags.find(
+      (item) => item?.id?.toString() === selectedRepo
+    );
+    const payload: any = {
+      name: `web-gateway-service-${fullBodySelected?.fullName}`,
+      description: `Watch for ${fullBodySelected.description} repository`,
+      type: 'Webhook',
+      resource: {
+        type: 'PCR_REPOSITORY',
+        repository: {
+          id: selectedRepo,
+        },
+        organization: {
+          id: selectedOrganization,
+        },
+      },
+    };
+    try {
+      await API.services.createWatch(payload, integration.id);
+      messageApi.success({ content: 'Watch created successfully' });
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error?.response?.data, status = error?.response?.status;
+      messageApi.error({ content: handleError(errorMessage, status) });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isWatchEnabled = useMemo(() => {
+    const watch = new utils.watch.Watch(domain);
+    return watch.isAvailable({ level: 'repository' })
+  }, [domain]);
+
+  const items: MenuProps['items'] = [
+    {
+      label: "Create Watch",
+      key: '0',
+      style: { display: isWatchEnabled ? 'block' : 'none' },
+      icon: <EyeOutlined />,
+      onClick: (e) => {
+        e.domEvent.stopPropagation();
+        handleCreateWatch()
+      }
+    },
+    {
+      label: 'Download',
+      key: '1',
+      icon: <DownloadOutlined />,
+      onClick: (e) => {
+        e.domEvent.stopPropagation();
+        downloadHandler();
+      }
+    }
+  ];
+
   React.useEffect(() => {
     getAllTags();
   }, []);
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        height: '100%',
-        flexDirection: 'column',
-        gap: '1rem',
-        flex:1,
-        justifyContent:"space-between"
-      }}
-    >
-      <Space
-        direction="vertical"
-        className="w-full"
-        style={{ height: '100%', justifyContent: 'space-between',flex:1}}
-      >
-        <Space direction="vertical" style={{ width: '100%',height:"100%",flex:1}}>
-          <ListComp
-          style={{height:"100% "}}
-            getHeaders={getHeaders}
-            dataSource={tags}
-            loading={loading}
-          />
-        </Space>
-      </Space>
-    </div>
-  );
-});
-
-type ListTypes = {
-  dataSource: Array<any>;
-  getHeaders: () => { [key: string]: string };
-} & ListProps<unknown>;
-
-const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
-  const [downloading, setDownloading] = React.useState<boolean>(false);
-  const { selectedOrganization, selectedRepo, current, setCurrentStep, } = React.useContext(AppContext);
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const downloadHandler = async (id: string) => {
-    setDownloading(true);
-    try {
-      await API.services.branchDownload(
-        { repoId: selectedRepo, orgId: selectedOrganization, branch: id },
-        getHeaders()
-      );
-      messageApi.success('Artifacts downloaded successfully.');
-    } catch (error) {
-      console.error(error);
-      messageApi.error('Failed to download the Artifacts.');
-    } finally {
-      setDownloading(false);
-    }
+  const onOkProps: ButtonProps = {
+    disabled: !selectedRepo,
   };
 
   return (
@@ -110,39 +137,56 @@ const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
       direction="vertical"
       className="w-full"
       style={{ height: '100%', justifyContent: 'space-between', flex: 1 }}
-      
     >
-      <Spin spinning={downloading} tip="Downloading..."  style={{ height: '100%' }}>
-        {contextHolder}
-        <Space direction="vertical" style={{ width: '100%',flex: 1, height:'100%'}}>
+      {contextHolder}
+      <Spin
+        spinning={downloading}
+        tip="Downloading..."
+        style={{ height: '100%' }}
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <div {...props} ref={ref} id="service_profile" style={{ flex: 1 }}>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+              }}
+            ></div>
+          </div>
           <List
-            {...props}
-            dataSource={dataSource}
-            renderItem={(item: any) => (
-              <List.Item
-                actions={[
-                  <Button
-                    onClick={() => downloadHandler(item?.id)}
-                    icon={<DownloadOutlined />}
-                    type="link"
-                    key={1}
-                  >
-                    Download
-                  </Button>,
-                ]}
-              >
-                <List.Item.Meta title={<a>{item.name}</a>} description={item.url} />
-              </List.Item>
-            )}
+            dataSource={tags}
+            loading={loading}
+            renderItem={(item) => {
+              const isSelected = selectedArtifact == item.id.toString();
+              return (
+                <List.Item
+                  actions={[
+                    isSelected && <Dropdown key={1} menu={{ items }} trigger={['click']}>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ padding: '.2rem', background: 'transparent', outline: 'none', border: 'none', cursor: 'pointer' }}
+                      >
+                        <EllipsisOutlined />
+                      </button>
+                    </Dropdown>
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={<a>{item?.name}</a>}
+                  />
+                </List.Item>
+              );
+            }}
           />
-        </Space>       
+        </Space>
       </Spin>
-
       <Footer
         onCancel={() => setCurrentStep(current - 1)}
-        onOkProps={{style:{display:"none"}
-      }}
+        onSubmit={() => setCurrentStep(0)}
+        onOkProps={onOkProps}
       />
     </Space>
   );
-};
+});
