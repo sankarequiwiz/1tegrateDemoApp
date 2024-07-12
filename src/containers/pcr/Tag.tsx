@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ButtonProps, Space, Spin, message, MenuProps, Dropdown } from 'antd';
-import React, { HTMLProps, useMemo } from 'react';
+import { Space, Spin } from 'antd';
+import React, { HTMLProps, } from 'react';
 import { Footer } from '../../components/footer/index';
 import { AppContext } from '../../context/AppProvider';
 import API from '../../services/';
 import { List } from 'antd';
 
-import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
-import { handleError } from '../../utils/error';
-import utils from '../../utils';
 
 
 export const Tag = React.forwardRef<
@@ -17,12 +14,9 @@ export const Tag = React.forwardRef<
 >((props, ref) => {
   const { integration, selectedOrganization, selectedRepo, domain, selectedArtifact,setCurrentStep ,current} =
       React.useContext(AppContext);
-  const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
   
     const [tags, SetTags] = React.useState<Array<any>>();
-
-  const [messageApi, contextHolder] = message.useMessage();
 
   const getHeaders = () => {
     return { integrationId: integration.id,};
@@ -59,9 +53,9 @@ export const Tag = React.forwardRef<
       className="w-full"
       style={{ height: '100%', justifyContent: 'space-between', flex: 1 }}
     >
-      {contextHolder}
+      
       <Spin
-        spinning={downloading}
+        spinning={false}
         tip="Downloading..."
         style={{ height: '100%' }}
       >
