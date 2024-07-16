@@ -7,7 +7,7 @@ import API from '../../../services';
 import { Payload,  } from './type';
 import { List } from 'antd';
 
-import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
 import { Errors,handleError } from '../../../utils/error';
 import utils from '../../../utils';
 
@@ -29,7 +29,7 @@ export const SelectRepoPcr = React.forwardRef<
   const [Repositories, setRepos] = React.useState<Array<any>>([]);
   const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
-
+ 
   const [messageApi, contextHolder] = message.useMessage();
 
   const getHeaders = () => {
@@ -57,29 +57,12 @@ export const SelectRepoPcr = React.forwardRef<
      }
     } finally {
       setLoading(false);
+      setDownloading(false)
     }
   };
 
   const handleSelect = (selected: string) => {
     setSelectedRepo(selected === selectedRepo ? '' : selected);
-  };
-  const downloadHandler = async () => {
-    setDownloading(true);
-    try {
-      await API.services.repositoryDownload(
-        {
-          orgId: selectedOrganization,
-          repoId: selectedRepo,
-        },
-        getHeaders()
-      );
-      messageApi.success('Repository downloaded successfully.');
-    } catch (error) {
-      console.error(error);
-      messageApi.error('Failed to download the repository');
-    } finally {
-      setDownloading(false);
-    }
   };
 
   const handleCreateWatch = async () => {
@@ -127,15 +110,6 @@ export const SelectRepoPcr = React.forwardRef<
       onClick: (e) => {
         e.domEvent.stopPropagation();
         handleCreateWatch()
-      }
-    },
-    {
-      label: 'Download',
-      key: '1',
-      icon: <DownloadOutlined />,
-      onClick: (e) => {
-        e.domEvent.stopPropagation();
-        downloadHandler();
       }
     }
   ];

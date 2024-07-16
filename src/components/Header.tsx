@@ -41,7 +41,7 @@ const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
 
 const domain = [
   {
-    label: 'Source Control',
+    label: 'Source Code',
     key: 'SCM',
   },
   {

@@ -7,7 +7,6 @@ import API from '../../services/';
 import { List } from 'antd';
 
 
-
 export const Tag = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
@@ -40,13 +39,9 @@ export const Tag = React.forwardRef<
       setLoading(false);
     }
   };
-
-
   React.useEffect(() => {
     getAllTags();
   }, []);
-
-
   return (
     <Space
       direction="vertical"
@@ -89,7 +84,6 @@ export const Tag = React.forwardRef<
       <Footer
         onCancel={() => setCurrentStep(current - 1)}
         onSubmit={() => setCurrentStep(0)}
-
       />
     </Space>
   );
