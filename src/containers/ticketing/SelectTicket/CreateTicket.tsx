@@ -120,7 +120,7 @@ function FormComp(props: FormTypes) {
 
    const fetchFormFields = async () => {
       try {
-         const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload[type], headers);
+         const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload['create'], headers);
          setFormFields(response.data.data);
       } catch (error) {
          console.error('Error fetching form fields:', error);
@@ -143,12 +143,12 @@ function FormComp(props: FormTypes) {
    }, [selected, type, open])
 
    useEffect(() => {
-      if(open){
+      if (open) {
          fetchFormFields()
-      }else{
+      } else {
          setFormFields([])
       }
-   }, [type,open]);
+   }, [type, open]);
 
    return (
       <div>
