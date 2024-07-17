@@ -20,7 +20,6 @@ export const Stepper = React.forwardRef<
 >(({ name, direction, items = [], ...props }, ref) => {
   const { current } = React.useContext(AppContext);
   const { style } = useLayout();
-
   return (
     <Layout id="stepper" aria-label={name} style={style} {...props} ref={ref}>
       <Steps
@@ -42,7 +41,6 @@ export const Stepper = React.forwardRef<
     </Layout>
   );
 });
-
 Stepper.defaultProps = {
   direction: 'vertical',
 };

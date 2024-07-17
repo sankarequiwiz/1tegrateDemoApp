@@ -13,6 +13,7 @@ type ContextTypes = {
   selectedService?: string;
   selectedOrganization?: string | 'default';
   selectedRepo?: string;
+  selectedArtifact?: string;
   conclusion?: string;
   selectedBranch?: string;
   userName?: string;
@@ -33,6 +34,7 @@ type ContextTypes = {
   setSelectedOrganization?: (selectedOrganization: string) => void;
   setSelectedService?: (selectedService: string) => void;
   setSelectedRepo?: (selectedOrganization: string) => void;
+  setSelectedArtifact?: (selectedOrganization: string) => void;
   setCurrentStep?: (newCurrent: number) => void;
   setOrganization?: React.Dispatch<React.SetStateAction<string>>;
   setDomain?: React.Dispatch<React.SetStateAction<DomainTypes>>;
@@ -121,6 +123,15 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
+  
+  const setSelectedArtifact = (arg) => {
+    setSearch((prev) => {
+      prev.set('selectedArtifact', arg);
+      return prev;
+    });
+  };
+
+
   const setCurrentStep = (newCurrent: number) => {
     setSearch((prev) => {
       prev.set('current', newCurrent.toString());
@@ -183,6 +194,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setSelectedService,
     setSelectedOrganization,
     setSelectedRepo,
+    setSelectedArtifact,
     setConclusion,
     setSelectedBranch,
     setUserName,
@@ -196,6 +208,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     companykey: search.get('companyKey'),
     accessKey: search.get('accessKey'),
     appTitle: search.get('appTitle'),
+    selectedArtifact:search.get("selectedArtifact"),
     selectedCommit: search.get('selectedCommit'),
     selectedPullReq: search.get('selectedPullReq'),
     selectedBranch: search.get('selectedBranch'),

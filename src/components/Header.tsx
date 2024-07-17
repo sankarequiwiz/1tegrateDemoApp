@@ -41,7 +41,7 @@ const Icon: React.FC<React.SVGProps<SVGSVGElement>> = () => (
 
 const domain = [
   {
-    label: 'Source Control',
+    label: 'Source Code',
     key: 'SCM',
   },
   {
@@ -50,8 +50,7 @@ const domain = [
   },
   {
     label: 'Packages & Container registry',
-    value: 'CONTAINER_REGISTRY',
-    disabled: true,
+    key: 'PCR',
   },
   {
     label: 'Notifications & Communications',
@@ -133,6 +132,7 @@ export const Header = React.forwardRef<
       key,
       onClick: () => {
         setDomain(key as DomainTypes)
+        
         Events.trigger('event:update_domain', {});
       },
       ...rest,

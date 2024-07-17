@@ -4,55 +4,64 @@ import React, { HTMLProps, useMemo } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { Payload, ReposTypes } from './type';
 import { List } from 'antd';
 
 import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
-import { handleError } from '../../../utils/error';
+import { Errors, handleError } from '../../../utils/error';
 import utils from '../../../utils';
 
-export const SelectRepo = React.forwardRef<
+const errorObj = new Errors();
+export const Artifact = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
 >((props, ref) => {
   const {
     setCurrentStep,
     current,
-    setSelectedRepo,
+    setSelectedArtifact,
+    selectedArtifact,
     selectedRepo,
     selectedOrganization,
     integration,
     domain
   } = React.useContext(AppContext);
-  const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
+  const [Repositories, setRepos] = React.useState<Array<any>>([]);
   const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [messageApi, contextHolder] = message.useMessage();
 
   const getHeaders = () => {
-    return { integrationId: integration.id };
+    return { integrationId: integration.id,};
   };
  
   const getRepos = async () => {
     try {
       setLoading(true);
-      const resp = await API.services.getRepo(
+      const resp = await API.services.getAllArtifact(
         selectedOrganization,
         getHeaders(),
+        selectedRepo,
         domain
       );
       const { data } = resp.data;
       setRepos(data);
     } catch (error) {
       console.log(error);
+      if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
+        const [{ errorCode }] = error?.response?.data;
+        if (errorCode === errorObj.getOrg().getNotFoundCode) {
+          setSelectedArtifact('default');
+           setCurrentStep(current + 1);
+        }
+     }
     } finally {
       setLoading(false);
     }
   };
 
   const handleSelect = (selected: string) => {
-    setSelectedRepo(selected === selectedRepo ? '' : selected);
+    setSelectedArtifact(selected === selectedArtifact ? '' : selected);
   };
   const downloadHandler = async () => {
     setDownloading(true);
@@ -78,7 +87,7 @@ export const SelectRepo = React.forwardRef<
     const fullBodySelected = Repositories.find(
       (item) => item?.id?.toString() === selectedRepo
     );
-    const payload: Payload = {
+    const payload: any = {
       name: `web-gateway-service-${fullBodySelected?.fullName}`,
       description: `Watch for ${fullBodySelected.description} repository`,
       type: 'Webhook',
@@ -166,7 +175,7 @@ export const SelectRepo = React.forwardRef<
             dataSource={Repositories}
             loading={loading}
             renderItem={(item) => {
-              const isSelected = selectedRepo == item.id.toString();
+              const isSelected = selectedArtifact == item.id.toString();
               return (
                 <List.Item
                   actions={[
@@ -188,8 +197,8 @@ export const SelectRepo = React.forwardRef<
                         value={item.id}
                       />
                     }
-                    title={<a>{item?.fullName}</a>}
-                    description={item?.description}
+                    title={<a>{item?.name}</a>}
+                    description={item?.id}
                   />
                 </List.Item>
               );

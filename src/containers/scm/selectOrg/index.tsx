@@ -41,7 +41,7 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
   const getOrganization = async () => {
     try {
       setLoading(true);
-      const resp = await API.services.getSCMOrganization(headers as any, domain.toLowerCase());
+      const resp = await API.services.getSCMOrganization(headers as any, domain);
       const { data } = resp.data;
       setOrganization(data);
     } catch (error) {

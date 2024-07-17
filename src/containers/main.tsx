@@ -40,7 +40,6 @@ export function Main() {
 			};
 		}
 	}, [conclusion]);
-
 	const items = React.useMemo(() => {
 		return getStepItems([getConclusion()])[domain];
 	}, [domain, getConclusion]);

@@ -12,7 +12,12 @@ import { Jira } from '../../../components/icons/providers/jira';
 import { Salesforce } from '../../../components/icons/providers/salesforce';
 import { ServiceTypes } from "./types";
 import { Trello } from "../../../components/icons/providers/trello";
-
+import { GoodleArtifact } from "../../../components/icons/providers/googleartifact";
+import { DockerHub } from "../../../components/icons/providers/dockerhub";
+import { Jfrog } from "../../../components/icons/providers/jfrogartifactory";
+import { Nuxus } from "../../../components/icons/providers/nexus";
+import { Microsoft } from "../../../components/icons/providers/microsoftacr";
+import { AmazonECR } from "../../../components/icons/providers/amazonecr";
 type CustomCardProps = {
    onSelectProvider?: () => void
    selected?: boolean
@@ -41,12 +46,24 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
          return <Trello />
       } else if (name.startsWith('salesforce')) {
          return <Salesforce />
+      }else if (name.startsWith('google')) {
+         return <GoodleArtifact />
+      }else if (name.startsWith('docker')) {
+         return <DockerHub />
+      }else if (name.startsWith('jfrog')) {
+         return <Jfrog />
+      }else if (name.startsWith('nexus')) {
+         return <Nuxus />
+      }else if (name.startsWith('microsoft')) {
+         return <Microsoft />
+      }else if (name.startsWith('amazon')) {
+         return <AmazonECR />
       }
    }, [item]);
 
    return (
       <Card
-         style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", }}
+         style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", maxWidth:"18rem !important"}}
          bordered
          rootClassName="card"
          ref={ref}

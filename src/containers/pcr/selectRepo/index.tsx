@@ -4,14 +4,16 @@ import React, { HTMLProps, useMemo } from 'react';
 import { Footer } from '../../../components/footer';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services';
-import { Payload, ReposTypes } from './type';
+import { Payload,  } from './type';
 import { List } from 'antd';
 
-import { DownloadOutlined, EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
-import { handleError } from '../../../utils/error';
+import { EllipsisOutlined, EyeOutlined } from '@ant-design/icons';
+import { Errors,handleError } from '../../../utils/error';
 import utils from '../../../utils';
 
-export const SelectRepo = React.forwardRef<
+
+const errorObj = new Errors();
+export const SelectRepoPcr = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
 >((props, ref) => {
@@ -24,20 +26,20 @@ export const SelectRepo = React.forwardRef<
     integration,
     domain
   } = React.useContext(AppContext);
-  const [Repositories, setRepos] = React.useState<Array<ReposTypes>>([]);
+  const [Repositories, setRepos] = React.useState<Array<any>>([]);
   const [downloading, setDownloading] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
-
+ 
   const [messageApi, contextHolder] = message.useMessage();
 
   const getHeaders = () => {
-    return { integrationId: integration.id };
+    return { integrationId: integration.id,};
   };
  
   const getRepos = async () => {
     try {
       setLoading(true);
-      const resp = await API.services.getRepo(
+      const resp = await API.services.getRepoPcr(
         selectedOrganization,
         getHeaders(),
         domain
@@ -46,31 +48,21 @@ export const SelectRepo = React.forwardRef<
       setRepos(data);
     } catch (error) {
       console.log(error);
+      if (error?.response?.data && Array.isArray(error?.response?.data) && error?.response?.data.length) {
+        const [{ errorCode }] = error?.response?.data;
+        if (errorCode === errorObj.getOrg().getNotFoundCode) {
+          setSelectedRepo('default');
+           setCurrentStep(current + 1);
+        }
+     }
     } finally {
       setLoading(false);
+      setDownloading(false)
     }
   };
 
   const handleSelect = (selected: string) => {
     setSelectedRepo(selected === selectedRepo ? '' : selected);
-  };
-  const downloadHandler = async () => {
-    setDownloading(true);
-    try {
-      await API.services.repositoryDownload(
-        {
-          orgId: selectedOrganization,
-          repoId: selectedRepo,
-        },
-        getHeaders()
-      );
-      messageApi.success('Repository downloaded successfully.');
-    } catch (error) {
-      console.error(error);
-      messageApi.error('Failed to download the repository');
-    } finally {
-      setDownloading(false);
-    }
   };
 
   const handleCreateWatch = async () => {
@@ -83,7 +75,7 @@ export const SelectRepo = React.forwardRef<
       description: `Watch for ${fullBodySelected.description} repository`,
       type: 'Webhook',
       resource: {
-        type: 'SCM_REPOSITORY',
+        type: 'PCR_REPOSITORY',
         repository: {
           id: selectedRepo,
         },
@@ -118,15 +110,6 @@ export const SelectRepo = React.forwardRef<
       onClick: (e) => {
         e.domEvent.stopPropagation();
         handleCreateWatch()
-      }
-    },
-    {
-      label: 'Download',
-      key: '1',
-      icon: <DownloadOutlined />,
-      onClick: (e) => {
-        e.domEvent.stopPropagation();
-        downloadHandler();
       }
     }
   ];
@@ -188,8 +171,8 @@ export const SelectRepo = React.forwardRef<
                         value={item.id}
                       />
                     }
-                    title={<a>{item?.fullName}</a>}
-                    description={item?.description}
+                    title={<a>{item?.name}</a>}
+                    description={item?.id}
                   />
                 </List.Item>
               );

@@ -50,7 +50,7 @@ function App() {
 
 	return (
 		<Fragment>
-			<Header style={{ position: 'fixed', top: 0, width: '100%', zIndex: 2 }} />
+			<Header style={{ position: 'fixed', top: 0, width: '100%', zIndex: 20 }} />
 			<Routes>
 				<Route path="/" element={<Main />} />
 				<Route path="/events" element={<Events />} />
