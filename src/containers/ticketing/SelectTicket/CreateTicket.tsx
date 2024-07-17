@@ -140,7 +140,7 @@ function FormComp(props: FormTypes) {
          }, {});
          form.setFieldsValue(values)
       }
-   }, [selected, type, open])
+   }, [selected, type, open,formFields])
 
    useEffect(() => {
       if(open){
