@@ -26,7 +26,7 @@ const setup = {
    },
    PCR: {
       organization: {
-         watch: false
+         watch: true
       },
       repository: {
          watch: true
