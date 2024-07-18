@@ -181,7 +181,7 @@ export const SelectRepoPcr = React.forwardRef<
         </Space>
       </Spin>
       <Footer
-        onCancel={() => setCurrentStep(current - 1)}
+        onCancel={() => setCurrentStep(current - (selectedOrganization === 'default' ? 2 : 1))}
         onSubmit={() => setCurrentStep(current + 1)}
         onOkProps={onOkProps}
       />
