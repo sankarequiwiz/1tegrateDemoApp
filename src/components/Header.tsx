@@ -53,8 +53,8 @@ const domain = [
     key: 'PCR',
   },
   {
-    label: 'Notifications & Communications',
-    value: 'Notifications & Communications',
+    label: 'Communications',
+    value: 'COMMS',
     disabled: true,
   },
   {

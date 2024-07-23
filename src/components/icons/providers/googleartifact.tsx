@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const GoodleArtifact = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => {
+export const GoogleArtifact = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => {
    return (
     <svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
     width="50" height="50" viewBox="0 0 24 24" overflow="visible" xmlSpace="preserve" {...props} ref={ref} >
