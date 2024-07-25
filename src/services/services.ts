@@ -228,3 +228,26 @@ export const getAllTags = async (
 		{ headers }
 	);
 };
+
+//Comms APi calls
+
+export const getChannels = async (
+	organizationId: string,
+	headers: { [key: string]: string },
+	type
+) => {
+	return await fetch.get(
+		`/api/demo/${withLowerCase(type)}/${organizationId}/channels`,
+		{ headers }
+	);
+};
+
+export const createMessages = async (
+	payload: { [key: string]: any },
+	headers: { [key: string]: any },
+	organizationId: string,
+	channelsId: string,
+	type
+) => {
+	return await fetch.post(`/api/demo//${withLowerCase(type)}/${organizationId}/channels/${channelsId}/messages`, payload, { headers })
+}

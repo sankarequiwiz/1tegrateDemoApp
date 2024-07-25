@@ -54,8 +54,7 @@ const domain = [
   },
   {
     label: 'Communications',
-    value: 'COMMS',
-    disabled: true,
+    key: 'COMMS',
   },
   {
     value: 'VULNERABILITY MANAGEMENT',
