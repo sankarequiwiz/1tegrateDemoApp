@@ -35,52 +35,19 @@ function FormComp(props: FormTypes) {
       form.resetFields();
    }
 
-   const createTicket = async (values: { [key: string]: string }) => {
-      setCreating(true);
+
+
+   const sendMessage = async (values: { [key: string]: string }) => {
+      values.name=selectedCollection
       try {
-         await API.services.createTickets(
+         await API.services.sendMessages(
             values,
             headers,
             selectedOrganization,
-            selectedCollection
-         );
-         messageApi.success({ content: `Ticket created successfully.` });
-         setTimeout(() => {
-            getAllTickets(defaultPagination)
-         }, 2000)
-         onCancel();
-      } catch (error) {
-         const errorProp = error?.response?.data;
-         console.error(errorProp);
-         let content = 'something went wrong!'
-         if (Array.isArray(errorProp) && errorProp.length) {
-            const [message] = errorProp;
-            content = message?.errorMessage || message?.message;
-         }
-         messageApi.error({ content })
-
-      } finally {
-         setCreating(false);
-      }
-   }
-
-   const editTicket = async (values: { [key: string]: string }) => {
-      const dirtyFields = {};
-      Object.entries(values).map(([key, value]) => {
-         if (!selected?.[key] || selected?.[key] !== value) {
-            dirtyFields[key] = value;
-         }
-      })
-      try {
-         await API.services.editTickets(
-            dirtyFields,
-            headers,
-            selectedOrganization,
             selectedCollection,
-            selected?.id
          );
          onCancel(undefined);
-         messageApi.success({ content: `Ticket updated successfully.` });
+         messageApi.success({ content: `Message sent successfully.` });
          setTimeout(() => {
             getAllTickets(paginationState);
          }, 2000)
@@ -99,11 +66,7 @@ function FormComp(props: FormTypes) {
    const onOk = async () => {
       try {
          const resp = await form.validateFields()
-         if (type === 'create') {
-            await createTicket(resp);
-         } else {
-            await editTicket(resp);
-         }
+            await sendMessage(resp);
       } catch (error) {
          console.error(error);
       };

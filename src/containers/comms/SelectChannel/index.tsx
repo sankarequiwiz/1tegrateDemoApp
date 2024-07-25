@@ -125,18 +125,16 @@ const ListComp = (
       setType(type);
       setSelected(arg);
       setOpen(true);
+      setSelectedCollection(arg?.id);
    }
+   console.log(selectedCollection)
 
    const onCancel = () => {
       setSelected(undefined);
       setOpen(false);
+      setSelectedCollection("")
    }
-   const handleSelect = (selected: string) => {
-   
-      setSelectedCollection(selectedCollection === selected ? '' : selected);
-   };
   
-
    return (
       <>
          {
@@ -151,9 +149,7 @@ const ListComp = (
                   }}
                   dataSource={dataSource}
                   renderItem={(item: { [key: string]: any }) => (
-                     <ListItem onOpen={onOpen} item={item} dataSource={dataSource}  onClick={() => {
-                        handleSelect(item.id);
-                     }}/>
+                     <ListItem onOpen={onOpen} item={item} dataSource={dataSource} />
                   )}
                />
             )
