@@ -2,7 +2,6 @@ import { Form, Input, InputNumber, Select, Modal, ModalProps, PaginationProps, m
 import React, { useEffect, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
-import { defaultPagination } from '.';
 import { MetaDataConfigTypes } from "./type"
 
 type FormTypes = {
@@ -24,6 +23,7 @@ function FormComp(props: FormTypes) {
    const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
    const [messageApi, contextHolder] = message.useMessage();
    const [creating, setCreating] = useState(false);
+  
    const [formFields, setFormFields] = useState<MetaDataConfigTypes[]>([]);
 
    const [form] = Form.useForm();
@@ -33,6 +33,7 @@ function FormComp(props: FormTypes) {
    const onCancel = (e?: React.MouseEvent<HTMLButtonElement>) => {
       onCancelProp(e);
       form.resetFields();
+      
    }
 
 
@@ -51,6 +52,7 @@ function FormComp(props: FormTypes) {
          setTimeout(() => {
             getAllTickets(paginationState);
          }, 2000)
+         setCreating
       } catch (error) {
          const errorProp = error?.response?.data;
          console.error(errorProp);
