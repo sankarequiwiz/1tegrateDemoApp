@@ -1,6 +1,6 @@
 import { EditOutlined, EllipsisOutlined, EyeOutlined, } from '@ant-design/icons';
 import { Dropdown, List, Menu, Tag, message } from 'antd';
-import React, { LegacyRef, useMemo } from 'react';
+import React, { HTMLProps, LegacyRef, useMemo } from 'react';
 import { AppContext } from '../../../context/AppProvider';
 import API from '../../../services/index';
 import { handleError } from '../../../utils/error';
@@ -12,9 +12,9 @@ type ListItemType = {
    item?: ItemTypes
    dataSource?: Array<ItemTypes>
    onOpen?: (type?: 'create' | 'edit', item?: ItemTypes) => void;
-}
+}&HTMLProps<HTMLDivElement>
 export const ListItem = React.forwardRef((props: ListItemType, ref: LegacyRef<HTMLDivElement>) => {
-   const { item, dataSource, onOpen: onOpenProp } = props;
+   const { item, dataSource, onOpen: onOpenProp ,...rest} = props;
    const [messageApi, contextHolder] = message.useMessage();
 
    const { integration, selectedOrganization = 'default', domain } = React.useContext(AppContext);
@@ -84,6 +84,7 @@ export const ListItem = React.forwardRef((props: ListItemType, ref: LegacyRef<HT
                   </Dropdown>
                ]
             )}
+            {...rest}
          >
             <List.Item.Meta
                title={item?.name ?? item?.id}

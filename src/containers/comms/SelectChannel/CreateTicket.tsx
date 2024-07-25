@@ -109,18 +109,14 @@ function FormComp(props: FormTypes) {
       };
    }
 
-   const payload = {
-      edit: {
-         type: 'TICKET_UPDATE'
-      },
-      create: {
-         type: 'TICKET_CREATE'
-      },
-   }
-
+   const payload = 
+      {
+         type:"MESSAGE_CREATE"
+     }
+   
    const fetchFormFields = async () => {
       try {
-         const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload[type], headers);
+         const response = await API.services.metaDataConfigComms(selectedOrganization, selectedCollection, payload, headers);
          setFormFields(response.data.data);
       } catch (error) {
          console.error('Error fetching form fields:', error);
@@ -156,7 +152,7 @@ function FormComp(props: FormTypes) {
          <Modal
             open={open}
             okButtonProps={{ loading: creating }}
-            title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
+            title={`${type === 'create' ? 'Create' : 'Send'} Message`}
             onOk={onOk}
             onCancel={onCancel}
          >

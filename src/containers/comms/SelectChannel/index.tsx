@@ -1,6 +1,5 @@
 import React, { HTMLProps, useEffect, useRef, useState } from 'react';
 import {
-   Button,
    List,
    ListProps,
    PaginationProps,
@@ -20,7 +19,7 @@ export const defaultPagination = {
    showQuickJumper: true
 }
 const SelectChannels = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>((props, ref) => {
-   const { setCurrentStep, current, integration,domain, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
+   const { setCurrentStep, current,integration,domain, selectedOrganization = 'default', selectedCollection = 'default' } = React.useContext(AppContext);
    const [ticketsState, setTicketsState] = React.useState([]);
    const [loading, setLoading] = useState<boolean>(false);
    const [paginationState, setPagination] = useState<PaginationProps>(defaultPagination);
@@ -115,6 +114,7 @@ const ListComp = (
       getAllTickets,
       loading,
    }: ListTypes) => {
+   const { setSelectedCollection,selectedCollection } = React.useContext(AppContext);
    const [open, setOpen] = useState<boolean>(false)
    const [selected, setSelected] = useState<{ [key: string]: any }>();
    const [type, setType] = useState<'create' | 'edit'>('create');
@@ -131,6 +131,11 @@ const ListComp = (
       setSelected(undefined);
       setOpen(false);
    }
+   const handleSelect = (selected: string) => {
+   
+      setSelectedCollection(selectedCollection === selected ? '' : selected);
+   };
+  
 
    return (
       <>
@@ -146,7 +151,9 @@ const ListComp = (
                   }}
                   dataSource={dataSource}
                   renderItem={(item: { [key: string]: any }) => (
-                     <ListItem onOpen={onOpen} item={item} dataSource={dataSource} />
+                     <ListItem onOpen={onOpen} item={item} dataSource={dataSource}  onClick={() => {
+                        handleSelect(item.id);
+                     }}/>
                   )}
                />
             )

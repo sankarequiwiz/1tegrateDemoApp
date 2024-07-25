@@ -86,7 +86,7 @@ export const getAllPullRequest = async (
 	repoId: string
 ) => {
 	return await fetch.get(
-		`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequest`,
+		`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequests`,
 		{ headers }
 	);
 };
@@ -242,12 +242,18 @@ export const getChannels = async (
 	);
 };
 
-export const createMessages = async (
+export const sendMessages = async (
 	payload: { [key: string]: any },
 	headers: { [key: string]: any },
 	organizationId: string,
 	channelsId: string,
 	type
 ) => {
-	return await fetch.post(`/api/demo//${withLowerCase(type)}/${organizationId}/channels/${channelsId}/messages`, payload, { headers })
+	return await fetch.post(`/api/demo/${withLowerCase(type)}/${organizationId}/channels/${channelsId}/messages`, payload, { headers })
+}
+
+
+
+export const metaDataConfigComms = async (orgId: string, channelsId: string, payload: { [key: string]: any },headers: { [key: string]: any }) => {
+	return await fetch.post(`/api/demo/comms/${orgId}/channels/${channelsId}/messages/metadataConfig`,payload, { headers })
 }
