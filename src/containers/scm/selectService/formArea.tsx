@@ -35,6 +35,9 @@ const integrationPayloadKey = {
    },
    CLIENT_SECRET: {
       value: "clientSecret"
+   },
+   TENANT_ID:{
+      value: "tenantId"
    }
 }
 
