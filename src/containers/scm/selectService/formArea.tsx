@@ -38,6 +38,9 @@ const integrationPayloadKey = {
    },
    TENANT_ID:{
       value: "tenantId"
+   },
+   SERVICE_REGION: {
+      value:"serviceRegion"
    }
 }
 
