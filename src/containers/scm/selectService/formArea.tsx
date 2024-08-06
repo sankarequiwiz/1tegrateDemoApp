@@ -1,4 +1,4 @@
-import React, { HTMLProps, useCallback } from "react";
+import React, { HTMLProps, cloneElement, useCallback } from "react";
 import { Payload, ServiceTypes } from "./types";
 import { Button, Card, Col, Form, Input, Radio, Row, Space, Typography, message, Select } from "antd";
 import { AppContext } from "../../../context/AppProvider";
@@ -15,6 +15,13 @@ type fieldTypeConfigTypes = {
    name: string;
    required: boolean;
    property: string
+   dataType?: {
+      type: "LIST",
+      values: {
+         code: string,
+         description: string
+      }[]
+   }
 };
 
 type FormAreaTypes = {
@@ -23,46 +30,92 @@ type FormAreaTypes = {
 
 const integrationPayloadKey = {
    API_KEY: {
-      value: 'apiKey'
+      value: 'apiKey',
+      getBaseValues() {
+         return this.value
+      }
    },
    USERNAME: {
-      value: 'username'
+      value: 'username',
+      getBaseValues() {
+         return this.value
+      }
    },
    PASSWORD: {
-      value: 'password'
+      value: 'password',
+      getBaseValues() {
+         return this.value
+      }
    },
    DOMAIN: {
-      value: 'domain'
+      value: 'domain',
+      getBaseValues() {
+         return this.value
+      }
    },
    CLIENT_ID: {
-      value: "clientId"
+      value: "clientId",
+      getBaseValues() {
+         return this.value
+      }
    },
    CLIENT_SECRET: {
-      value: "clientSecret"
+      value: "clientSecret",
+      getBaseValues() {
+         return this.value
+      }
    },
    TENANT_ID: {
-      value: "tenantId"
+      value: "tenantId",
+      getBaseValues() {
+         return this.value
+      }
    },
    SERVICE_REGION: {
-      value: "serviceRegion"
+      value: "serviceRegion",
+      getBaseValues(code) {
+         return { code }
+      }
    },
-   contentType:{
-      value :"contentType"
+   contentType: {
+      value: "contentType",
+      getBaseValues() {
+         return this.value
+      }
    },
-   version:{
-      value:"version"
+   version: {
+      value: "version",
+      getBaseValues() {
+         return this.value
+      }
    },
-   url:{
-      value:"url"
+   url: {
+      value: "url",
+      getBaseValues() {
+         return this.value
+      }
    }
+}
 
+const components = {
+   LIST: {
+      getComp() {
+         return <Select />
+      }
+   }
+}
 
+const parseSelectOptions = (arg = []) => {
+   return arg.map(({ code: value = null, description: label = null }) => (
+      { value, label }
+   ))
 }
 
 export const FormArea = React.forwardRef<
    HTMLDivElement,
    HTMLProps<HTMLDivElement> & FormAreaTypes
 >(({ selected, ...props }, ref) => {
+
    const {
       organization,
       setIntegration,
@@ -70,6 +123,7 @@ export const FormArea = React.forwardRef<
       current,
       domain: type,
    } = React.useContext(AppContext);
+
    const [loading, setLoading] = React.useState<boolean>(false);
 
    const [messageApi, contextHolder] = message.useMessage();
@@ -107,20 +161,29 @@ export const FormArea = React.forwardRef<
       }
    }
 
-
-
    const onIntegrate = () => {
+
       if (organization) {
          form
             .validateFields()
             .then(async (resp) => {
 
                Object.entries(resp).map(([key, value]) => {
+
+
                   delete resp[key];
                   if (!integrationPayloadKey?.[key]) {
                      alert(`${key} is not configured in mapper`)
                   }
-                  resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
+
+                  const baseValue = integrationPayloadKey?.[key];
+
+                  if (typeof baseValue?.getBaseValues(value) === 'object') {
+                     resp[baseValue?.['value'] ?? key] = baseValue?.getBaseValues(value);
+                  } else {
+                     resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
+                  }
+
                })
 
                let formValues: Payload = {
@@ -141,7 +204,6 @@ export const FormArea = React.forwardRef<
                   },
                };
 
-               
                setLoading(true);
                try {
                   const resp = await API.services.createIntegrations(formValues);
@@ -203,8 +265,6 @@ export const FormArea = React.forwardRef<
 
    if (!selected) return null;
 
-
-   console.log(smData, "smData is printing here")
    return (
       <div {...props} ref={ref}>
          <Form layout="vertical" form={form}>
@@ -242,6 +302,15 @@ export const FormArea = React.forwardRef<
                            <Space direction="vertical" className="w-full">
                               {fieldConfigs &&
                                  fieldConfigs.map(({ ...field }, index) => {
+
+                                    const comp = components?.[field?.dataType?.type]?.getComp() ?? <Input />;
+
+                                    let inputProps = {};
+
+                                    if (field?.dataType?.type === 'LIST') {
+                                       inputProps = { ...inputProps, options: parseSelectOptions(field?.dataType?.values) }
+                                    }
+
                                     return (
                                        <div key={index}>
                                           <div style={{ margin: '.5rem 0' }}>
@@ -257,12 +326,11 @@ export const FormArea = React.forwardRef<
                                              name={field.type}
                                              rules={[{ required: field.required }]}
                                           >
-                                             {
-                                                <Input
-                                                   style={{ width: '35rem' }}
-                                                   placeholder={`${field.name?.toString()}`}
-                                                />
-                                             }
+                                             {cloneElement(comp, {
+                                                style: { width: '35rem' },
+                                                placeholder: `${field.name?.toString()}`,
+                                                ...inputProps
+                                             })}
                                           </Form.Item>
                                           {getIsSelfManaged() && (
                                              <>
@@ -293,7 +361,6 @@ export const FormArea = React.forwardRef<
                                                 </Form.Item>
                                                 <Form.Item name="url" label={<Typography.Text strong>Endpoint Url</Typography.Text>} rules={[{ required: true }]}>
                                                    <Input
-
                                                       style={{ width: '35rem' }}
                                                       placeholder="Endpoint Url"
                                                    />
