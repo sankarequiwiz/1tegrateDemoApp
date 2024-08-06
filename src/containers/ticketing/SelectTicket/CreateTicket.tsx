@@ -120,7 +120,7 @@ function FormComp(props: FormTypes) {
 
    const fetchFormFields = async () => {
       try {
-         const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload['create'], headers);
+         const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload[type], headers);
          setFormFields(response.data.data);
       } catch (error) {
          console.error('Error fetching form fields:', error);
