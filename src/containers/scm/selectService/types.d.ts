@@ -49,6 +49,9 @@ type ServiceTypes = {
     state: string;
     visibility: string;
     image: { [key: string]: string };
+    deploymentModel: {
+      type: "SELF_MANAGED" | "SAAS",
+    },
     accessPointConfigs: Array<AccessPointConfigsTypes>;
     notifications: [];
     tags: [];
@@ -95,7 +98,7 @@ export type ServiceProfileDataTypes = {
 
 type Payload = {
   name: string;
-  type: 'SCM' | 'TICKETING'|'PCR'|'COMMS',
+  type: 'SCM' | 'TICKETING' | 'PCR' | 'COMMS',
   externalKey?: string;
   subOrganization: {
     name: string;
@@ -111,7 +114,20 @@ type Payload = {
         type: 'APIKEY_FLW' | 'EMAIL' | 'OAUTH_PASSWORD_FLW';
       };
       emailAddress?: string;
-      apiKey: string;
+      apiKey?: string;
+      deploymentTypeConfig?: DepolyementTypeConfig
     };
   };
 };
+
+type DepolyementTypeConfig = {
+  type: "SELF_MANAGED",
+  version: {
+    id: string
+  }
+  endpoint: {
+    contentType: string
+  }
+  insecureSSL: number
+  url: string
+}

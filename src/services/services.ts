@@ -37,6 +37,11 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 	return fetch.post('/api/demo/integrations', payload);
 };
 
+/*get all versions */
+export const getSelfManaged =async (spId:string)=>{
+	return await fetch.get(`/api/demo/serviceProfiles/${spId}/versions`)
+}
+
 /* get all organization */
 export const getSCMOrganization = async (headers: AxiosHeaders, type) => {
 	return await fetch.get(`/api/demo/${withLowerCase(type)}/organizations`, { headers });
