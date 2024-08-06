@@ -12,12 +12,15 @@ import { Jira } from '../../../components/icons/providers/jira';
 import { Salesforce } from '../../../components/icons/providers/salesforce';
 import { ServiceTypes } from "./types";
 import { Trello } from "../../../components/icons/providers/trello";
-import { GoodleArtifact } from "../../../components/icons/providers/googleartifact";
+import { GoogleArtifact } from "../../../components/icons/providers/googleartifact";
 import { DockerHub } from "../../../components/icons/providers/dockerhub";
 import { Jfrog } from "../../../components/icons/providers/jfrogartifactory";
 import { Nuxus } from "../../../components/icons/providers/nexus";
 import { Microsoft } from "../../../components/icons/providers/microsoftacr";
 import { AmazonECR } from "../../../components/icons/providers/amazonecr";
+import { Teams } from "../../../components/icons/providers/teams";
+import { GoogleChat } from "../../../components/icons/providers/googlechat";
+import { Slack } from "../../../components/icons/providers/slack";
 type CustomCardProps = {
    onSelectProvider?: () => void
    selected?: boolean
@@ -47,7 +50,7 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
       } else if (name.startsWith('salesforce')) {
          return <Salesforce />
       }else if (name.startsWith('google')) {
-         return <GoodleArtifact />
+         return <GoogleArtifact />
       }else if (name.startsWith('docker')) {
          return <DockerHub />
       }else if (name.startsWith('jfrog')) {
@@ -58,6 +61,12 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
          return <Microsoft />
       }else if (name.startsWith('amazon')) {
          return <AmazonECR />
+      }else if (name.startsWith('slack')) {
+         return <Slack />
+      }else if (name.startsWith('teams')) {
+         return <Teams />
+      }else if (name.startsWith('googlechat')) {
+         return <GoogleChat />
       }
    }, [item]);
 

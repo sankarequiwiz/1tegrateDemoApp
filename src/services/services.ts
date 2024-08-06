@@ -37,6 +37,11 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 	return fetch.post('/api/demo/integrations', payload);
 };
 
+/*get all versions */
+export const getSelfManaged =async (spId:string)=>{
+	return await fetch.get(`/api/demo/serviceProfiles/${spId}/versions`)
+}
+
 /* get all organization */
 export const getSCMOrganization = async (headers: AxiosHeaders, type) => {
 	return await fetch.get(`/api/demo/${withLowerCase(type)}/organizations`, { headers });
@@ -86,7 +91,7 @@ export const getAllPullRequest = async (
 	repoId: string
 ) => {
 	return await fetch.get(
-		`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequest`,
+		`/api/demo/scm/organizations/${organizationId}/repositories/${repoId}/pullRequests`,
 		{ headers }
 	);
 };
@@ -228,3 +233,30 @@ export const getAllTags = async (
 		{ headers }
 	);
 };
+
+//Comms APi calls
+
+export const getChannels = async (
+	organizationId: string,
+	headers: { [key: string]: string },
+	type
+) => {
+	return await fetch.get(
+		`/api/demo/${withLowerCase(type)}/${organizationId}/channels`,
+		{ headers }
+	);
+};
+
+
+export const metaDataConfigComms = async (orgId: string, channelsId: string, payload: { [key: string]: any },headers: { [key: string]: any }) => {
+	return await fetch.post(`/api/demo/comms/${orgId}/channels/${channelsId}/messages/metadataConfig`,payload, { headers })
+}
+
+export const sendMessages = async (
+	payload: { [key: string]: any },
+	headers: { [key: string]: any },
+	orgId: string,
+	channelsId: string,
+) => {
+	return await fetch.post(`/api/demo/comms/${orgId}/channels/${channelsId}/messages`, payload, { headers })
+}
