@@ -207,7 +207,7 @@ export const Artifact = React.forwardRef<
         </Space>
       </Spin>
       <Footer
-        onCancel={() => setCurrentStep(current - 1)}
+        onCancel={() => setCurrentStep(current - (selectedRepo === 'default' && selectedOrganization === 'default'? 3 : selectedRepo === 'default'? 2:1))}
         onSubmit={() => setCurrentStep(current + 1)}
         onOkProps={onOkProps}
       />

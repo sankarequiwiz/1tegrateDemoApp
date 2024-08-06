@@ -53,9 +53,8 @@ const domain = [
     key: 'PCR',
   },
   {
-    label: 'Notifications & Communications',
-    value: 'Notifications & Communications',
-    disabled: true,
+    label: 'Communications',
+    key: 'COMMS',
   },
   {
     value: 'VULNERABILITY MANAGEMENT',

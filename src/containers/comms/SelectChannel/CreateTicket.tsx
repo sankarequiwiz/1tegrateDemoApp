@@ -2,7 +2,6 @@ import { Form, Input, InputNumber, Select, Modal, ModalProps, PaginationProps, m
 import React, { useEffect, useState } from 'react';
 import API from '../../../services';
 import { AppContext } from '../../../context/AppProvider';
-import { defaultPagination } from '.';
 import { MetaDataConfigTypes } from "./type"
 
 type FormTypes = {
@@ -24,6 +23,7 @@ function FormComp(props: FormTypes) {
    const { integration, selectedOrganization, selectedCollection } = React.useContext(AppContext);
    const [messageApi, contextHolder] = message.useMessage();
    const [creating, setCreating] = useState(false);
+  
    const [formFields, setFormFields] = useState<MetaDataConfigTypes[]>([]);
 
    const [form] = Form.useForm();
@@ -33,57 +33,26 @@ function FormComp(props: FormTypes) {
    const onCancel = (e?: React.MouseEvent<HTMLButtonElement>) => {
       onCancelProp(e);
       form.resetFields();
+      
    }
 
-   const createTicket = async (values: { [key: string]: string }) => {
-      setCreating(true);
+
+
+   const sendMessage = async (values: { [key: string]: string }) => {
+      values.name=selectedCollection
       try {
-         await API.services.createTickets(
+         await API.services.sendMessages(
             values,
             headers,
             selectedOrganization,
-            selectedCollection
-         );
-         messageApi.success({ content: `Ticket created successfully.` });
-         setTimeout(() => {
-            getAllTickets(defaultPagination)
-         }, 2000)
-         onCancel();
-      } catch (error) {
-         const errorProp = error?.response?.data;
-         console.error(errorProp);
-         let content = 'something went wrong!'
-         if (Array.isArray(errorProp) && errorProp.length) {
-            const [message] = errorProp;
-            content = message?.errorMessage || message?.message;
-         }
-         messageApi.error({ content })
-
-      } finally {
-         setCreating(false);
-      }
-   }
-
-   const editTicket = async (values: { [key: string]: string }) => {
-      const dirtyFields = {};
-      Object.entries(values).map(([key, value]) => {
-         if (!selected?.[key] || selected?.[key] !== value) {
-            dirtyFields[key] = value;
-         }
-      })
-      try {
-         await API.services.editTickets(
-            dirtyFields,
-            headers,
-            selectedOrganization,
             selectedCollection,
-            selected?.id
          );
          onCancel(undefined);
-         messageApi.success({ content: `Ticket updated successfully.` });
+         messageApi.success({ content: `Message sent successfully.` });
          setTimeout(() => {
             getAllTickets(paginationState);
          }, 2000)
+         setCreating
       } catch (error) {
          const errorProp = error?.response?.data;
          console.error(errorProp);
@@ -99,28 +68,20 @@ function FormComp(props: FormTypes) {
    const onOk = async () => {
       try {
          const resp = await form.validateFields()
-         if (type === 'create') {
-            await createTicket(resp);
-         } else {
-            await editTicket(resp);
-         }
+            await sendMessage(resp);
       } catch (error) {
          console.error(error);
       };
    }
 
-   const payload = {
-      edit: {
-         type: 'TICKET_UPDATE'
-      },
-      create: {
-         type: 'TICKET_CREATE'
-      },
-   }
-
+   const payload = 
+      {
+         type:"MESSAGE_CREATE"
+     }
+   
    const fetchFormFields = async () => {
       try {
-         const response = await API.services.metaDataConfig(selectedOrganization, selectedCollection, payload['create'], headers);
+         const response = await API.services.metaDataConfigComms(selectedOrganization, selectedCollection, payload, headers);
          setFormFields(response.data.data);
       } catch (error) {
          console.error('Error fetching form fields:', error);
@@ -143,12 +104,12 @@ function FormComp(props: FormTypes) {
    }, [selected, type, open,formFields])
 
    useEffect(() => {
-      if (open) {
+      if(open){
          fetchFormFields()
-      } else {
+      }else{
          setFormFields([])
       }
-   }, [type, open]);
+   }, [type,open]);
 
    return (
       <div>
@@ -156,7 +117,7 @@ function FormComp(props: FormTypes) {
          <Modal
             open={open}
             okButtonProps={{ loading: creating }}
-            title={`${type === 'create' ? 'Create' : 'Update'} Ticket`}
+            title={`${type === 'create' ? 'Create' : 'Send'} Message`}
             onOk={onOk}
             onCancel={onCancel}
          >

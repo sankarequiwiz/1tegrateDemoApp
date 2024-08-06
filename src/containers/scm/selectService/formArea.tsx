@@ -1,9 +1,13 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLProps, useCallback } from "react";
 import { Payload, ServiceTypes } from "./types";
-import { Button, Card, Col, Form, Input, Radio, Row, Space, Typography, message } from "antd";
+import { Button, Card, Col, Form, Input, Radio, Row, Space, Typography, message, Select } from "antd";
 import { AppContext } from "../../../context/AppProvider";
 import API from '../../../services';
 import FormItem from "antd/es/form/FormItem";
+import { deploymentModel } from "../../../common/deploymentModal";
+
+
+const { Option } = Select;
 
 type fieldTypeConfigTypes = {
    type: string;
@@ -35,7 +39,24 @@ const integrationPayloadKey = {
    },
    CLIENT_SECRET: {
       value: "clientSecret"
+   },
+   TENANT_ID: {
+      value: "tenantId"
+   },
+   SERVICE_REGION: {
+      value: "serviceRegion"
+   },
+   contentType:{
+      value :"contentType"
+   },
+   version:{
+      value:"version"
+   },
+   url:{
+      value:"url"
    }
+
+
 }
 
 export const FormArea = React.forwardRef<
@@ -52,6 +73,7 @@ export const FormArea = React.forwardRef<
    const [loading, setLoading] = React.useState<boolean>(false);
 
    const [messageApi, contextHolder] = message.useMessage();
+   const [smData, setSmData] = React.useState([]);
 
    const [form] = Form.useForm();
    const integrationType = Form.useWatch('integrationType', form);
@@ -70,11 +92,29 @@ export const FormArea = React.forwardRef<
       return 'not_set';
    }, [fields]);
 
+   const getIsSelfManaged = useCallback(() => {
+      return selected?.serviceProfile.deploymentModel?.type === deploymentModel.type.SELF_MANAGED;
+   }, [selected])
+
+   const getAllVersions = async () => {
+
+      try {
+         const smResp = await API.services.getSelfManaged(selected?.serviceProfile?.id);
+         setSmData(smResp.data.data)
+
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+
+
    const onIntegrate = () => {
       if (organization) {
          form
             .validateFields()
             .then(async (resp) => {
+
                Object.entries(resp).map(([key, value]) => {
                   delete resp[key];
                   if (!integrationPayloadKey?.[key]) {
@@ -82,7 +122,8 @@ export const FormArea = React.forwardRef<
                   }
                   resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
                })
-               const formValues: Payload = {
+
+               let formValues: Payload = {
                   name: `${selected?.serviceProfile?.name} integration`,
                   type,
                   subOrganization: { name: organization },
@@ -99,6 +140,8 @@ export const FormArea = React.forwardRef<
                      },
                   },
                };
+
+               
                setLoading(true);
                try {
                   const resp = await API.services.createIntegrations(formValues);
@@ -152,8 +195,16 @@ export const FormArea = React.forwardRef<
       form.resetFields();
    }, [selected]);
 
+   React.useEffect(() => {
+      if (getIsSelfManaged()) {
+         getAllVersions()
+      }
+   }, [getIsSelfManaged()]);
+
    if (!selected) return null;
 
+
+   console.log(smData, "smData is printing here")
    return (
       <div {...props} ref={ref}>
          <Form layout="vertical" form={form}>
@@ -213,6 +264,42 @@ export const FormArea = React.forwardRef<
                                                 />
                                              }
                                           </Form.Item>
+                                          {getIsSelfManaged() && (
+                                             <>
+                                                <Form.Item name="version" label={<Typography.Text strong>Select version</Typography.Text>} rules={[{ required: true }]}>
+                                                   <Select
+                                                      placeholder="Select version"
+                                                      allowClear
+                                                   >
+                                                      {
+                                                         smData.map((item, id) => {
+                                                            return <Option key={id} value={item.id}>
+                                                               {item?.name}
+                                                            </Option>
+                                                         })
+                                                      }
+
+                                                   </Select>
+                                                </Form.Item>
+                                                <Form.Item name="contentType" label={<Typography.Text strong>Content type</Typography.Text>} rules={[{ required: true }]}>
+                                                   <Select
+                                                      placeholder="Select content type"
+                                                      allowClear
+                                                   >
+                                                      <Option value={"application/json"}>
+                                                         {"application/json"}
+                                                      </Option>
+                                                   </Select>
+                                                </Form.Item>
+                                                <Form.Item name="url" label={<Typography.Text strong>Endpoint Url</Typography.Text>} rules={[{ required: true }]}>
+                                                   <Input
+
+                                                      style={{ width: '35rem' }}
+                                                      placeholder="Endpoint Url"
+                                                   />
+                                                </Form.Item>
+                                             </>
+                                          )}
                                        </div>
                                     );
                                  })}

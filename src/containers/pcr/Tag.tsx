@@ -82,7 +82,7 @@ export const Tag = React.forwardRef<
         </Space>
       </Spin>
       <Footer
-        onCancel={() => setCurrentStep(current - 1)}
+        onCancel={() => setCurrentStep(current - (selectedArtifact === 'default' && selectedRepo === 'default'? 3 : selectedArtifact === 'default'? 2:1))}
         onSubmit={() => setCurrentStep(0)}
       />
     </Space>
