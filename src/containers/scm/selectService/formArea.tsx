@@ -332,44 +332,44 @@ export const FormArea = React.forwardRef<
                                                 ...inputProps
                                              })}
                                           </Form.Item>
-                                          {getIsSelfManaged() && (
-                                             <>
-                                                <Form.Item name="version" label={<Typography.Text strong>Select version</Typography.Text>} rules={[{ required: true }]}>
-                                                   <Select
-                                                      placeholder="Select version"
-                                                      allowClear
-                                                   >
-                                                      {
-                                                         smData.map((item, id) => {
-                                                            return <Option key={id} value={item.id}>
-                                                               {item?.name}
-                                                            </Option>
-                                                         })
-                                                      }
-
-                                                   </Select>
-                                                </Form.Item>
-                                                <Form.Item name="contentType" label={<Typography.Text strong>Content type</Typography.Text>} rules={[{ required: true }]}>
-                                                   <Select
-                                                      placeholder="Select content type"
-                                                      allowClear
-                                                   >
-                                                      <Option value={"application/json"}>
-                                                         {"application/json"}
-                                                      </Option>
-                                                   </Select>
-                                                </Form.Item>
-                                                <Form.Item name="url" label={<Typography.Text strong>Endpoint Url</Typography.Text>} rules={[{ required: true }]}>
-                                                   <Input
-                                                      style={{ width: '35rem' }}
-                                                      placeholder="Endpoint Url"
-                                                   />
-                                                </Form.Item>
-                                             </>
-                                          )}
                                        </div>
                                     );
                                  })}
+                              {getIsSelfManaged() && (
+                                 <>
+                                    <Form.Item name="version" label={<Typography.Text strong>Please select your version</Typography.Text>} rules={[{ required: true }]}>
+                                       <Select
+                                          placeholder="Please select your version"
+                                          allowClear
+                                       >
+                                          {
+                                             smData.map((item, id) => {
+                                                return <Option key={id} value={item.id}>
+                                                   {item?.name}
+                                                </Option>
+                                             })
+                                          }
+
+                                       </Select>
+                                    </Form.Item>
+                                    <Form.Item name="contentType" label={<Typography.Text strong>Please select your content type</Typography.Text>} rules={[{ required: true }]}>
+                                       <Select
+                                          placeholder="Please select your content type"
+                                          allowClear
+                                       >
+                                          <Option value={"application/json"}>
+                                             {"application/json"}
+                                          </Option>
+                                       </Select>
+                                    </Form.Item>
+                                    <Form.Item name="url" label={<Typography.Text strong>Please enter your endpoint url</Typography.Text>} rules={[{ required: true }]}>
+                                       <Input
+                                          style={{ width: '35rem' }}
+                                          placeholder="Please enter your endpoint url"
+                                       />
+                                    </Form.Item>
+                                 </>
+                              )}
                            </Space>
                         </Space>
                      </Space>
