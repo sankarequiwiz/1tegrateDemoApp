@@ -23,7 +23,7 @@ export const fieldMapper = () => {
       },
       SERVICE_REGION: {
          value: "serviceRegion",
-         getBaseKey(value: string | { [key: string]: any } | { [key: string]: any }[]) {
+         getBaseKey(_value: string | { [key: string]: any } | { [key: string]: any }[]) {
             return {}
          }
       },
