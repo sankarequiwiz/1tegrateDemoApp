@@ -352,16 +352,7 @@ export const FormArea = React.forwardRef<
 
                                        </Select>
                                     </Form.Item>
-                                    <Form.Item name="contentType" label={<Typography.Text strong>Please select your content type</Typography.Text>} rules={[{ required: true }]}>
-                                       <Select
-                                          placeholder="Please select your content type"
-                                          allowClear
-                                       >
-                                          <Option value={"application/json"}>
-                                             {"application/json"}
-                                          </Option>
-                                       </Select>
-                                    </Form.Item>
+                                    
                                     <Form.Item name="url" label={<Typography.Text strong>Please enter your endpoint url</Typography.Text>} rules={[{ required: true }]}>
                                        <Input
                                           style={{ width: '35rem' }}
