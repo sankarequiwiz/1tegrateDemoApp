@@ -21,6 +21,7 @@ import { AmazonECR } from "../../../components/icons/providers/amazonecr";
 import { Teams } from "../../../components/icons/providers/teams";
 import { GoogleChat } from "../../../components/icons/providers/googlechat";
 import { Slack } from "../../../components/icons/providers/slack";
+import { Opsgenie } from "../../../components/icons/providers/opsgenie";
 type CustomCardProps = {
    onSelectProvider?: () => void
    selected?: boolean
@@ -67,7 +68,10 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
          return <Teams />
       }else if (name.startsWith('googlechat')) {
          return <GoogleChat />
+      }else if (name.startsWith('opsgenie')) {
+         return <Opsgenie />
       }
+      
    }, [item]);
 
    return (
