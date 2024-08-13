@@ -57,13 +57,12 @@ const domain = [
     key: 'COMMS',
   },
   {
-    value: 'VULNERABILITY MANAGEMENT',
-    label: 'Vulnerability management',
-    disabled: true,
+    label: 'Incident Management',
+    key: 'INCIDENT',
   },
   {
-    value: 'INCIDENT MANAGEMENT',
-    label: 'Incident Management',
+    value: 'VULNERABILITY MANAGEMENT',
+    label: 'Vulnerability management',
     disabled: true,
   },
   {
