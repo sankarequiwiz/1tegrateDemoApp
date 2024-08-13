@@ -120,6 +120,19 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         container: <SelectChannels />,
         key: '3',
       },
+    ],
+    INCIDENT:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+      {
+        title: 'Select Organization ',
+        container: <SelectOrganization />,
+        key: '2',
+      },
+      
     ]
   };
 }
