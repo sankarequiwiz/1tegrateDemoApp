@@ -77,6 +77,12 @@ const integrationPayloadKey = {
          return { code }
       }
    },
+   ACCOUNT_ID: {
+      value: "accountId",
+      getBaseValues() {
+         return this.value
+      }
+   },
    contentType: {
       value: "contentType",
       getBaseValues() {
@@ -170,7 +176,6 @@ export const FormArea = React.forwardRef<
 
                Object.entries(resp).map(([key, value]) => {
 
-
                   delete resp[key];
                   if (!integrationPayloadKey?.[key]) {
                      alert(`${key} is not configured in mapper`)
@@ -183,7 +188,6 @@ export const FormArea = React.forwardRef<
                   } else {
                      resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
                   }
-
                })
 
                let formValues: Payload = {
@@ -206,12 +210,14 @@ export const FormArea = React.forwardRef<
 
                setLoading(true);
                try {
+
                   const resp = await API.services.createIntegrations(formValues);
                   const { data } = resp;
                   setIntegration(data);
                   setTimeout(() => {
                      setCurrentStep(current + 1)
                   }, 1000);
+
                } catch (error) {
                   let errorMessage: string = 'Something went wrong';
                   if (error.response.status === 400) {
@@ -349,10 +355,9 @@ export const FormArea = React.forwardRef<
                                                 </Option>
                                              })
                                           }
-
                                        </Select>
                                     </Form.Item>
-                                    
+
                                     <Form.Item name="url" label={<Typography.Text strong>Please enter your endpoint url</Typography.Text>} rules={[{ required: true }]}>
                                        <Input
                                           style={{ width: '35rem' }}
