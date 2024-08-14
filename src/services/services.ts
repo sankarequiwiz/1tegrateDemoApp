@@ -260,3 +260,43 @@ export const sendMessages = async (
 ) => {
 	return await fetch.post(`/api/demo/comms/${orgId}/channels/${channelsId}/messages`, payload, { headers })
 }
+
+
+//Incident Api calls
+export const getServicesOpsigine = async (
+	organizationId: string,
+	headers: { [key: string]: string },
+	type
+) => {
+	return await fetch.get(
+		`/api/demo/${withLowerCase(type)}/${organizationId}/services`,
+		{ headers }
+	);
+};
+
+export const getTeamsOpsigine = async (
+	organizationId: string,
+	serviceId:string,
+	headers: { [key: string]: string },
+	type
+) => {
+	return await fetch.get(
+		`/api/demo/${withLowerCase(type)}/${organizationId}/services/${serviceId}/teams`,
+		{ headers }
+	);
+};
+
+
+export const getIncidentOpsigine = async (
+	organizationId: string,
+	serviceId:string,
+	teamId:string,
+	headers: { [key: string]: string },
+	type
+) => {
+	return await fetch.get(
+		`/api/demo/${withLowerCase(type)}/${organizationId}/services/${serviceId}/teams/${teamId}/incidents`,
+		{ headers }
+	);
+};
+
