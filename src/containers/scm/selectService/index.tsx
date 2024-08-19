@@ -103,7 +103,6 @@ export const SelectService = React.forwardRef<
     loading: childRef.current?.loading,
     style: { display: 'none' }
   };
-  console.log(serviceserror?.response?.status, "state is priting")
   return (
     <Space
       direction="vertical"
@@ -142,7 +141,7 @@ export const SelectService = React.forwardRef<
             serviceserror?.response?.status ? (
               <div>
                 <Alert
-                  message={<Typography.Title style={{ marginTop: "1rem", marginBottom: "1rem" }} level={4}>{serviceserror?.message}</Typography.Title>}
+                  message={<Typography.Title style={{ marginTop: "1rem", marginBottom: "1rem" }} level={4}>{serviceserror?.response?.data.map((item=>item.errorMessage))}</Typography.Title>}
                   type="warning"
                   className="custom-alert custom-warning"
                   showIcon
