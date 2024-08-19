@@ -1,5 +1,8 @@
 import { StepperItemsTypes } from '../components/stepper';
 import { SelectChannels } from '../containers/comms/SelectChannel';
+import { SelectIncident } from '../containers/incident/SelectIncident';
+import { SelectServices } from '../containers/incident/SelectService/index';
+import { SelectTeams } from '../containers/incident/SelectTeams';
 import { Tag } from '../containers/pcr/Tag';
 import { Artifact } from '../containers/pcr/selectArtifact/Artifact'
 import { SelectRepoPcr } from '../containers/pcr/selectRepo';
@@ -132,7 +135,22 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         container: <SelectOrganization />,
         key: '2',
       },
-      
+       {
+        title: 'Select Service',
+        container: <SelectServices />,
+        key: '3',
+      },
+      {
+        title: 'Select Team',
+        container: <SelectTeams />,
+        key: '4',
+      },
+      {
+        title: 'Select Incident',
+        container: <SelectIncident />,
+        key: '5',
+      },
+        
     ]
   };
 }
