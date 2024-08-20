@@ -138,7 +138,7 @@ export const SelectService = React.forwardRef<
               )}
             </div>
           ) : (
-            serviceserror?.response?.status ? (
+            serviceserror?.response?.data.map((item=>item.statusCode)) ? (
               <div>
                 <Alert
                   message={<Typography.Title style={{ marginTop: "1rem", marginBottom: "1rem" }} level={4}>{serviceserror?.response?.data.map((item=>item.errorMessage))}</Typography.Title>}
