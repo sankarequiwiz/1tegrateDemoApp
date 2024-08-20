@@ -150,7 +150,7 @@ export const SelectService = React.forwardRef<
             ) : (
               <div>
                 <Alert
-                  message={<Typography.Title level={4}>Subscription or Services Not Enabled</Typography.Title>}
+                  message={<Typography.Title level={4}>Subscription or Services not Enabled</Typography.Title>}
                   description={<div>
                     <p>It appears that you currently do not have an active subscription or any services enabled on your account. To start using services, please visit the
                       Customer Portal
