@@ -27,7 +27,7 @@ export const SelectService = React.forwardRef<
   HTMLProps<HTMLDivElement>
 >((props, ref) => {
   const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [serviceserror, setServicesError] = React.useState<any>("");
   const childRef = React.useRef<{
     onIntegrate: (callBack: VoidFunction) => void;
@@ -118,57 +118,60 @@ export const SelectService = React.forwardRef<
             gap: '1rem',
           }}
         >
-          {services.length > 0 ? (
-            <div>
-              <Typography.Title level={5}>Available services</Typography.Title>
-              {loading ? (
-                <Skeleton />
-              ) : (
-                <TileList
-                  items={services}
-                  selectedIndex={selectedIndex}
-                  onSelectTile={onSelectTile}
-                  formContent={
-                    <FormArea
-                      ref={childRef as any}
-                      selected={services.find((item) => item?.id === selected) as any}
-                    />
-                  }
-                />
-              )}
-            </div>
+          {loading ? (
+            <Skeleton />
           ) : (
-            serviceserror?.response?.data.map((item=>item.statusCode)) ? (
-              <div>
-                <Alert
-                  message={<Typography.Title style={{ marginTop: "1rem", marginBottom: "1rem" }} level={4}>{serviceserror?.response?.data.map((item=>item.errorMessage))}</Typography.Title>}
-                  type="warning"
-                  className="custom-alert custom-warning"
-                  showIcon
-                />
-              </div>
-            ) : (
-              <div>
-                <Alert
-                  message={<Typography.Title level={4}>Subscription or Services not Enabled</Typography.Title>}
-                  description={<div>
-                    <p>It appears that you currently do not have an active subscription or any services enabled on your account. To start using services, please visit the
-                      Customer Portal
-                      and navigate to the
-                      Services
-                      tab under "Setup Integrations". </p>
-                      <br />
-                    <p>
-                      If you don't have a subscription yet, you can request one by reaching out to <a href="mailto:sales@unizo.in"> Unizo representative </a> . They will assist you in setting up the appropriate subscription plan tailored to your needs.</p>
-                  </div>}
-                  type="warning"
-                  className="custom-alert custom-warning"
-                  showIcon
-                />
-              </div>
-            )
-          )}
+            <div>
+              {services.length > 0 ? (
+                <div>
+                  <Typography.Title level={5}>Available services</Typography.Title>
+                  <TileList
+                    items={services}
+                    selectedIndex={selectedIndex}
+                    onSelectTile={onSelectTile}
+                    formContent={
+                      <FormArea
+                        ref={childRef as any}
+                        selected={services.find((item) => item?.id === selected) as any}
+                      />
+                    }
+                  />
 
+                </div>
+              ) : (
+                serviceserror?.response?.data.map((item => item.statusCode)) ? (
+                  <div>
+                    <Alert
+                      message={<Typography.Title style={{ marginTop: "1rem", marginBottom: "1rem" }} level={4}>{serviceserror?.response?.data.map((item => item.errorMessage))}</Typography.Title>}
+                      type="warning"
+                      className="custom-alert custom-warning"
+                      showIcon
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <Alert
+                      message={<Typography.Title level={4}>Subscription or Services not Enabled</Typography.Title>}
+                      description={<div>
+                        <p>It appears that you currently do not have an active subscription or any services enabled on your account. To start using services, please visit the
+                          Customer Portal
+                          and navigate to the
+                          Services
+                          tab under "Setup Integrations". </p>
+                        <br />
+                        <p>
+                          If you don't have a subscription yet, you can request one by reaching out to <a href="mailto:sales@unizo.in"> Unizo representative </a> . They will assist you in setting up the appropriate subscription plan tailored to your needs.</p>
+                      </div>}
+                      type="warning"
+                      className="custom-alert custom-warning"
+                      showIcon
+                    />
+                  </div>
+                )
+              )}
+            </ div>
+          )
+          }
 
         </div>
       </div>
