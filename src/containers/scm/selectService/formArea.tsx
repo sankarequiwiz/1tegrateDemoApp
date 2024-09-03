@@ -100,7 +100,19 @@ const integrationPayloadKey = {
       getBaseValues() {
          return this.value
       }
-   }
+   },
+   API_ID: {
+      value: "apiId",
+      getBaseValues() {
+         return this.value
+      }
+   },
+   CODE: {
+      value: "code",
+      getBaseValues() {
+         return this.value
+      }
+   },
 }
 
 const components = {
