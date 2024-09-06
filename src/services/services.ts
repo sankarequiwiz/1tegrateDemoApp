@@ -37,6 +37,11 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 	return fetch.post('/api/demo/integrations', payload);
 };
 
+/* test integrations */
+export const testIntegrations = async (payload:{ [key: string]: any }) => {
+	return fetch.post('/api/demo/integrations/validate', payload);
+};
+
 /*get all versions */
 export const getSelfManaged =async (spId:string)=>{
 	return await fetch.get(`/api/demo/serviceProfiles/${spId}/versions`)
