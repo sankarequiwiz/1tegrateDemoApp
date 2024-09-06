@@ -431,7 +431,7 @@ export const FormArea = React.forwardRef<
                                           <Form.Item
                                              key={index}
                                              name={field.type}
-                                             rules={[{ required: field.required }]}
+                                             rules={[{ required: field.required, message: <Typography.Text style={{color:"red"}}>{field.name?.toString()}</Typography.Text>}]}
                                              hasFeedback 
                                              validateStatus={isIntValidated}
                                              
