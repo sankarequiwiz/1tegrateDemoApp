@@ -165,6 +165,7 @@ export const FormArea = React.forwardRef<
       }
       return 'not_set';
    }, [fields]);
+   // console.log(flwType,"ftestIntegrations")
 
    const getIsSelfManaged = useCallback(() => {
       return selected?.serviceProfile.deploymentModel?.type === deploymentModel.type.SELF_MANAGED;
@@ -294,7 +295,7 @@ export const FormArea = React.forwardRef<
                                  property: "/target/accessPoint/accessPointConfig/type",
                                  operator: "=",
                                  values: [
-                                      "APIKEY_FLW"
+                                    flwType
                                  ]
                             },
                             ...Object.entries(resp).map(([key,value]) => {
