@@ -100,7 +100,19 @@ const integrationPayloadKey = {
       getBaseValues() {
          return this.value
       }
-   }
+   },
+   API_ID: {
+      value: "apiId",
+      getBaseValues() {
+         return this.value
+      }
+   },
+   CODE: {
+      value: "code",
+      getBaseValues() {
+         return this.value
+      }
+   },
 }
 
 const components = {
@@ -134,7 +146,8 @@ export const FormArea = React.forwardRef<
 
    const [messageApi, contextHolder] = message.useMessage();
    const [smData, setSmData] = React.useState([]);
-
+   const [isIntValidated, setIsIntValidated]=React.useState<"" | "error" | "warning" | "success" | "validating">("")
+   const[checkData,setCheckData]=React.useState([])
    const [form] = Form.useForm();
    const integrationType = Form.useWatch('integrationType', form);
 
@@ -144,6 +157,7 @@ export const FormArea = React.forwardRef<
       }
       return [];
    }, [selected]);
+  
 
    const flwType = React.useMemo(() => {
       if (fields.length === 1) {
@@ -151,6 +165,7 @@ export const FormArea = React.forwardRef<
       }
       return 'not_set';
    }, [fields]);
+   // console.log(flwType,"ftestIntegrations")
 
    const getIsSelfManaged = useCallback(() => {
       return selected?.serviceProfile.deploymentModel?.type === deploymentModel.type.SELF_MANAGED;
@@ -245,6 +260,90 @@ export const FormArea = React.forwardRef<
       }
    };
 
+   const checkIntegrate= async()=>{
+      if (organization) {
+         form
+            .validateFields()
+            .then(async (resp) => {
+               
+               Object.entries(resp).map(([key, value]) => {
+
+                  delete resp[key];
+                  if (!integrationPayloadKey?.[key]) {
+                     alert(`${key} is not configured in mapper`)
+                  }
+
+                  const baseValue = integrationPayloadKey?.[key];
+
+                  if (typeof baseValue?.getBaseValues(value) === 'object') {
+                     resp[baseValue?.['value'] ?? key] = baseValue?.getBaseValues(value);
+                  } else {
+                     resp[integrationPayloadKey?.[key]?.['value'] ?? key] = value;
+                  }
+               })
+               const payload = {
+                  criteria: {
+                       and: [
+                            {
+                                 property: "/target/accessPoint/serviceProfile/id",
+                                 operator: "=",
+                                 values: [
+                                      selected?.serviceProfile.id
+                                 ]
+                            },
+                            {
+                                 property: "/target/accessPoint/accessPointConfig/type",
+                                 operator: "=",
+                                 values: [
+                                    flwType
+                                 ]
+                            },
+                            ...Object.entries(resp).map(([key,value]) => {
+                                 return {
+                                      property: `/target/accessPoint/${key}`,
+                                      operator: "=",
+                                      values: [
+                                       value
+                                      ]
+                                 }
+                            })
+                       ]
+                  }
+             }
+               try {
+                  const checkDataa=await API.services.testIntegrations(payload);
+                  setCheckData(checkDataa.data.data)
+                  if (checkDataa.data.data.some((item) => item.type === "SUCCESS")) {
+                     setIsIntValidated("success");
+                     messageApi.open({
+                         type: 'success',
+                         content: <>
+                         <strong>Success!</strong> Your credentials have been successfully validated. You can now proceed with your next steps.
+                     </>
+                     });
+                 } 
+                 // Check if any item has type "FAILURE"
+                 else if (checkDataa.data.data.some((item) => item.type === "FAILURE")) {
+                     setIsIntValidated("error");
+                     messageApi.open({
+                         type: 'error',
+                         content: <>
+                         <strong>"Oops!</strong> There was an issue validating your credentials. Please check your information and try again.
+                     </>
+                     });
+                     console.log("console check error");
+                 }
+               } catch (error) {
+                  setIsIntValidated("error")
+                  messageApi.open({
+                     type: 'error',
+                     content: error,
+                  });
+               } 
+            })    
+      } 
+   }
+
    const fieldConfigs: Array<fieldTypeConfigTypes> = React.useMemo(() => {
       if (!fields) return undefined;
       if (fields.length === 1) {
@@ -259,6 +358,9 @@ export const FormArea = React.forwardRef<
       }
    }, [integrationType, fields]);
 
+   React.useEffect(()=>{
+      checkIntegrate()
+   },[])
    React.useEffect(() => {
       form.resetFields();
    }, [selected]);
@@ -270,7 +372,7 @@ export const FormArea = React.forwardRef<
    }, [getIsSelfManaged()]);
 
    if (!selected) return null;
-
+   console.log(checkData.map((item)=>item.type),"checkData")
    return (
       <div {...props} ref={ref}>
          <Form layout="vertical" form={form}>
@@ -330,7 +432,10 @@ export const FormArea = React.forwardRef<
                                           <Form.Item
                                              key={index}
                                              name={field.type}
-                                             rules={[{ required: field.required }]}
+                                             rules={[{ required: field.required, message: <Typography.Text style={{color:"red"}}>{field.name?.toString()}</Typography.Text>}]}
+                                             hasFeedback 
+                                             validateStatus={isIntValidated}
+                                             
                                           >
                                              {cloneElement(comp, {
                                                 style: { width: '35rem' },
@@ -371,8 +476,9 @@ export const FormArea = React.forwardRef<
                      </Space>
                   </Card>
                </Col>
-               <Col style={{ display: 'flex', justifyContent: 'flex-end' }} span={24}>
-                  <Button loading={loading} onClick={onIntegrate} type="primary">Next</Button>
+               <Col style={{ display: 'flex', justifyContent: 'flex-end', gap: "1rem" }} span={24}>
+                  <Button  onClick={checkIntegrate} style={{fontSize:"14px",color:"#1677ff",backgroundColor:"#eff6ff"}}>Test Integration</Button>
+                  <Button loading={loading} onClick={onIntegrate} type="primary" style={{fontSize:"14px"}}>Next</Button>
                </Col>
             </Row>
          </Form>

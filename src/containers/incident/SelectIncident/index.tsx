@@ -64,7 +64,7 @@ const SelectIncident = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement
             <ListComp loading={loading} dataSource={collectionsState} />
          </Space>
          <Footer
-            onCancel={() => setCurrentStep(current - (selectedOrganization === 'default' ? 2 : 1))}
+            onCancel={() => setCurrentStep(current - (selectedService === 'default'&& selectedCollection==="default" && selectedOrganization==="default" ? 4 : selectedService === 'default'&& selectedCollection==="default"? 3: selectedService === 'default'? 2:1))}
             onSubmit={() => setCurrentStep(current + 1)}
          />
       </Space>

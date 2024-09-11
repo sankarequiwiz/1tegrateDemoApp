@@ -23,6 +23,10 @@ import { GoogleChat } from "../../../components/icons/providers/googlechat";
 import { Slack } from "../../../components/icons/providers/slack";
 import { Opsgenie } from "../../../components/icons/providers/opsgenie";
 import { Pagerduty } from "../../../components/icons/providers/pagerduty";
+import { Victorops } from "../../../components/icons/providers/victorops";
+import { ManageEngine } from "../../../components/icons/providers/manageengine";
+import { Solarwinds } from "../../../components/icons/providers/solarwinds";
+import { Splunk } from "../../../components/icons/providers/splunk";
 
 type CustomCardProps = {
    onSelectProvider?: () => void
@@ -74,6 +78,14 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
          return <Opsgenie />
       }else if (name.startsWith('pagerduty')) {
          return <Pagerduty />
+      }else if (name.startsWith('victorops')) {
+         return <Victorops />
+      }else if (name.startsWith('manageengine')) {
+         return <ManageEngine />
+      }else if (name.startsWith('solarwinds')) {
+         return <Solarwinds/>
+      }else if (name.startsWith('splunk')) {
+         return <Splunk/>
       }
       
    }, [item]);
