@@ -102,8 +102,6 @@ const domain = [
   }
 ];
 
-const warningMsg =
-  'Warning: Access key not configured yet. Please configure the access key to proceed.';
 
 export const Header = React.forwardRef<
   HTMLDivElement,
@@ -115,7 +113,6 @@ export const Header = React.forwardRef<
   const {
     setDomain,
     domain: selectedDomain,
-    accessKey,
     userName,
     organization,
     appTitle,
@@ -130,7 +127,6 @@ export const Header = React.forwardRef<
       key,
       onClick: () => {
         setDomain(key as DomainTypes)
-        
         Events.trigger('event:update_domain', {});
       },
       ...rest,
@@ -139,7 +135,6 @@ export const Header = React.forwardRef<
 
   return (
     <div {...props} ref={ref}>
-      {!accessKey && <Alert type="error" message={warningMsg} banner />}
       <div
         style={{
           display: 'flex',
@@ -163,7 +158,6 @@ export const Header = React.forwardRef<
           <img width={23} alt="brand_logo" src={brandLogo} />
           <TypographyText strong>{appTitle}</TypographyText>
         </Space>
-
         <Space>
           <Space>
             <Notification style={{ marginRight: '1rem' }} />

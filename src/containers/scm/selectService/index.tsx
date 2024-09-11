@@ -22,6 +22,8 @@ import { TileList } from './TileList';
 type VoidFunction = () => void;
 type ObjType = { [key: string]: any }
 
+const warningMsg =
+  'Warning: Access key not configured yet. Please configure the access key to proceed.';
 export const SelectService = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
@@ -103,6 +105,7 @@ export const SelectService = React.forwardRef<
     loading: childRef.current?.loading,
     style: { display: 'none' }
   };
+  
   return (
     <Space
       direction="vertical"
@@ -120,7 +123,7 @@ export const SelectService = React.forwardRef<
         >
           {loading ? (
             <Skeleton />
-          ) : (
+          ) : key?(
             <div>
               {services.length > 0 ? (
                 <div>
@@ -136,7 +139,6 @@ export const SelectService = React.forwardRef<
                       />
                     }
                   />
-
                 </div>
               ) : (
                 serviceserror?.response?.data.map((item => item.statusCode)) ? (
@@ -170,9 +172,8 @@ export const SelectService = React.forwardRef<
                 )
               )}
             </ div>
-          )
+          ):<Alert type="error" message={warningMsg} banner />
           }
-
         </div>
       </div>
       <Footer hideBackButton onOkProps={onOkProps} />
