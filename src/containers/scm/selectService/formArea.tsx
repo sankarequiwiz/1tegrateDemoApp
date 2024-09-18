@@ -328,7 +328,7 @@ export const FormArea = React.forwardRef<
                      messageApi.open({
                          type: 'error',
                          content: <>
-                         <strong>"Oops!</strong> There was an issue validating your credentials. Please check your information and try again.
+                         <strong>Oops!</strong> Your tokens are invalid. Please check the information and try again.
                      </>
                      });
                      console.log("console check error");
