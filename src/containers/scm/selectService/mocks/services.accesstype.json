@@ -1,0 +1,280 @@
+[
+   {
+      "href": "https://api.1tegrate.com/api/v1/services/66cf52ae-53af-446f-a4ff-516a764c2b79/accessPoints",
+      "type": "API_KEY_FLW",
+      "id": "b6cf52ae-53af-446f-a4ff-516a764c2b79",
+      "label": "Credential Flow",
+      "recommended": true,
+      "description": "Integration to connect GitHub with Semgrep for repository security scans.",
+      "isBeta": true,
+      "state": "CONFIGURED",
+      "apiKeyConfig": {
+
+      },
+      "accessPointTypeConfig": {
+         "id": "d9f88be7-4d1c-4e30-979e-ce517dea4d40"
+      }
+   },
+   {
+      "href": "https://api.1tegrate.com/api/v1/services/66cf52ae-53af-446f-a4ff-516a764c2b79/accessPoints",
+      "type": "APP_FLW",
+      "id": "b6cf52ae-53af-446f-a4ff-516a764c2b79",
+      "label": "Link to Github using Github App",
+      "recommended": true,
+      "description": "Integration to connect GitHub with Semgrep for repository security scans.",
+      "isBeta": true,
+      "state": "CONFIGURED",
+      "appDetails": {
+         "appId": "github-app-001",
+         "appName": {
+            "value": "semgrep-app",
+            "format": {
+               "delimiter": "-",
+               "queryParam": "name_suffix"
+            },
+            "appUrl": "https://semgrep.io",
+            "appDescription": "Semgrep GitHub application for security scans.",
+            "clientId": "client-12345",
+            "privateKey": "private-key-12345",
+            "redirectUrl": "https://semgrep.io/oauth/callback",
+            "callbackUrls": [
+               "https://semgrep.io/oauth/callback",
+               "https://semgrep.io/oauth/altcallback"
+            ]
+         }
+      },
+      "appConfig": {
+         "type": "EXISTING",
+         "label": "Connect using GitHub App",
+         "description": "GitHub Marketplace integration for Semgrep, providing security scan capabilities for repositories.",
+         "assistanceInfo": {
+            "processSteps": [
+               {
+                  "title": "Application Details",
+                  "subTitle": "Provide essential details for your GitHub application.",
+                  "description": "Set the name, URL, and description of your application. These details are crucial for identifying and accessing your app."
+               }
+            ]
+         },
+         "links": [
+            {
+               "rel": "doc",
+               "name": "Learn More",
+               "href": "https://docs.unizo.com/github/integration-readmore",
+               "method": "GET",
+               "contentType": "application/json",
+               "authenticate": true
+            }
+         ],
+         "segments": [
+            {
+               "key": "application_details",
+               "label": "Application Details",
+               "fieldTypeConfigs": [
+                  {
+                     "type": "TEXT",
+                     "label": "App ID",
+                     "description": "Please enter the unique App ID for your GitHub application.",
+                     "placeholder": "e.g., github-app-001",
+                     "required": true,
+                     "property": "/appId"
+                  },
+                  {
+                     "type": "TEXT",
+                     "label": "Application Name",
+                     "description": "What is the name of your GitHub application?",
+                     "placeholder": "e.g., semgrep-app",
+                     "required": true,
+                     "property": "/appName/value"
+                  },
+                  {
+                     "type": "TEXT",
+                     "label": "Application URL",
+                     "description": "What is the URL where your application is hosted?",
+                     "placeholder": "e.g., https://semgrep.io",
+                     "required": true,
+                     "property": "/appUrl"
+                  },
+                  {
+                     "type": "TEXT",
+                     "label": "Application Description",
+                     "description": "Provide a brief description of your application.",
+                     "placeholder": "e.g., Application description goes here",
+                     "required": true,
+                     "property": "/appDescription"
+                  },
+                  {
+                     "type": "TEXT",
+                     "label": "Client ID",
+                     "description": "Please provide the Client ID for your GitHub application.",
+                     "placeholder": "e.g., client-12345",
+                     "required": true,
+                     "property": "/clientId"
+                  },
+                  {
+                     "type": "PASSWORD",
+                     "label": "Private Key",
+                     "description": "Enter the Private Key for your GitHub application.",
+                     "placeholder": "e.g., private-key-12345",
+                     "required": true,
+                     "property": "/privateKey"
+                  },
+                  {
+                     "type": "TEXT",
+                     "label": "Redirect URL",
+                     "description": "What is the URL to redirect users after GitHub authentication?",
+                     "placeholder": "e.g., https://semgrep.io/oauth/callback",
+                     "required": true,
+                     "property": "/redirectUrl"
+                  },
+                  {
+                     "type": "LIST",
+                     "label": "Callback URLs",
+                     "description": "List of callback URLs used for OAuth redirection with your GitHub app.",
+                     "property": "/callbackUrls",
+                     "items": {
+                        "type": "TEXT",
+                        "placeholder": "Example: https://{{organization_name | hyphenated}}.example.com",
+                        "validation": [
+                           {
+                              "type": "regex",
+                              "value": "^(https?:\\/\\/[^\\s\\/$.?#].[^\\s]*)$",
+                              "errorMessage": "Each callback URL must be a valid URL."
+                           }
+                        ]
+                     },
+                     "validation": [
+                        {
+                           "type": "maxItems",
+                           "value": 10,
+                           "errorMessage": "The list cannot contain more than 10 callback URLs."
+                        },
+                        {
+                           "type": "minItems",
+                           "value": 1,
+                           "errorMessage": "The list must contain at least 1 callback URL."
+                        }
+                     ]
+                  }
+               ],
+               "assistanceInfo": {
+                  "processSteps": [
+                     {
+                        "title": "Application Details",
+                        "subTitle": "Provide essential details for your GitHub application.",
+                        "description": "Set the name, URL, and description of your application. These details are crucial for identifying and accessing your app."
+                     }
+                  ]
+               },
+               "links": [
+                  {
+                     "rel": "doc",
+                     "name": "Learn More",
+                     "href": "https://docs.unizo.com/github/integration-readmore",
+                     "method": "GET",
+                     "contentType": "application/json",
+                     "authenticate": true
+                  }
+               ],
+               "creationConfig": {
+                  "supported": false
+               },
+               "authorizationConfig": {
+                  "supported": true
+               },
+               "installationConfig": {
+                  "supported": true
+               },
+               "deletionConfig": {
+                  "supported": true
+               },
+               "authorizationProcessConfig": {
+                  "label": "Service Customization",
+                  "description": "Configure custom fields for the service.",
+                  "customFields": [
+                     {
+                        "label": "Repository Access",
+                        "description": "Select repositories for scanning.",
+                        "required": true,
+                        "dataType": "list",
+                        "options": [
+                           "repo1",
+                           "repo2"
+                        ],
+                        "links": []
+                     }
+                  ],
+                  "attentionInfo": {
+                     "processSteps": [
+                        {
+                           "title": "Administrator Role Required",
+                           "subTitle": "You must be an administrator of BambooHR to link Semgrep successfully.",
+                           "description": "Follow these steps to ensure your GitHub app is promoted for wider reach.",
+                           "options": {
+                              "type": "navigation",
+                              "name": "I'm an Admin",
+                              "requiresUserConfirmation": true,
+                              "requiresCloseWindow": true
+                           }
+                        }
+                     ]
+                  },
+                  "stepConfigs": [
+                     {
+                        "key": "process-flow",
+                        "label": "Connect GitHub to Acme",
+                        "fieldTypeConfigs": [
+                           {
+                              "type": "BUTTON",
+                              "label": "Install GitHub App",
+                              "description": "Initiate the installation of your GitHub application.",
+                              "options": {
+                                 "name": "Link GitHub Organization",
+                                 "url": "/api/v1/services/{serviceId}/actions",
+                                 "method": "POST",
+                                 "contentType": "application/json"
+                              },
+                              "links": [
+                                 {
+                                    "rel": "doc",
+                                    "name": "Review Permissions",
+                                    "href": "https://docs.customersite.com/github/ReviewPermissions",
+                                    "method": "GET",
+                                    "contentType": "application/json",
+                                    "authenticate": true
+                                 }
+                              ]
+                           },
+                           {
+                              "type": "BUTTON",
+                              "label": "Enable code access (Optional)",
+                              "description": "Granting code access allows scans on select repositories.",
+                              "option": {
+                                 "name": "Register GitHub App",
+                                 "url": "/api/v1/services/{serviceId}/actions",
+                                 "method": "POST",
+                                 "contentType": "application/json"
+                              },
+                              "links": [
+                                 {
+                                    "rel": "doc",
+                                    "name": "Review Permissions",
+                                    "href": "https://docs.customersite.com/github/ReviewPermissions",
+                                    "method": "GET",
+                                    "contentType": "application/json",
+                                    "authenticate": true
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      },
+      "accessPointTypeConfig": {
+         "id": "d9f88be7-4d1c-4e30-979e-ce517dea4d40"
+      }
+   }
+]

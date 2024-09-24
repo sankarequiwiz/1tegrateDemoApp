@@ -18,6 +18,7 @@ import Event from '../../../utils/Events/index';
 import { EventTypes } from '../../../utils/Events/types';
 import { FormArea } from './formArea';
 import { TileList } from './TileList';
+import { AccessTypeConfigListSelect } from './Accesstypeconfig/Accesstypeconfig.listselect';
 
 type VoidFunction = () => void;
 type ObjType = { [key: string]: any }
@@ -30,7 +31,7 @@ export const SelectService = React.forwardRef<
 >((props, ref) => {
   const [services, setServices] = React.useState<Array<ServiceTypes>>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [serviceserror, setServicesError] = React.useState<any>("");
+  const [servicesError, setServicesError] = React.useState<any>("");
   const childRef = React.useRef<{
     onIntegrate: (callBack: VoidFunction) => void;
     loading: boolean;
@@ -41,6 +42,7 @@ export const SelectService = React.forwardRef<
     accessKey: key,
     domain,
   } = React.useContext(AppContext);
+
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   function compare(a: ObjType, b: ObjType) {
@@ -105,7 +107,7 @@ export const SelectService = React.forwardRef<
     loading: childRef.current?.loading,
     style: { display: 'none' }
   };
-  
+
   return (
     <Space
       direction="vertical"
@@ -123,7 +125,7 @@ export const SelectService = React.forwardRef<
         >
           {loading ? (
             <Skeleton />
-          ) : key?(
+          ) : key ? (
             <div>
               {services.length > 0 ? (
                 <div>
@@ -133,18 +135,21 @@ export const SelectService = React.forwardRef<
                     selectedIndex={selectedIndex}
                     onSelectTile={onSelectTile}
                     formContent={
-                      <FormArea
-                        ref={childRef as any}
-                        selected={services.find((item) => item?.id === selected) as any}
+                      <AccessTypeConfigListSelect
+                        selectedService={services.find((item) => item?.id === selected) as any}
                       />
                     }
                   />
                 </div>
               ) : (
-                serviceserror?.response?.data.map((item => item.statusCode)) ? (
+                servicesError?.response?.data?.map((item => item?.statusCode))?.length ? (
                   <div>
                     <Alert
-                      message={<Typography.Title style={{ marginTop: "1rem", marginBottom: "1rem" }} level={4}>{serviceserror?.response?.data.map((item => item.errorMessage))}</Typography.Title>}
+                      message={<Typography.Title
+                        style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                        level={4}>
+                        {servicesError?.response?.data?.map((item => item.errorMessage))}
+                      </Typography.Title>}
                       type="warning"
                       className="custom-alert custom-warning"
                       showIcon
@@ -172,7 +177,7 @@ export const SelectService = React.forwardRef<
                 )
               )}
             </ div>
-          ):<Alert type="error" message={warningMsg} banner />
+          ) : <Alert type="error" message={warningMsg} banner />
           }
         </div>
       </div>

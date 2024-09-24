@@ -28,4 +28,21 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+type ErrorProps = { [key: string]: any } & { [key: string]: any }[]
+export const parseError = (error: ErrorProps) => {
+     if (Array.isArray(error)) {
+          if (error.length >= 1) {
+               const [first] = error;
+               return {
+                    message: first?.errorMessage ?? first?.error,
+                    status: first?.statusCode ?? first?.status
+               }
+          }
+     }
+     return {
+          message: error?.errorMessage ?? error?.error,
+          status: error?.statusCode ?? error?.status
+     }
+}
+
 export default axiosInstance;

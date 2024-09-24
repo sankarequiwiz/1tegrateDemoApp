@@ -1,3 +1,5 @@
+import { ServiceAccessTypeEnum, ServiceAccessTypeStateEnum } from "./constant";
+
 export type AccessPointConfigsTypes = {
   type: string;
   label: string;
@@ -131,3 +133,14 @@ type DepolyementTypeConfig = {
   insecureSSL: number
   url: string
 }
+
+type ServiceConfigType = {
+  "href": string
+  "type": ServiceAccessTypeEnum
+  "id": string
+  "label": string
+  "recommended": true,
+  "description": string
+  "isBeta": boolean,
+  "state": ServiceAccessTypeStateEnum
+} & any
