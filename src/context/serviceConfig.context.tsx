@@ -3,10 +3,13 @@ import React, { useContext } from 'react';
 import { ServiceConfigType, ServiceTypes } from '../containers/scm/selectService/types';
 import { FormInstance } from 'antd';
 
+export type FormValidationState = "error" | "warning" | "success" | "validating";
+
 export type ServiceConfigTypeContextValues = {
   selectedServiceConfig?: ServiceConfigType
   selectedService?: ServiceTypes
   form?: FormInstance
+  formValidationState?: FormValidationState
 };
 
 export const ServiceConfigTypeContext = React.createContext<ServiceConfigTypeContextValues>(

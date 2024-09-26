@@ -52,7 +52,11 @@ const INPUT_FIELD_MAPPERS = {
 
 export const APIKeyFlowIntegration = () => {
 
-   const { selectedService, form } = useServiceConfigTypeProvider();
+   const {
+      selectedService,
+      form,
+      formValidationState,
+   } = useServiceConfigTypeProvider();
 
    const [versions, setVersion] = useState([]);
 
@@ -122,6 +126,7 @@ export const APIKeyFlowIntegration = () => {
                         hasFeedback
                         rules={validations}
                         messageVariables={{ name }}
+                        validateStatus={formValidationState}
                      >
                         {fieldMapper?.getField({
                            placeholder: `${(name ?? label)?.toString()}`,

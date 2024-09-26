@@ -17,3 +17,11 @@ body {
 .w-full {
   width: 100%;
 }
+
+.ant-tabs {
+  &.hide-header {
+    div[role='tablist'] {
+      display: none;
+    }
+  }
+}

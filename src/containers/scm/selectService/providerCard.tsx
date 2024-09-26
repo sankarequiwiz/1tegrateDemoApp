@@ -39,55 +39,60 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
 
    const getLogo = React.useCallback((name: string) => {
       name = name?.toLowerCase();
-      if (name.startsWith('github')) {
-         return <Github />;
-      } else if (name.startsWith('jira')) {
-         return <Jira />
-      } else if (name.startsWith('servicenow')) {
-         return <Servicenow />
+
+      try {
+         if (name?.startsWith('github')) {
+            return <Github />;
+         } else if (name.startsWith('jira')) {
+            return <Jira />
+         } else if (name.startsWith('servicenow')) {
+            return <Servicenow />
+         }
+         else if (name.startsWith('gitlab')) {
+            return <Gitlab />;
+         } else if (name.startsWith('bitbucket')) {
+            return <Bitbucket />;
+         } else if (name.startsWith('ado')) {
+            return <ADO />;
+         } else if (name.startsWith('trello')) {
+            return <Trello />
+         } else if (name.startsWith('salesforce')) {
+            return <Salesforce />
+         }else if (name.startsWith('google')) {
+            return <GoogleArtifact />
+         }else if (name.startsWith('docker')) {
+            return <DockerHub />
+         }else if (name.startsWith('jfrog')) {
+            return <Jfrog />
+         }else if (name.startsWith('nexus')) {
+            return <Nuxus />
+         }else if (name.startsWith('microsoft')) {
+            return <Microsoft />
+         }else if (name.startsWith('amazon')) {
+            return <AmazonECR />
+         }else if (name.startsWith('slack')) {
+            return <Slack />
+         }else if (name.startsWith('teams')) {
+            return <Teams />
+         }else if (name.startsWith('googlechat')) {
+            return <GoogleChat />
+         }else if (name.startsWith('opsgenie')) {
+            return <Opsgenie />
+         }else if (name.startsWith('pagerduty')) {
+            return <Pagerduty />
+         }else if (name.startsWith('victorops')) {
+            return <Victorops />
+         }else if (name.startsWith('manageengine')) {
+            return <ManageEngine />
+         }else if (name.startsWith('solarwinds')) {
+            return <Solarwinds/>
+         }else if (name.startsWith('splunk')) {
+            return <Splunk/>
+         }
+      } catch (error) {
+         console.log(error)
       }
-      else if (name.startsWith('gitlab')) {
-         return <Gitlab />;
-      } else if (name.startsWith('bitbucket')) {
-         return <Bitbucket />;
-      } else if (name.startsWith('ado')) {
-         return <ADO />;
-      } else if (name.startsWith('trello')) {
-         return <Trello />
-      } else if (name.startsWith('salesforce')) {
-         return <Salesforce />
-      }else if (name.startsWith('google')) {
-         return <GoogleArtifact />
-      }else if (name.startsWith('docker')) {
-         return <DockerHub />
-      }else if (name.startsWith('jfrog')) {
-         return <Jfrog />
-      }else if (name.startsWith('nexus')) {
-         return <Nuxus />
-      }else if (name.startsWith('microsoft')) {
-         return <Microsoft />
-      }else if (name.startsWith('amazon')) {
-         return <AmazonECR />
-      }else if (name.startsWith('slack')) {
-         return <Slack />
-      }else if (name.startsWith('teams')) {
-         return <Teams />
-      }else if (name.startsWith('googlechat')) {
-         return <GoogleChat />
-      }else if (name.startsWith('opsgenie')) {
-         return <Opsgenie />
-      }else if (name.startsWith('pagerduty')) {
-         return <Pagerduty />
-      }else if (name.startsWith('victorops')) {
-         return <Victorops />
-      }else if (name.startsWith('manageengine')) {
-         return <ManageEngine />
-      }else if (name.startsWith('solarwinds')) {
-         return <Solarwinds/>
-      }else if (name.startsWith('splunk')) {
-         return <Splunk/>
-      }
-      
+
    }, [item]);
 
    return (

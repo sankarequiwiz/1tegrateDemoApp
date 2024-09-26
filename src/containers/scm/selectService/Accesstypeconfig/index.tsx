@@ -1,24 +1,36 @@
-import { Button, Flex, Form, Modal, ModalProps, Space, message } from 'antd';
+import { Button, ButtonProps, Flex, Form, Modal, ModalProps, Space, Typography, message } from 'antd';
 import { MouseEvent, useContext, useMemo, useState } from 'react';
-import { ServiceConfigTypeProvider, useServiceConfigTypeProvider } from '../../../../context/serviceConfig.context';
-import { API_FLW_INTEGRATION_KEY_MAPPER, ServiceAccessTypeEnum } from '../constant';
+import { ServiceAccessTypeEnum } from '../constant';
 import { APIKeyFlowIntegration } from './apikeyflow';
 import { Payload } from '../types';
 import API from '../../../../services';
 import { AppContext } from '../../../../context/AppProvider';
-import { useDeriveApiKeyFlowPayload } from '../../../../hooks/useDeriveIntegrationPayload';
+import { useApiKeyFlowPayload } from '../../../../hooks/useDeriveIntegrationPayload';
+import { FormValidationState, ServiceConfigTypeProvider, useServiceConfigTypeProvider } from '../../../../context/serviceConfig.context';
 import { parseError } from '../../../../utils/API/fetchInstance';
+import { AppFlowConfig } from './appflow';
 
 type AccessTypeConfigFormProps = {
 } & ModalProps
 
 type ModalFooterProps = {
    onTest?: (e: MouseEvent<HTMLDivElement>) => void
+   loadingButtonProps?: ButtonProps
 } & Pick<ModalProps, 'onOk' | 'onCancel' | 'okButtonProps'>
+
+const TEST_INTEGRATION_BTN_STYLE: React.CSSProperties = { fontSize: "14px", color: "#1677ff", backgroundColor: "#eff6ff" }
 
 const ModalFooter = (props: ModalFooterProps) => {
 
-   const { onOk, onCancel, okButtonProps, onTest } = props;
+   const {
+      onOk,
+      onCancel,
+      okButtonProps,
+      loadingButtonProps = {},
+      onTest
+   } = props;
+
+   const { style: testIntegrationStyle = {} } = loadingButtonProps;
 
    return (
       <Flex justify='space-between'>
@@ -26,20 +38,23 @@ const ModalFooter = (props: ModalFooterProps) => {
             <Button onClick={onCancel} danger>Close</Button>
          </Space>
          <Space>
-            <Button onClick={onTest} >Test Integration</Button>
-            <Button {...okButtonProps} onClick={onOk} type='primary'>Create</Button>
+            <Button
+               onClick={onTest}
+               {...loadingButtonProps}
+               style={{ ...testIntegrationStyle, ...TEST_INTEGRATION_BTN_STYLE }}
+            >
+               Test Integration
+            </Button>
+            <Button
+               {...okButtonProps}
+               onClick={onOk}
+               type='primary'
+            >
+               Create
+            </Button>
          </Space>
       </Flex>
    )
-}
-
-const ELEMENTS = {
-   [ServiceAccessTypeEnum.APIKey]: {
-      getElement: (props) => <APIKeyFlowIntegration {...props} />
-   },
-   [ServiceAccessTypeEnum.AppFlow]: {
-      getElement: () => 'null'
-   }
 }
 
 export const AccessTypeConfigForm = (props: AccessTypeConfigFormProps) => {
@@ -58,145 +73,56 @@ export const AccessTypeConfigForm = (props: AccessTypeConfigFormProps) => {
       selectedService: selected,
       ...restValue
    } = useServiceConfigTypeProvider();
-   const [messageApi, contextHolder] = message.useMessage();
 
    const {
       type = null
    } = selectedServiceConfig;
 
-   const {
-      organization,
-      setIntegration,
-      setCurrentStep,
-      current
-   } = useContext(AppContext);
-
    const [form] = Form.useForm();
-   const { derive } = useDeriveApiKeyFlowPayload()
-   const [isCreating, setIsCreating] = useState<boolean>(false);
 
-   const createIntegration = async (values) => {
-      let { flowType, ...formData } = values;
-
-      const payload = derive(formData);
-
-      let formValues: Payload = {
-         name: `${selected?.serviceProfile?.name} integration`,
-         type,
-         subOrganization: { name: organization },
-         target: {
-            accessPoint: {
-               type: 'SP',
-               serviceProfile: {
-                  id: selected?.serviceProfile.id,
-               },
-               accessPointConfig: {
-                  type: flowType,
-               },
-               ...payload,
-            },
-         },
-      };
-
-      try {
-         setIsCreating(true);
-         const resp = await API.services.createIntegrations(formValues);
-         const { data } = resp;
-         setIntegration(data);
-         setTimeout(() => {
-            setCurrentStep(current + 1)
-         }, 1000);
-      } catch (error) {
-         const { message } = parseError(error?.response?.data)
-         messageApi.open({
-            type: 'error',
-            content: message,
-         });
-      } finally {
-         setIsCreating(false);
-      }
-   }
-
-   const onTest = async (values) => {
-      let { flowType, ...formData } = values;
-      const payload = derive(formData);
-      try {
-         const { data } = await API.services.testIntegrations({
-            criteria: {
-               and: [
-                  {
-                     property: "/target/accessPoint/serviceProfile/id",
-                     operator: "=",
-                     values: [
-                        selected?.serviceProfile.id
-                     ]
-                  },
-                  {
-                     property: "/target/accessPoint/accessPointConfig/type",
-                     operator: "=",
-                     values: [
-                        flowType
-                     ]
-                  },
-                  ...Object.entries(payload).map(([key, value]) => {
-                     return {
-                        property: `/target/accessPoint/${key}`,
-                        operator: "=",
-                        values: [
-                           value
-                        ]
-                     }
-                  })
-               ]
-            }
-         });
-         // setCheckData(checkDataa.data.data)
-         if (data?.data.some((item) => item.type === "SUCCESS")) {
-            // setIsIntValidated("success");
-            messageApi.open({
-               type: 'success',
-               content: <>
-                  <strong>Success!</strong> Your credentials have been successfully validated. You can now proceed with your next steps.
-               </>
-            });
-         }
-         else if (data.data.some((item) => item.type === "FAILURE")) {
-            // setIsIntValidated("error");
-            messageApi.open({
-               type: 'error',
-               content: <>
-                  <strong>Oops!</strong> Your tokens are invalid. Please check the information and try again.
-               </>
-            });
-         }
-      } catch (error) {
-         // setIsIntValidated("error")
-
-         const { message } = parseError(error?.response?.data)
-         messageApi.open({
-            type: 'error',
-            content: message,
-         });
-      }
-   }
+   const {
+      onCreateIntegration,
+      onTestIntegration,
+      isTesting,
+      isCreating,
+      isIntValidated,
+      messageInstance: [, contextHolder]
+   } = useApiKeyFlowPayload({
+      selectedService: selected,
+      selectedServiceConfig
+   });
 
    const onOk = (e: MouseEvent<HTMLButtonElement>) => {
       typeof onOkProp === 'function' && onOkProp(e);
 
-      form.validateFields().then((resp) => {
-         if (type === ServiceAccessTypeEnum.APIKey) {
-            createIntegration(resp)
-         }
+      if (type === ServiceAccessTypeEnum.APIKey) {
+         form.validateFields().then(onCreateIntegration).catch(() => { });
+      } else {
 
-      }).catch(() => { })
+      }
    },
       onCancel = (e: MouseEvent<HTMLButtonElement>) => {
          typeof onCancelProp === 'function' && onCancelProp(e)
       };
 
-   const resolveBody = useMemo(() => (
-      ELEMENTS?.[type]?.getElement()
-   ), [type]);
+   const resolveBody = useMemo(() => {
+      switch (type) {
+         case ServiceAccessTypeEnum.APIKey:
+            return (
+               <APIKeyFlowIntegration />
+            );
+         case ServiceAccessTypeEnum.AppFlow:
+            return (
+               <AppFlowConfig />
+            )
+         default:
+            return null;
+      }
+   }, [type]);
+
+   const isAppFlow = useMemo(() => (
+      selectedServiceConfig?.type === ServiceAccessTypeEnum.AppFlow
+   ), [selectedServiceConfig])
 
    return (
       <>
@@ -204,17 +130,25 @@ export const AccessTypeConfigForm = (props: AccessTypeConfigFormProps) => {
          <Modal
             onCancel={onCancel}
             open={open}
-            title={`${selectedServiceConfig?.label}`}
+            title={<Typography.Title level={4}>{`${selectedServiceConfig?.label}`}</Typography.Title>}
             {...rest}
             footer={(
-               <ModalFooter
-                  onOk={onOk}
-                  okButtonProps={{ loading: isCreating }}
-                  onCancel={onCancel}
-                  onTest={() => {
-                     form.validateFields().then(onTest).catch(() => { })
-                  }}
-               />
+               !isAppFlow ? (
+                  <ModalFooter
+                     onOk={onOk}
+                     okButtonProps={{ loading: isCreating }}
+                     loadingButtonProps={{
+                        style: {
+                           display: isAppFlow ? 'none' : 'block'
+                        },
+                        loading: isTesting
+                     }}
+                     onCancel={onCancel}
+                     onTest={() => {
+                        form.validateFields().then(onTestIntegration).catch(() => { })
+                     }}
+                  />
+               ) : false
             )}
          >
             <ServiceConfigTypeProvider
@@ -222,6 +156,7 @@ export const AccessTypeConfigForm = (props: AccessTypeConfigFormProps) => {
                   form,
                   selectedServiceConfig,
                   selectedService: selected,
+                  formValidationState: isIntValidated,
                   ...restValue
                }}
             >

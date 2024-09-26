@@ -46,8 +46,8 @@ export const SelectService = React.forwardRef<
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   function compare(a: ObjType, b: ObjType) {
-    const bandA = a.serviceProfile.name.toUpperCase();
-    const bandB = b.serviceProfile.name.toUpperCase();
+    const bandA = a?.serviceProfile?.name.toUpperCase();
+    const bandB = b?.serviceProfile?.name.toUpperCase();
 
     let comparison = 0;
     if (bandA > bandB) {
@@ -68,7 +68,7 @@ export const SelectService = React.forwardRef<
       );
       if (resp && resp.data.data) {
         const data = resp.data.data;
-        data?.sort(compare)
+        // data?.sort(compare)
         setServices(data);
         setServicesError("")
       }
@@ -127,7 +127,7 @@ export const SelectService = React.forwardRef<
             <Skeleton />
           ) : key ? (
             <div>
-              {services.length > 0 ? (
+              {services.length ? (
                 <div>
                   <Typography.Title level={5}>Available services</Typography.Title>
                   <TileList
