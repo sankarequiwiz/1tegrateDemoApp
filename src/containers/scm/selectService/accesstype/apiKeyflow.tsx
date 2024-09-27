@@ -41,10 +41,13 @@ export const APIKeyFlow = () => {
 
    const {
       selectedService,
-      form,
       selectedServiceConfig,
       formValidationState,
    } = useServiceConfigTypeProvider();
+
+   const [form] = Form.useForm()
+
+   console.log(selectedServiceConfig)
 
    const [versions, setVersion] = useState([]);
 

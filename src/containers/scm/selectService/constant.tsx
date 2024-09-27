@@ -5,7 +5,7 @@ export enum ServiceAccessTypeStateEnum {
 }
 
 export enum ServiceAccessTypeEnum {
-   APIKey = 'API_KEY_FLW',
+   APIKey = 'APIKEY_FLW',
    AppFlow = 'APP_FLW',
 }
 
