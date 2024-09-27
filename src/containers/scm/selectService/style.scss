@@ -32,5 +32,13 @@
     transform-origin: var(--arrow-x, 50%) var(--arrow-y, 50%);
     --antd-arrow-background-color: #ffffff;
   }
-  
+
+}
+
+.ant-tabs {
+  &.hide-header {
+    div[role='tablist'] {
+      display: none;
+    }
+  }
 }

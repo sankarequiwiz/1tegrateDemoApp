@@ -130,7 +130,11 @@ export const AccessTypeConfigForm = (props: AccessTypeConfigFormProps) => {
          <Modal
             onCancel={onCancel}
             open={open}
-            title={<Typography.Title level={4}>{`${selectedServiceConfig?.label}`}</Typography.Title>}
+            title={(
+               <Typography.Title level={4}>
+                  {`${selectedServiceConfig?.label}`}
+               </Typography.Title>
+            )}
             {...rest}
             footer={(
                !isAppFlow ? (

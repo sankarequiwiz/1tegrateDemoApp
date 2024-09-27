@@ -1,14 +1,16 @@
-import React, { HTMLProps } from 'react';
+import React, { HTMLProps, useState } from 'react';
 import { ServiceTypes } from './types';
 import { ProviderCard } from './providerCard';
 import { AppContext } from '../../../context/AppProvider';
-import GridExampleUsage from '../../../components/resposiveGrid';
+import { Col, Row } from 'antd';
+import { ServiceAccessTypeForm } from './accesstype';
 
 type TileListProps = {
    items?: Array<ServiceTypes>
    formContent?: React.JSX.Element | null | undefined | boolean
    onSelectTile?: (selectedIndex: number) => void;
    selectedIndex?: number
+   selectedService: ServiceTypes
 }
 
 export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & TileListProps>(
@@ -18,12 +20,14 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
          onSelectTile,
          selectedIndex,
          formContent = null,
+         selectedService,
          ...rest
       } = props;
+      const [open, setOpen] = useState<boolean>(false)
 
       const {
          setSelectedService: setSelected,
-         selectedService: selected,
+         selectedService: selected
       } = React.useContext(AppContext);
 
 
@@ -32,18 +36,23 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
          if (typeof onSelectTile === 'function') {
             onSelectTile(index)
          }
+         setOpen(true)
       };
+
+      const onCancel = () => {
+         setOpen(false);
+      }
 
       return (
          <div {...rest} ref={ref}>
-            <GridExampleUsage
-               selectedIndex={selectedIndex}
-               detailedPanel={formContent}
-               tiles={
-                  items.map((item, index) => {
-                     return (
+            <Row gutter={[20, 20]}>
+               {items.map((item, index) => {
+                  return (
+                     <Col
+                        span={4}
+                        key={index}
+                     >
                         <ProviderCard
-                           key={index}
                            style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
                            bordered
                            selected={selectedIndex === index}
@@ -54,9 +63,14 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
                            }}
                            item={item}
                         />
-                     )
-                  })
-               }
+                     </Col>
+                  )
+               })}
+            </Row>
+            <ServiceAccessTypeForm
+               open={open}
+               selected={selectedService}
+               onCancel={onCancel}
             />
          </div>
       )

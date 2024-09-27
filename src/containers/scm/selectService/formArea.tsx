@@ -6,7 +6,6 @@ import API from '../../../services';
 import FormItem from "antd/es/form/FormItem";
 import { deploymentModel } from "../../../common/deploymentModal";
 
-
 const { Option } = Select;
 
 type fieldTypeConfigTypes = {

@@ -1,6 +1,6 @@
 import { Button, Card, Col, Flex, Radio, Row, Space, Typography } from 'antd';
 import serviceAccessTypeConfig from '../mocks/services.accesstype.json';
-import { MouseEvent, useState } from 'react';
+import {  useState } from 'react';
 import { ServiceConfigTypeProvider } from '../../../../context/serviceConfig.context';
 import { ServiceConfigType, ServiceTypes } from '../types';
 import { AccessTypeConfigForm } from '.';

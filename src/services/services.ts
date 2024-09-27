@@ -2,10 +2,10 @@ import { AxiosHeaders } from 'axios';
 import { Payload as CreateIntegrationType } from '../containers/scm/selectService/types';
 import fetch from '../utils/API/fetchInstance';
 import { DomainTypes } from '../types/type';
-
+import mockAccessPoint from '../containers/scm/selectService/mocks/services.accesstype.json'
 
 const withLowerCase = (str: string = "") => {
-    return str.toLowerCase();
+	return str.toLowerCase();
 };
 /* set accessKey */
 export const setAccessKey = async (key: string) => {
@@ -32,18 +32,23 @@ export const getServices = async (
 	});
 };
 
+export const getServiceAccessType = async (id: string) => {
+	// await fetch.get(`/api/v1/services/${id}/accessPoints?customerView=true`)
+	return { data: mockAccessPoint }
+}
+
 /* create integrations */
 export const createIntegrations = async (payload: CreateIntegrationType) => {
 	return fetch.post('/api/demo/integrations', payload);
 };
 
 /* test integrations */
-export const testIntegrations = async (payload:{ [key: string]: any }) => {
+export const testIntegrations = async (payload: { [key: string]: any }) => {
 	return fetch.post('/api/demo/integrations/validate', payload);
 };
 
 /*get all versions */
-export const getSelfManaged =async (spId:string)=>{
+export const getSelfManaged = async (spId: string) => {
 	return await fetch.get(`/api/demo/serviceProfiles/${spId}/versions`)
 }
 
@@ -188,8 +193,8 @@ export const editTickets = async (
 	return await fetch.put(`/api/demo/ticketing/${orgId}/collections/${collections}/tickets/${ticketId}`, payload, { headers })
 }
 
-export const metaDataConfig = async (orgId: string, collectionId: string, payload: { [key: string]: any },headers: { [key: string]: any }) => {
-	return await fetch.post(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets/metadataConfig`,payload, { headers })
+export const metaDataConfig = async (orgId: string, collectionId: string, payload: { [key: string]: any }, headers: { [key: string]: any }) => {
+	return await fetch.post(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets/metadataConfig`, payload, { headers })
 }
 
 
@@ -230,7 +235,7 @@ export const getAllTags = async (
 	organizationId: string,
 	headers: { [key: string]: string },
 	repoId: string,
-	artifactId:string,
+	artifactId: string,
 	type
 ) => {
 	return await fetch.get(
@@ -253,8 +258,8 @@ export const getChannels = async (
 };
 
 
-export const metaDataConfigComms = async (orgId: string, channelsId: string, payload: { [key: string]: any },headers: { [key: string]: any }) => {
-	return await fetch.post(`/api/demo/comms/${orgId}/channels/${channelsId}/messages/metadataConfig`,payload, { headers })
+export const metaDataConfigComms = async (orgId: string, channelsId: string, payload: { [key: string]: any }, headers: { [key: string]: any }) => {
+	return await fetch.post(`/api/demo/comms/${orgId}/channels/${channelsId}/messages/metadataConfig`, payload, { headers })
 }
 
 export const sendMessages = async (
@@ -281,7 +286,7 @@ export const getServicesOpsigine = async (
 
 export const getTeamsOpsigine = async (
 	organizationId: string,
-	serviceId:string,
+	serviceId: string,
 	headers: { [key: string]: string },
 	type
 ) => {
@@ -294,8 +299,8 @@ export const getTeamsOpsigine = async (
 
 export const getIncidentOpsigine = async (
 	organizationId: string,
-	serviceId:string,
-	teamId:string,
+	serviceId: string,
+	teamId: string,
 	headers: { [key: string]: string },
 	type
 ) => {
@@ -304,4 +309,3 @@ export const getIncidentOpsigine = async (
 		{ headers }
 	);
 };
-

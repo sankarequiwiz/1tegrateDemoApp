@@ -134,11 +134,7 @@ export const SelectService = React.forwardRef<
                     items={services}
                     selectedIndex={selectedIndex}
                     onSelectTile={onSelectTile}
-                    formContent={
-                      <AccessTypeConfigListSelect
-                        selectedService={services.find((item) => item?.id === selected) as any}
-                      />
-                    }
+                    selectedService={services.find((item) => item?.id === selected)}
                   />
                 </div>
               ) : (
