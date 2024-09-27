@@ -1,6 +1,6 @@
-import { Flex, Tabs } from "antd"
+import { Button, Flex, Tabs, Typography } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
-import { useMemo, useState } from "react";
+import { MouseEvent, useMemo, useState } from "react";
 
 export const APPKeyFlow = () => {
 
@@ -11,10 +11,21 @@ export const APPKeyFlow = () => {
    const [activeKey, setActiveKey] = useState(0)
 
    const segments = selectedServiceConfig?.appConfig?.segments ?? [];
-   const attentionInfos = segments?.map((i) => i?.authorizationProcessConfig?.attentionInfo)
 
+   const attentionInfos = useMemo(() => {
+      const tempArr = [];
+      segments?.forEach((i) => {
+         const steps = i?.authorizationProcessConfig?.attentionInfo?.attentionInfo ?? [];
+         tempArr.push(...steps);
+      })
+      return tempArr;
+   }, [segments]);
 
-   const tabItems = useMemo(() => {
+   const onMoveWindow = (index: number) => {
+      setActiveKey(index)
+   }
+
+   const tabItems: any = useMemo(() => {
       return attentionInfos?.map((item, index) => {
          return {
             label: '',
@@ -22,6 +33,7 @@ export const APPKeyFlow = () => {
             children: (
                <Windows
                   info={item}
+                  onProceed={() => onMoveWindow(index)}
                />
             )
          }
@@ -31,7 +43,9 @@ export const APPKeyFlow = () => {
    return (
       <Flex>
          <Tabs
+            className="hide-header"
             items={tabItems}
+            accessKey={activeKey as any}
          />
       </Flex>
    )
@@ -48,16 +62,26 @@ type WindowsProps = {
          "requiresUserConfirmation": true,
          "requiresCloseWindow": true
       }
-   }
+   },
+   onProceed: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 export const Windows = (props: WindowsProps) => {
 
+   const { onProceed } = props;
+
    const { info } = props;
 
    return (
-      <Flex>
-         wqd
+      <Flex vertical>
+         <Flex>
+            <Typography.Text>{info?.title}</Typography.Text>
+            <Typography.Text>{info?.subTitle}</Typography.Text>
+            <Typography.Text>{info?.description}</Typography.Text>
+         </Flex>
+         <Flex vertical>
+            <Button onClick={onProceed} >{info?.options?.name}</Button>
+         </Flex>
       </Flex>
    )
 }

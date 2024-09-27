@@ -1,19 +1,132 @@
 [
    {
-      "href": "https://api.1tegrate.com/api/v1/services/66cf52ae-53af-446f-a4ff-516a764c2b79/accessPoints",
-      "type": "API_KEY_FLW",
-      "id": "b6cf52ae-53af-446f-a4ff-516a764c2b79",
-      "label": "Credential Flow",
-      "recommended": true,
-      "description": "Integration to connect GitHub with Semgrep for repository security scans.",
-      "isBeta": true,
+      "href": "http://api.unizo.io/api/v1/accessPoint/35e3150d-50ab-40d3-808f-518548c84a20",
+      "id": "35e3150d-50ab-40d3-808f-518548c84a20",
+      "type": "APIKEY_FLW",
       "state": "CONFIGURED",
-
+      "label": "Use my API key or Access Token",
+      "recommended": true,
+      "isBeta": false,
       "accessPointTypeConfig": {
-         "id": "d9f88be7-4d1c-4e30-979e-ce517dea4d40"
+         "id": "ca1fa58e-3164-4eb6-9df1-0358217678d6",
+         "type": "APIKEY_FLW",
+         "recommended": true,
+         "isBeta": true
       },
-      "apiKeyConfig": {
-
+      "service": {
+         "id": "28a8d1e7-099d-4a16-92f2-52295e2311e7"
+      },
+      "organization": {
+         "id": "cf18d244-c71f-419e-9f00-8bde97a2cc11"
+      },
+      "changeRequest": {
+         "type": "CREATE_REQUEST",
+         "description": "changerequest.desc.create-request",
+         "status": "ACCEPTED"
+      },
+      "changeLog": {
+         "createdDateTime": "2024-09-27T09:12:34.891+00:00",
+         "lastUpdatedDateTime": "2024-09-27T09:12:34.891+00:00"
+      },
+      "apiKey": {
+         "label": "github-app-001",
+         "description": "https://semgrep.io",
+         "assistanceInfo": {
+            "processSteps": [
+               {
+                  "title": "How to identify api key in Mercurial",
+                  "subTitle": "Steps to identify api key in Mercurial",
+                  "description": "In Settings, go to developer settings page and click on private access tokens"
+               }
+            ]
+         },
+         "links": [
+            {
+               "rel": "doc",
+               "href": "https://docs.unizo.io/github/integration-readmore",
+               "method": "GET",
+               "contentType": "application/json",
+               "authenticate": true
+            }
+         ],
+         "authorizationProcessConfig": {
+            "label": "Service Customization",
+            "description": "This is a description for the authorization process.",
+            "serviceCustomFields": [
+               {
+                  "label": "This is a label",
+                  "description": "This is a description",
+                  "required": false,
+                  "dataType": "STRING",
+                  "options": [
+                     {
+                        "name": "I am an Admin",
+                        "type": "navigation",
+                        "requiresUserConfirmation": false,
+                        "requiresCloseWindow": true
+                     }
+                  ]
+               }
+            ],
+            "attentionInfo": {
+               "processSteps": [
+                  {
+                     "title": "Administrator Role Required",
+                     "subTitle": "You must be an administrator of BambooHR to link Semgrep successfully.",
+                     "description": "Follow these steps to ensure your GitHub app is promoted for wider reach.",
+                     "options": [
+                        {
+                           "name": "I am an Admin",
+                           "type": "navigation",
+                           "requiresUserConfirmation": false,
+                           "requiresCloseWindow": true
+                        }
+                     ]
+                  }
+               ]
+            },
+            "stepConfigs": [
+               {
+                  "key": "This is a key",
+                  "label": "test desc",
+                  "links": [
+                     {
+                        "rel": "doc",
+                        "href": "https://docs.unizo.io/github/integration-readmore",
+                        "method": "GET",
+                        "contentType": "application/json",
+                        "authenticate": true
+                     }
+                  ],
+                  "fieldTypeConfigs": [
+                     {
+                        "type": "TEXT",
+                        "label": "Github-api-key",
+                        "property": "/apikey",
+                        "description": "The name of the GitHub application.",
+                        "placeholder": "",
+                        "validations": [
+                           {
+                              "type": "regex",
+                              "value": "^[a-zA-Z0-9 ]{1,100}$",
+                              "errorMessage": "Application name must be alphanumeric and can include spaces, up to 100 characters."
+                           }
+                        ],
+                        "required": true
+                     }
+                  ],
+                  "assistanceInfo": {
+                     "processSteps": [
+                        {
+                           "title": "How to identify api key in Mercurial",
+                           "subTitle": "Steps to identify api key in Mercurial",
+                           "description": "In Settings, go to developer settings page and click on private access tokens"
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
       }
    },
    {
