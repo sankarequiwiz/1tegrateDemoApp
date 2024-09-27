@@ -4,6 +4,10 @@ import { ServiceConfigType, ServiceTypes } from '../types';
 import services from '../../../../services';
 import { ServiceConfigTypeProvider } from '../../../../context/serviceConfig.context';
 import { ConfigWindows } from './configwindow';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ProviderIndicator } from './providerIndicator';
+import { useAppProvider } from '../../../../context/AppProvider';
+import { RedirectAcceptanceModal } from './redirectAcceptanceModal';
 
 
 type ServiceAccessTypeFormProps = {
@@ -21,7 +25,11 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
    const {
       selected: selectedService,
       onCancel: onCancelProp,
+      open: openProp,
       ...rest } = props;
+
+   const open = openProp;
+   const { redirectModalOpen } = useAppProvider()
 
    const serviceId: string = selectedService?.id ?? null;
    const [accessPoints, setAccessPoints] = useState([]);
@@ -57,6 +65,14 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
       setActiveKey('2')
    }
 
+   const onBack = (e: MouseEvent<HTMLButtonElement>) => {
+      if (activeKey === '1') {
+         onCancel(e)
+      } else {
+         setActiveKey('1')
+      }
+   }
+
    useEffect(() => {
       serviceId && getServiceAccessType()
    }, [serviceId])
@@ -71,10 +87,13 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
          <Modal
             {...rest}
             closeIcon={null}
+            open={open}
             title={
-               <Button onClick={onCancel} style={BACK_BTN_STYLE} type='link' >Back</Button>
+               <Button onClick={onBack} style={BACK_BTN_STYLE} type='link' icon={<ArrowLeftOutlined />} >Close</Button>
             }
+            // style={{ visibility: 'hidden' }}
             footer={false}
+            closable={false}
          >
             <Tabs
                activeKey={activeKey}
@@ -86,13 +105,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
                      children: (
                         <Flex vertical gap={'small'} align='end'>
                            <Flex vertical justify='center' align='center' gap={'middle'}>
-                              <Space direction='vertical' align='center'>
-                                 <Space>
-                                    <img src={selectedService?.serviceProfile?.image?.small} alt='provider_logo' />
-                                 </Space>
-                                 <Typography.Title level={4}>How would you like to authenticate?</Typography.Title>
-                              </Space>
-
+                              <ProviderIndicator selectedService={selectedService} />
                               <Flex vertical gap={'small'} >
                                  {accessPoints?.map((i, index) => {
                                     const { label, description } = i,
@@ -100,6 +113,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
 
                                     return (
                                        <Card
+                                          key={index}
                                           size='small'
                                           style={SELECTABLE_CARD_STYLE}
                                           onClick={() => onselect(i, index)}
@@ -132,6 +146,10 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
                ]}
             />
          </Modal>
+
+         <RedirectAcceptanceModal
+            open={redirectModalOpen}
+         />
       </ServiceConfigTypeProvider>
    )
 }

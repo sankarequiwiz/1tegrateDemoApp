@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { DomainTypes } from '../types/type';
 import { useSearchParams } from 'react-router-dom';
 import { ServiceTypes } from '../containers/scm/selectService/types';
@@ -21,8 +21,12 @@ type ContextTypes = {
   selectedCommit?: string;
   appTitle?: string;
   selectedCollection?: string;
-  companykey?:string;
+  companykey?: string;
+  redirectModalOpen?: boolean
+  accessPointModalOpen?: boolean
 
+  setAccessPointModalOpen?: (isOpen: boolean) => void
+  setRedirectModalOpen?: (isOpen: boolean) => void
   setAppTitle?: (appTitle: string) => void;
   setCompanykey?: (companyKey: string) => void;
   setUserName?: (userName: string) => void;
@@ -57,7 +61,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
     userName: 'Demo app User',
     organization: 'Demo app Company',
     appTitle: 'Demo app Title',
-    domain: 'SCM'
+    domain: 'SCM',
+    redirectModalOpen: 'false',
+    accessPointModalOpen: 'false'
   });
 
   const setIntegrationDetails = (arg) => {
@@ -123,7 +129,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
-  
+
   const setSelectedArtifact = (arg) => {
     setSearch((prev) => {
       prev.set('selectedArtifact', arg);
@@ -185,6 +191,20 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
+  const setRedirectModalOpen = (isOpen: boolean) => {
+    setSearch((prev) => {
+      prev.set('redirectModalOpen', isOpen.toString());
+      return prev;
+    })
+  }
+
+  const setAccessPointModalOpen = (isOpen: boolean) => {
+    setSearch((prev) => {
+      prev.set('accessPointModalOpen', isOpen.toString());
+      return prev;
+    })
+  }
+
   const contextValues: ContextTypes = {
     setAccessKey,
     setDomain,
@@ -203,12 +223,17 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setSelectedPullReq,
     setSelectedCommit,
     setSelectedCollection,
+    setRedirectModalOpen,
+    setAccessPointModalOpen,
+
+    redirectModalOpen: JSON.parse(search.get('redirectModalOpen')),
+    accessPointModalOpen: JSON.parse(search.get('accessPointModalOpen')),
     organization: search.get('organization'),
     userName: search.get('userName'),
     companykey: search.get('companyKey'),
     accessKey: search.get('accessKey'),
     appTitle: search.get('appTitle'),
-    selectedArtifact:search.get("selectedArtifact"),
+    selectedArtifact: search.get("selectedArtifact"),
     selectedCommit: search.get('selectedCommit'),
     selectedPullReq: search.get('selectedPullReq'),
     selectedBranch: search.get('selectedBranch'),
@@ -226,4 +251,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
   };
 
   return <AppContext.Provider value={contextValues} children={children} />;
+}
+
+
+export const useAppProvider = () => {
+  try {
+    return useContext(AppContext)
+  } catch (error) {
+    console.error('useAppProvider must be within AppProvider')
+  }
 }

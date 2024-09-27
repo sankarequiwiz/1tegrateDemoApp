@@ -1,6 +1,11 @@
-import { Button, Flex, Tabs, Typography } from "antd"
+import { Button, ButtonProps, Flex, Tabs, Typography } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { MouseEvent, useMemo, useState } from "react";
+import { ProviderIndicator } from "./providerIndicator";
+
+import { useAppProvider } from "../../../../context/AppProvider";
+
+
 
 export const APPKeyFlow = () => {
 
@@ -8,21 +13,35 @@ export const APPKeyFlow = () => {
       selectedServiceConfig,
    } = useServiceConfigTypeProvider();
 
-   const [activeKey, setActiveKey] = useState(0)
+   const { setAccessPointModalOpen, setRedirectModalOpen } = useAppProvider()
+
+   const [activeKey, setActiveKey] = useState<number>(0);
+   const [loading] = useState<boolean>(false);
 
    const segments = selectedServiceConfig?.appConfig?.segments ?? [];
 
    const attentionInfos = useMemo(() => {
       const tempArr = [];
       segments?.forEach((i) => {
-         const steps = i?.authorizationProcessConfig?.attentionInfo?.attentionInfo ?? [];
+         const steps = i?.authorizationProcessConfig?.attentionInfo?.processSteps ?? [];
          tempArr.push(...steps);
       })
       return tempArr;
    }, [segments]);
 
-   const onMoveWindow = (index: number) => {
-      setActiveKey(index)
+   const onMoveWindow = () => {
+      setActiveKey((prev) => {
+         return prev + 1;
+      })
+   }
+
+   const onBackWindow = () => {
+      setActiveKey((prev) => prev - 1)
+   }
+
+   const onContinue = async () => {
+      setAccessPointModalOpen(false);
+      setRedirectModalOpen(true);
    }
 
    const tabItems: any = useMemo(() => {
@@ -33,54 +52,88 @@ export const APPKeyFlow = () => {
             children: (
                <Windows
                   info={item}
-                  onProceed={() => onMoveWindow(index)}
+                  onProceed={() => {
+                     if (index < attentionInfos?.length - 1) {
+                        onMoveWindow()
+                     } else {
+                        // all looks good then go ahead and proceed with redirection process
+                        onContinue()
+                     }
+                  }}
+                  onBack={onBackWindow}
+                  backButtonProps={{
+                     style: {
+                        display: index === 0 ? 'none' : 'block'
+                     }
+                  }}
+                  onButtonProps={{
+                     loading,
+                     disabled: loading
+                  }}
                />
             )
          }
       })
    }, [attentionInfos])
 
+   const acceptanceData = { formUrl: "https://api.example.com/install", }
+
    return (
-      <Flex>
+      <>
          <Tabs
             className="hide-header"
             items={tabItems}
-            accessKey={activeKey as any}
+            activeKey={activeKey as any}
          />
-      </Flex>
+      </>
    )
 }
 
 type WindowsProps = {
    info: {
-      "title": "Administrator Role Required",
-      "subTitle": "You must be an administrator of BambooHR to link Semgrep successfully.",
-      "description": "Follow these steps to ensure your GitHub app is promoted for wider reach.",
+      "title": string,
+      "subTitle": string,
+      "description": string,
       "options": {
-         "type": "navigation",
-         "name": "I'm an Admin",
-         "requiresUserConfirmation": true,
-         "requiresCloseWindow": true
+         "type": string,
+         "name": string,
+         "requiresUserConfirmation": boolean,
+         "requiresCloseWindow": boolean
       }
    },
    onProceed: (e: MouseEvent<HTMLButtonElement>) => void
+   onBack: (e: MouseEvent<HTMLButtonElement>) => void
+
+   backButtonProps?: ButtonProps
+   onButtonProps?: ButtonProps
 }
 
 export const Windows = (props: WindowsProps) => {
 
-   const { onProceed } = props;
+   const {
+      onProceed,
+      onBack,
+      backButtonProps,
+      onButtonProps
+   } = props;
+
+   const {
+      selectedService
+   } = useServiceConfigTypeProvider();
 
    const { info } = props;
 
    return (
-      <Flex vertical>
-         <Flex>
-            <Typography.Text>{info?.title}</Typography.Text>
+      <Flex vertical gap={'large'}>
+         <ProviderIndicator selectedService={selectedService} />
+         <Flex vertical gap={'small'} align="center">
+            <Typography.Title style={{ marginBottom: 0 }} level={4}>{info?.title}</Typography.Title>
             <Typography.Text>{info?.subTitle}</Typography.Text>
-            <Typography.Text>{info?.description}</Typography.Text>
+            <Typography.Text type="secondary">{info?.description}</Typography.Text>
          </Flex>
-         <Flex vertical>
-            <Button onClick={onProceed} >{info?.options?.name}</Button>
+         <Flex vertical gap={'small'}>
+            <Button type='primary' onClick={onProceed} {...onButtonProps} >{info?.options?.name}</Button>
+            <Button type='default' onClick={onBack} {...backButtonProps} >Go back</Button>
          </Flex>
       </Flex>
    )

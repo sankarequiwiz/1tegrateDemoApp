@@ -1,7 +1,7 @@
 import React, { HTMLProps, useState } from 'react';
 import { ServiceTypes } from './types';
 import { ProviderCard } from './providerCard';
-import { AppContext } from '../../../context/AppProvider';
+import { AppContext, useAppProvider } from '../../../context/AppProvider';
 import { Col, Row } from 'antd';
 import { ServiceAccessTypeForm } from './accesstype';
 
@@ -23,7 +23,8 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
          selectedService,
          ...rest
       } = props;
-      const [open, setOpen] = useState<boolean>(false)
+
+      const { accessPointModalOpen, setAccessPointModalOpen } = useAppProvider()
 
       const {
          setSelectedService: setSelected,
@@ -36,11 +37,11 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
          if (typeof onSelectTile === 'function') {
             onSelectTile(index)
          }
-         setOpen(true)
+         setAccessPointModalOpen(true)
       };
 
       const onCancel = () => {
-         setOpen(false);
+         setAccessPointModalOpen(false);
       }
 
       return (
@@ -68,7 +69,7 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
                })}
             </Row>
             <ServiceAccessTypeForm
-               open={open}
+               open={accessPointModalOpen}
                selected={selectedService}
                onCancel={onCancel}
             />

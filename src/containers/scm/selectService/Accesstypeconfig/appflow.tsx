@@ -44,10 +44,8 @@ const SegmentWindow = (props: SegmentWindowProps) => {
    const { segment = {} } = props;
 
    const { authorizationProcessConfig } = segment;
-   const [stepIndex, setStepIndex] = useState(0);
 
    const processSteps = authorizationProcessConfig?.attentionInfo?.processSteps ?? [];
-   console.log(processSteps)
 
    return (
       <Flex>

@@ -1,4 +1,4 @@
-import { AxiosHeaders } from 'axios';
+import { AxiosHeaders, AxiosRequestConfig } from 'axios';
 import { Payload as CreateIntegrationType } from '../containers/scm/selectService/types';
 import fetch from '../utils/API/fetchInstance';
 import { DomainTypes } from '../types/type';
@@ -35,6 +35,13 @@ export const getServices = async (
 export const getServiceAccessType = async (id: string) => {
 	// await fetch.get(`/api/v1/services/${id}/accessPoints?customerView=true`)
 	return { data: mockAccessPoint }
+}
+
+export const buildInstallationFormUrl = async (serviceId: string, options: AxiosRequestConfig<any>) => {
+	return fetch({
+		url: `/api/v1/github_app/services/${serviceId}/buildInstallationFormUrl`,
+		...options
+	})
 }
 
 /* create integrations */
