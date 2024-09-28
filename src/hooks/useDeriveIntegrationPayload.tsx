@@ -35,7 +35,6 @@ enum FormValidationStateEnum {
 
 export function useApiKeyFlowPayload({
    selectedService: selected,
-   selectedServiceConfig
 }: useApiKeyFlowPayloadProps): ApiKeyFlowPayloadType {
    const [isCreating, setIsCreating] = useState<boolean>(false);
    const [isTesting, setIsTesting] = useState<boolean>(false);
@@ -51,9 +50,7 @@ export function useApiKeyFlowPayload({
 
    const { selectedService } = useServiceConfigTypeProvider()
 
-   const {
-      type = null
-   } = selectedServiceConfig;
+
    const messageInstance = message.useMessage();
 
    const [messageApi] = messageInstance;

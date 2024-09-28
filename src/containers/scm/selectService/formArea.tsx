@@ -146,7 +146,7 @@ export const FormArea = React.forwardRef<
    const [messageApi, contextHolder] = message.useMessage();
    const [smData, setSmData] = React.useState([]);
    const [isIntValidated, setIsIntValidated] = React.useState<"" | "error" | "warning" | "success" | "validating">("")
-   const [checkData, setCheckData] = React.useState([])
+   const [, setCheckData] = React.useState([])
    const [form] = Form.useForm();
    const integrationType = Form.useWatch('integrationType', form);
 

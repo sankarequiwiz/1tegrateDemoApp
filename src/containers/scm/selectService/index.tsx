@@ -19,7 +19,6 @@ import { EventTypes } from '../../../utils/Events/types';
 import { TileList } from './TileList';
 
 type VoidFunction = () => void;
-type ObjType = { [key: string]: any }
 
 const warningMsg =
   'Warning: Access key not configured yet. Please configure the access key to proceed.';
@@ -43,18 +42,18 @@ export const SelectService = React.forwardRef<
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  function _compare(a: ObjType, b: ObjType) {
-    const bandA = a?.serviceProfile?.name.toUpperCase();
-    const bandB = b?.serviceProfile?.name.toUpperCase();
+  // function _compare(a: ObjType, b: ObjType) {
+  //   const bandA = a?.serviceProfile?.name.toUpperCase();
+  //   const bandB = b?.serviceProfile?.name.toUpperCase();
 
-    let comparison = 0;
-    if (bandA > bandB) {
-      comparison = 1;
-    } else if (bandA < bandB) {
-      comparison = -1;
-    }
-    return comparison;
-  }
+  //   let comparison = 0;
+  //   if (bandA > bandB) {
+  //     comparison = 1;
+  //   } else if (bandA < bandB) {
+  //     comparison = -1;
+  //   }
+  //   return comparison;
+  // }
 
   const getServices = async () => {
     setLoading(true);

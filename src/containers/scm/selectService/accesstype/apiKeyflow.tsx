@@ -170,12 +170,12 @@ export const APIKeyFlowForm = () => {
    });
 
 
-   const onOk = (e: MouseEvent<HTMLButtonElement>) => {
+   const onOk = (_e: MouseEvent<HTMLButtonElement>) => {
       // typeof onOkProp === 'function' && onOkProp(e);
 
       form.validateFields().then(onCreateIntegration).catch(() => { });
    },
-      onCancel = (e: MouseEvent<HTMLButtonElement>) => {
+      onCancel = (_e: MouseEvent<HTMLButtonElement>) => {
          // typeof onCancelProp === 'function' && onCancelProp(e)
       };
 
