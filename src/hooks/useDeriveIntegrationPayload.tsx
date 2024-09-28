@@ -6,6 +6,7 @@ import { parseError } from "../utils/API/fetchInstance";
 import { AppContext } from "../context/AppProvider";
 import { message } from "antd";
 import { MessageInstance } from "antd/es/message/interface";
+import { useServiceConfigTypeProvider } from "../context/serviceConfig.context";
 
 type ApiKeyFlowPayloadType = {
    derive: (values: Record<string, any>) => Record<string, any>;
@@ -44,8 +45,11 @@ export function useApiKeyFlowPayload({
       organization,
       setIntegration,
       setCurrentStep,
-      current
+      current,
+      domain
    } = useContext(AppContext);
+
+   const { selectedService } = useServiceConfigTypeProvider()
 
    const {
       type = null
@@ -59,7 +63,7 @@ export function useApiKeyFlowPayload({
       Object.entries(values).forEach(([key, value]) => {
 
          if (key.includes('/')) {
-            const [,...keys] = key.split('/');
+            const [, ...keys] = key.split('/');
             let current = payload;
 
             keys.forEach((k, index) => {
@@ -85,15 +89,15 @@ export function useApiKeyFlowPayload({
 
       let formValues: Payload = {
          name: `${selected?.serviceProfile?.name} integration`,
-         type,
+         type: domain,
          subOrganization: { name: organization },
          target: {
             accessPoint: {
                type: 'SP',
-               serviceProfile: {
-                  id: selected?.serviceProfile.id,
+               service: {
+                  id: selectedService?.id
                },
-               accessPointConfig: {
+               accessPointTypeConfig: {
                   type: flowType,
                },
                ...payload,

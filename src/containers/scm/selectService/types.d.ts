@@ -109,10 +109,10 @@ type Payload = {
   target: {
     accessPoint: {
       type: 'SP';
-      serviceProfile: {
+      service: {
         id: string;
       };
-      accessPointConfig: {
+      accessPointTypeConfig: {
         type: 'APIKEY_FLW' | 'EMAIL' | 'OAUTH_PASSWORD_FLW';
       };
       emailAddress?: string;
