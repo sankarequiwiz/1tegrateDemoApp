@@ -1,9 +1,11 @@
-import { Flex, Form, Input, Select, Typography } from "antd"
+import { Button, ButtonProps, Flex, Form, Input, ModalProps, Select, Space, Typography } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { InputFieldType } from "../constant";
 import { deploymentModel } from "../../../../common/deploymentModal";
 import API from '../../../../services';
+import { useApiKeyFlowPayload } from "../../../../hooks/useDeriveIntegrationPayload";
+import { ProviderIndicator } from "./providerIndicator";
 
 const INPUT_FIELD_MAPPERS = {
    [InputFieldType.List]: {
@@ -31,7 +33,7 @@ const INPUT_FIELD_MAPPERS = {
          const [validations] = args;
          return validations?.map(({ required = false }) => ({
             required,
-            message: '${name}'
+            message: '${name} required'
          }))
       }
    }
@@ -47,15 +49,21 @@ export const APIKeyFlow = () => {
 
    const [form] = Form.useForm()
 
-   console.log(selectedServiceConfig)
-
    const [versions, setVersion] = useState([]);
 
    const getIsSelfManaged = useCallback(() => {
       return selectedService?.serviceProfile.deploymentModel?.type === deploymentModel.type.SELF_MANAGED;
    }, [selectedService])
 
-   const fields = useMemo(() => [], []);
+   const fields = useMemo(() => {
+      const stepConfigs = selectedServiceConfig?.apiKey?.authorizationProcessConfig?.stepConfigs ?? []
+
+      const flattedFieldTypeConfigs = [];
+      stepConfigs?.forEach(({ fieldTypeConfigs }) => {
+         flattedFieldTypeConfigs.push(...fieldTypeConfigs)
+      })
+      return flattedFieldTypeConfigs
+   }, [selectedServiceConfig]);
 
    const getAllVersions = async () => {
       try {
@@ -67,10 +75,30 @@ export const APIKeyFlow = () => {
       }
    };
 
-
    const flwType = useMemo(() => {
-      return selectedService?.serviceProfile?.accessPointConfigs?.[0]?.type ?? 'not_set';
-   }, [selectedService?.serviceProfile]);
+      return selectedServiceConfig?.type ?? 'not_set';
+   }, [selectedServiceConfig?.type]);
+
+   const {
+      onCreateIntegration,
+      onTestIntegration,
+      isTesting,
+      isCreating,
+      messageInstance: [, contextHolder]
+   } = useApiKeyFlowPayload({
+      selectedService,
+      selectedServiceConfig
+   });
+
+
+   const onOk = (e: MouseEvent<HTMLButtonElement>) => {
+      // typeof onOkProp === 'function' && onOkProp(e);
+
+         form.validateFields().then(onCreateIntegration).catch(() => { });
+   },
+      onCancel = (e: MouseEvent<HTMLButtonElement>) => {
+         // typeof onCancelProp === 'function' && onCancelProp(e)
+      };
 
    useEffect(() => {
       form.setFieldValue('flowType', flwType)
@@ -82,67 +110,120 @@ export const APIKeyFlow = () => {
 
    return (
       <Flex>
+         {contextHolder}
          <Form
             layout="vertical"
             form={form}
             style={{ width: '100%' }}
          >
-            <Typography.Title level={5}>
-               {`Configure ${selectedService?.serviceProfile?.name} services`}
-            </Typography.Title>
-            <Form.Item
-               name={'flowType'}
-               hidden
-               preserve
-            >
-               <Input value={flwType} />
-            </Form.Item>
-            <Flex vertical gap={'small'}>
-               {fields.map((field, index) => {
+            <Flex vertical gap={'middle'}>
+               <ProviderIndicator selectedService={selectedService} />
 
-                  const { dataType, label, name, required, type } = field,
-                     fieldType = dataType?.type ?? InputFieldType.Text;
+               <Flex vertical gap={'small'}>
+                  <Form.Item
+                     name={'flowType'}
+                     hidden
+                     preserve
+                  >
+                     <Input value={flwType} />
+                  </Form.Item>
+                  {fields.map((field, index) => {
 
-                  const fieldMapper = INPUT_FIELD_MAPPERS?.[fieldType],
-                     validations = fieldMapper?.getValidations([{ required }])
+                     const {  label, name, required, type, property } = field,
+                        fieldType = type ?? InputFieldType.Text;
 
-                  return (
-                     <Form.Item
-                        key={index}
-                        name={type}
-                        label={<b>{label}</b>}
-                        hasFeedback
-                        rules={validations}
-                        messageVariables={{ name }}
-                        validateStatus={formValidationState}
-                     >
-                        {fieldMapper?.getField({
-                           placeholder: `${(name ?? label)?.toString()}`,
-                           ...field
-                        })}
-                     </Form.Item>
-                  )
-               })}
+                     const fieldMapper = INPUT_FIELD_MAPPERS?.[fieldType],
+                        validations = fieldMapper?.getValidations([{ required }])
 
-               {getIsSelfManaged() && (
-                  <>
-                     <Form.Item name="version" label={<Typography.Text strong>Please select your version</Typography.Text>} rules={[{ required: true }]}>
-                        <Select
-                           placeholder="Please select your version"
-                           allowClear
-                           options={versions?.map(({ id: value, name: label }) => ({ value, label }))}
-                        />
-                     </Form.Item>
+                     return (
+                        <Form.Item
+                           key={index}
+                           name={property}
+                           label={<b>{label}</b>}
+                           hasFeedback
+                           rules={validations}
+                           messageVariables={{ name: label || property }}
+                           validateStatus={formValidationState}
+                        >
+                           {fieldMapper?.getField({
+                              placeholder: `${(name ?? label)?.toString()}`,
+                              ...field
+                           })}
+                        </Form.Item>
+                     )
+                  })}
 
-                     <Form.Item name="url" label={<Typography.Text strong>Please enter your endpoint url</Typography.Text>} rules={[{ required: true }]}>
-                        <Input
-                           placeholder="Please enter your endpoint url"
-                        />
-                     </Form.Item>
-                  </>
-               )}
+                  {getIsSelfManaged() && (
+                     <>
+                        <Form.Item name="version" label={<Typography.Text strong>Please select your version</Typography.Text>} rules={[{ required: true }]}>
+                           <Select
+                              placeholder="Please select your version"
+                              allowClear
+                              options={versions?.map(({ id: value, name: label }) => ({ value, label }))}
+                           />
+                        </Form.Item>
+
+                        <Form.Item name="url" label={<Typography.Text strong>Please enter your endpoint url</Typography.Text>} rules={[{ required: true }]}>
+                           <Input
+                              placeholder="Please enter your endpoint url"
+                           />
+                        </Form.Item>
+                     </>
+                  )}
+               </Flex>
+
+               <ModalFooter
+                  onOk={onOk}
+                  okButtonProps={{ loading: isCreating }}
+                  loadingButtonProps={{
+                     loading: isTesting
+                  }}
+                  onCancel={onCancel}
+                  onTest={() => {
+                     form.validateFields().then(onTestIntegration).catch(() => { })
+                  }}
+               />
             </Flex>
          </Form>
+      </Flex>
+   )
+}
+
+const TEST_INTEGRATION_BTN_STYLE: React.CSSProperties = { fontSize: "14px", color: "#1677ff", backgroundColor: "#eff6ff" }
+type ModalFooterProps = {
+   onTest?: (e: MouseEvent<HTMLDivElement>) => void
+   loadingButtonProps?: ButtonProps
+} & Pick<ModalProps, 'onOk' | 'onCancel' | 'okButtonProps'>
+
+const ModalFooter = (props: ModalFooterProps) => {
+
+   const {
+      onOk,
+      okButtonProps,
+      loadingButtonProps = {},
+      onTest
+   } = props;
+
+   const { style: testIntegrationStyle = {} } = loadingButtonProps;
+
+   return (
+      <Flex justify='flex-end'>
+         <Space>
+            <Button
+               onClick={onTest}
+               {...loadingButtonProps}
+               style={{ ...testIntegrationStyle, ...TEST_INTEGRATION_BTN_STYLE }}
+            >
+               Test Integration
+            </Button>
+            <Button
+               {...okButtonProps}
+               onClick={onOk}
+               type='primary'
+            >
+               Create
+            </Button>
+         </Space>
       </Flex>
    )
 }

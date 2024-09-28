@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import services from "../../../../services";
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { useAppProvider } from "../../../../context/AppProvider";
+import { ProviderIndicator } from "./providerIndicator";
 
 type ConfirmationModalProps = {
 } & ModalProps
@@ -70,39 +71,40 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
          footer={false}
          closeIcon={null}
       >
-         {loading ? (
-            <Skeleton />
-         ) : (
-            !isFailed ? (
-               <Flex vertical gap={'middle'}>
-                  <Flex vertical gap={'small'}>
-                     <Typography.Title level={4} style={{ marginBottom: 0 }}>Here is the link to redirect</Typography.Title>
-                     <Typography.Text type='secondary' >
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum! Quae expedita dolore ipsum vitae accusantium perferendis quis asperiores, excepturi praesentium ex possimus laboriosam inventore, vel enim?
-                     </Typography.Text>
-                  </Flex>
-                  <Link to={redirectDetails?.formUrl}>
-                     <Button
-                        type="primary"
-                        block
-                     >
-                        Click to redirect to app
-                     </Button>
-                  </Link>
-               </Flex>
+            {loading ? (
+               <Skeleton />
             ) : (
-               <Result
-                  title='Something went wrong!'
-                  subTitle='Something went wrong with your authentication details'
-                  status={'error'}
-                  extra={
-                     <Button onClick={onTryAgain} type="primary" >
-                        Try again
-                     </Button>
-                  }
-               />
-            )
-         )}
+               !isFailed ? (
+                  <Flex vertical gap={'middle'} align="center" justify="start">
+                     <ProviderIndicator onlyLogo selectedService={selectedService} />
+                     <Flex vertical gap={'small'} align="center">
+                        <Typography.Title level={4} style={{ marginBottom: 0 }}>Here is the link to redirect</Typography.Title>
+                        <Typography.Text type='secondary' style={{ textAlignLast: 'center' }}>
+                           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum! Quae expedita dolore ipsum vitae accusantium perferendis quis asperiores, excepturi praesentium ex possimus laboriosam inventore, vel enim?
+                        </Typography.Text>
+                     </Flex>
+                     <Link to={redirectDetails?.formUrl}>
+                        <Button
+                           type="primary"
+                           block
+                        >
+                           Click to redirect to app
+                        </Button>
+                     </Link>
+                  </Flex>
+               ) : (
+                  <Result
+                     title='Something went wrong!'
+                     subTitle='Something went wrong with your authentication details'
+                     status={'error'}
+                     extra={
+                        <Button onClick={onTryAgain} type="primary" >
+                           Try again
+                        </Button>
+                     }
+                  />
+               )
+            )}
       </Modal>
    )
 }

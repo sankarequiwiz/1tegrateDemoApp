@@ -4,20 +4,31 @@ import { ServiceConfigType, ServiceTypes } from '../types';
 import services from '../../../../services';
 import { ServiceConfigTypeProvider } from '../../../../context/serviceConfig.context';
 import { ConfigWindows } from './configwindow';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ProviderIndicator } from './providerIndicator';
 import { useAppProvider } from '../../../../context/AppProvider';
 import { RedirectAcceptanceModal } from './redirectAcceptanceModal';
+import { ArrowLeftOutlined, CloseOutlined } from '@ant-design/icons';
 
 
 type ServiceAccessTypeFormProps = {
    selected?: ServiceTypes
 } & ModalProps
 
-const BACK_BTN_STYLE: React.CSSProperties = {
-   padding: 0
-}, SELECTABLE_CARD_STYLE: React.CSSProperties = {
-   cursor: 'pointer'
+type ModalHeaderProps = {
+   onBack?: (e: MouseEvent<HTMLButtonElement>) => void
+   onClose?: (e: MouseEvent<HTMLButtonElement>) => void
+}
+
+const ModalHeader = (props: ModalHeaderProps) => {
+
+   const { onBack, onClose } = props;
+
+   return (
+      <Flex style={{ width: '100%' }} justify='space-between'>
+         <Button type='text' icon={<ArrowLeftOutlined />} onClick={onBack}>Back</Button>
+         <Button type='text' onClick={onClose} icon={<CloseOutlined width={'.8em'} style={{ scale: '.8' }} />}  ></Button>
+      </Flex>
+   )
 }
 
 export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
@@ -44,7 +55,8 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
 
    const getServiceAccessType = async () => {
       try {
-         const { data } = await services.services.getServiceAccessType(selectedService?.id);
+         const resp = await services.services.getServiceAccessType(selectedService?.id);
+         const { data } = resp?.data;
          setAccessPoints(data)
       } catch (error) {
 
@@ -86,15 +98,17 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
       >
          <Modal
             {...rest}
-            closeIcon={null}
             open={open}
-            title={
-               <Button onClick={onBack} style={BACK_BTN_STYLE} type='link' icon={<ArrowLeftOutlined />} >Close</Button>
-            }
-            // style={{ visibility: 'hidden' }}
+            title={null}
+            closeIcon={null}
             footer={false}
             closable={false}
+
          >
+            <ModalHeader
+               onBack={onBack}
+               onClose={onCancel}
+            />
             <Tabs
                activeKey={activeKey}
                className='hide-header'
@@ -103,10 +117,10 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
                      label: 'config-selection',
                      key: '1',
                      children: (
-                        <Flex vertical gap={'small'} align='end'>
+                        <Flex vertical gap={'small'}>
                            <Flex vertical justify='center' align='center' gap={'middle'}>
                               <ProviderIndicator selectedService={selectedService} />
-                              <Flex vertical gap={'small'} >
+                              <Flex vertical gap={'small'} style={{ width: '100%' }}>
                                  {accessPoints?.map((i, index) => {
                                     const { label, description } = i,
                                        isSelected = selectedIndex === index
@@ -115,14 +129,16 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
                                        <Card
                                           key={index}
                                           size='small'
-                                          style={SELECTABLE_CARD_STYLE}
+                                          className='selectable'
                                           onClick={() => onselect(i, index)}
                                        >
                                           <Flex align='start'>
                                              <Radio checked={isSelected} />
                                              <Flex vertical gap={'small'}>
                                                 <Typography.Text strong>{label}</Typography.Text>
-                                                <Typography.Text type='secondary'>{description}</Typography.Text>
+                                                {description ? (
+                                                   <Typography.Text type='secondary'>{description}</Typography.Text>
+                                                ) : null}
                                              </Flex>
                                           </Flex>
                                        </Card>
@@ -130,8 +146,14 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
                                  })}
                               </Flex>
                            </Flex>
-                           <Flex>
-                              <Button type='primary' onClick={onContinue} disabled={!selectedConfig} >Continue</Button>
+                           <Flex justify='flex-end'>
+                              <Button
+                                 type='primary'
+                                 onClick={onContinue}
+                                 disabled={!selectedConfig}
+                              >
+                                 Continue
+                              </Button>
                            </Flex>
                         </Flex>
                      )
@@ -147,9 +169,11 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
             />
          </Modal>
 
-         <RedirectAcceptanceModal
-            open={redirectModalOpen}
-         />
+         {redirectModalOpen ? (
+            <RedirectAcceptanceModal
+               open={redirectModalOpen}
+            />
+         ) : null}
       </ServiceConfigTypeProvider>
    )
 }

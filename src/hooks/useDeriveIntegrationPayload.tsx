@@ -27,6 +27,33 @@ interface useApiKeyFlowPayloadProps {
    selectedServiceConfig: ServiceConfigType
 }
 
+function transformObject(input) {
+   const output = {};
+
+   // Iterate over each key-value pair in the input object
+   Object.entries(input).forEach(([key, value]) => {
+      // Check if the key contains a slash
+      if (key.includes('/')) {
+         const keys = key.split('/'); // Split the key by '/'
+         let current = output;
+
+         // Iterate through the keys, creating nested objects as needed
+         keys.forEach((k, index) => {
+            if (index === keys.length - 1) {
+               current[k] = value; // Set the value at the last key
+            } else {
+               current[k] = current[k] || {}; // Create the nested object if it doesn't exist
+               current = current[k];
+            }
+         });
+      } else {
+         output[key] = value; // Copy the key-value pair directly if no slash is found
+      }
+   });
+
+   return output;
+}
+
 export function useApiKeyFlowPayload({
    selectedService: selected,
    selectedServiceConfig
@@ -50,23 +77,27 @@ export function useApiKeyFlowPayload({
    const [messageApi] = messageInstance;
 
    function derive(values) {
-      let formData = {};
-      Object.entries(values).map(([key, value]) => {
+      const payload = {};
+      Object.entries(values).forEach(([key, value]) => {
 
-         delete formData[key];
-         if (!API_FLW_INTEGRATION_KEY_MAPPER?.[key]) {
-            alert(`${key} is not configured in mapper`);
-         }
-         const baseValue = API_FLW_INTEGRATION_KEY_MAPPER?.[key];
+         if (key.includes('/')) {
+            const [,...keys] = key.split('/');
+            let current = payload;
 
-         if (typeof baseValue?.getBaseValues(value) === 'object') {
-            formData[baseValue?.['value'] ?? key] = baseValue?.getBaseValues(value);
+            keys.forEach((k, index) => {
+               if (index === keys.length - 1) {
+                  current[k] = value;
+               } else {
+                  current[k] = current[k] || {};
+                  current = current[k];
+               }
+            });
          } else {
-            formData[API_FLW_INTEGRATION_KEY_MAPPER?.[key]?.['value'] ?? key] = value;
+            payload[key] = value;
          }
-      });
 
-      return formData;
+      })
+      return payload;
    }
 
    const onCreateIntegration = async (values) => {

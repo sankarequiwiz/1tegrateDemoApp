@@ -42,3 +42,15 @@
     }
   }
 }
+
+.ant-card {
+  &.selectable {
+    cursor: pointer;
+  }
+}
+
+.ant-btn {
+  &.ant-btn-text {
+    box-shadow: none;
+  }
+}

@@ -1,11 +1,9 @@
-import { Button, ButtonProps, Flex, Tabs, Typography } from "antd"
+import { Tabs, } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
-import { MouseEvent, useMemo, useState } from "react";
-import { ProviderIndicator } from "./providerIndicator";
+import { useEffect, useMemo, useState } from "react";
 
 import { useAppProvider } from "../../../../context/AppProvider";
-
-
+import { AttentionInfoWindows } from "./attentionInfo";
 
 export const APPKeyFlow = () => {
 
@@ -39,7 +37,7 @@ export const APPKeyFlow = () => {
       setActiveKey((prev) => prev - 1)
    }
 
-   const onContinue = async () => {
+   const onContinue = () => {
       setAccessPointModalOpen(false);
       setRedirectModalOpen(true);
    }
@@ -47,10 +45,10 @@ export const APPKeyFlow = () => {
    const tabItems: any = useMemo(() => {
       return attentionInfos?.map((item, index) => {
          return {
-            label: '',
+            label: null,
             key: index,
             children: (
-               <Windows
+               <AttentionInfoWindows
                   info={item}
                   onProceed={() => {
                      if (index < attentionInfos?.length - 1) {
@@ -76,65 +74,19 @@ export const APPKeyFlow = () => {
       })
    }, [attentionInfos])
 
-   const acceptanceData = { formUrl: "https://api.example.com/install", }
+   useEffect(() => {
 
-   return (
-      <>
-         <Tabs
-            className="hide-header"
-            items={tabItems}
-            activeKey={activeKey as any}
-         />
-      </>
-   )
-}
-
-type WindowsProps = {
-   info: {
-      "title": string,
-      "subTitle": string,
-      "description": string,
-      "options": {
-         "type": string,
-         "name": string,
-         "requiresUserConfirmation": boolean,
-         "requiresCloseWindow": boolean
+      if (!tabItems?.length) {
+         onContinue()
       }
-   },
-   onProceed: (e: MouseEvent<HTMLButtonElement>) => void
-   onBack: (e: MouseEvent<HTMLButtonElement>) => void
 
-   backButtonProps?: ButtonProps
-   onButtonProps?: ButtonProps
-}
-
-export const Windows = (props: WindowsProps) => {
-
-   const {
-      onProceed,
-      onBack,
-      backButtonProps,
-      onButtonProps
-   } = props;
-
-   const {
-      selectedService
-   } = useServiceConfigTypeProvider();
-
-   const { info } = props;
+   }, [tabItems])
 
    return (
-      <Flex vertical gap={'large'}>
-         <ProviderIndicator selectedService={selectedService} />
-         <Flex vertical gap={'small'} align="center">
-            <Typography.Title style={{ marginBottom: 0 }} level={4}>{info?.title}</Typography.Title>
-            <Typography.Text>{info?.subTitle}</Typography.Text>
-            <Typography.Text type="secondary">{info?.description}</Typography.Text>
-         </Flex>
-         <Flex vertical gap={'small'}>
-            <Button type='primary' onClick={onProceed} {...onButtonProps} >{info?.options?.name}</Button>
-            <Button type='default' onClick={onBack} {...backButtonProps} >Go back</Button>
-         </Flex>
-      </Flex>
+      <Tabs
+         className="hide-header"
+         items={tabItems}
+         activeKey={activeKey as any}
+      />
    )
 }

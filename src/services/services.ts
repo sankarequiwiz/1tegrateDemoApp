@@ -2,7 +2,6 @@ import { AxiosHeaders, AxiosRequestConfig } from 'axios';
 import { Payload as CreateIntegrationType } from '../containers/scm/selectService/types';
 import fetch from '../utils/API/fetchInstance';
 import { DomainTypes } from '../types/type';
-import mockAccessPoint from '../containers/scm/selectService/mocks/services.accesstype.json'
 
 const withLowerCase = (str: string = "") => {
 	return str.toLowerCase();
@@ -33,13 +32,12 @@ export const getServices = async (
 };
 
 export const getServiceAccessType = async (id: string) => {
-	// await fetch.get(`/api/v1/services/${id}/accessPoints?customerView=true`)
-	return { data: mockAccessPoint }
+	return await fetch.get(`/api/demo/services/${id}/accessPoints?customerView=true`)
 }
 
 export const buildInstallationFormUrl = async (serviceId: string, options: AxiosRequestConfig<any>) => {
 	return fetch({
-		url: `/api/v1/github_app/services/${serviceId}/buildInstallationFormUrl`,
+		url: `/api/demo/services/${serviceId}/buildInstallationFormUrl`,
 		...options
 	})
 }

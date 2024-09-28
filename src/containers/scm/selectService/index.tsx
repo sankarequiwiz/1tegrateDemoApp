@@ -16,9 +16,7 @@ import { ServiceTypes } from './types';
 
 import Event from '../../../utils/Events/index';
 import { EventTypes } from '../../../utils/Events/types';
-import { FormArea } from './formArea';
 import { TileList } from './TileList';
-import { AccessTypeConfigListSelect } from './Accesstypeconfig/Accesstypeconfig.listselect';
 
 type VoidFunction = () => void;
 type ObjType = { [key: string]: any }
@@ -45,7 +43,7 @@ export const SelectService = React.forwardRef<
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  function compare(a: ObjType, b: ObjType) {
+  function _compare(a: ObjType, b: ObjType) {
     const bandA = a?.serviceProfile?.name.toUpperCase();
     const bandB = b?.serviceProfile?.name.toUpperCase();
 
@@ -144,7 +142,7 @@ export const SelectService = React.forwardRef<
                       message={<Typography.Title
                         style={{ marginTop: "1rem", marginBottom: "1rem" }}
                         level={4}>
-                        {servicesError?.response?.data?.map((item => item.errorMessage))}
+                        {(servicesError?.response?.data ?? [])?.map((item => item.errorMessage))}
                       </Typography.Title>}
                       type="warning"
                       className="custom-alert custom-warning"
