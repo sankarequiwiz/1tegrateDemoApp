@@ -1,12 +1,13 @@
 import { Button, ButtonProps, Flex, Form, Input, ModalProps, Select, Space, Tabs, Typography } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { InputFieldType } from "../constant";
+import { InputFieldType, ServiceAccessTypeEnum } from "../constant";
 import { deploymentModel } from "../../../../common/deploymentModal";
 import API from '../../../../services';
 import { useApiKeyFlowPayload } from "../../../../hooks/useDeriveIntegrationPayload";
 import { AttentionInfoWindows } from "./attentionInfo";
 import { ProviderIndicator } from "./providerIndicator";
+import { ServiceConfigType } from "../types";
 
 const INPUT_FIELD_MAPPERS = {
    [InputFieldType.List]: {
@@ -40,6 +41,22 @@ const INPUT_FIELD_MAPPERS = {
    }
 }
 
+const getConfigContainer = (type: ServiceAccessTypeEnum, accessPoint: ServiceConfigType) => {
+
+   switch (type) {
+      case ServiceAccessTypeEnum.APIKey:
+         return accessPoint?.apiKey
+
+      case ServiceAccessTypeEnum.CredentialFlow:
+         return accessPoint?.CredentialsDetails
+
+      case ServiceAccessTypeEnum.OAuthPasswordFlow:
+         return accessPoint?.OAuthDetails
+      default:
+         return null;
+   }
+}
+
 export const APIKeyFlow = () => {
 
    const {
@@ -47,17 +64,27 @@ export const APIKeyFlow = () => {
    } = useServiceConfigTypeProvider();
 
    const attentionInfos = useMemo(() => {
-      return selectedServiceConfig?.apiKey?.authorizationProcessConfig?.attentionInfo?.processSteps ?? []
+      const configContainer = getConfigContainer(selectedServiceConfig?.type, selectedServiceConfig);
+      return (
+         configContainer?.
+            authorizationProcessConfig?.
+            attentionInfo?.
+            processSteps ?? []
+      )
    }, [selectedServiceConfig]);
 
    const [activeKey, setActiveKey] = useState(1);
+   const [subKey, setSubKey] = useState(0)
 
    const onMoveWindow = () => {
-      console.log('move')
+      setSubKey((prev) => {
+         return prev + 1;
+      })
    };
    const onContinue = () => {
       setActiveKey(2)
    };
+
    const onBackWindow = () => { };
 
    const tabItems: any = useMemo(() => {
@@ -100,6 +127,7 @@ export const APIKeyFlow = () => {
                   key: 1,
                   children: (
                      <Tabs
+                        activeKey={subKey as any}
                         animated
                         items={tabItems}
                      />

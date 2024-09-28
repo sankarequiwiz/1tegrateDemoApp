@@ -8,10 +8,14 @@ export const ConfigWindows = () => {
 
    const { selectedServiceConfig } = useServiceConfigTypeProvider();
 
-   if (selectedServiceConfig?.type !== ServiceAccessTypeEnum.APIKey) {
+   if ([
+      ServiceAccessTypeEnum.APIKey,
+      ServiceAccessTypeEnum.CredentialFlow,
+      ServiceAccessTypeEnum.OAuthPasswordFlow
+   ].includes(selectedServiceConfig?.type)) {
       return (
-         <APPKeyFlow />
+         <APIKeyFlow />
       )
    }
-   return <APIKeyFlow />
+   return <APPKeyFlow />
 }
