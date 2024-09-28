@@ -1,21 +1,18 @@
 import { useContext, useState } from "react";
 
 import API from '../services/index';
-import { API_FLW_INTEGRATION_KEY_MAPPER } from "../containers/scm/selectService/constant";
 import { Payload, ServiceConfigType, ServiceTypes } from "../containers/scm/selectService/types";
 import { parseError } from "../utils/API/fetchInstance";
 import { AppContext } from "../context/AppProvider";
 import { message } from "antd";
 import { MessageInstance } from "antd/es/message/interface";
-import { FormValidationState } from "../context/serviceConfig.context";
 
 type ApiKeyFlowPayloadType = {
    derive: (values: Record<string, any>) => Record<string, any>;
    isCreating?: boolean
    isTesting?: boolean
-   isIntValidated?: FormValidationState
    messageInstance?: readonly [MessageInstance, React.ReactElement<any, string | React.JSXElementConstructor<any>>]
-
+   formValidationState?: FormValidationStateEnum
    // events
    onCreateIntegration?: (values: Record<string, any>) => void
    onTestIntegration?: (values: Record<string, any>) => void
@@ -27,31 +24,12 @@ interface useApiKeyFlowPayloadProps {
    selectedServiceConfig: ServiceConfigType
 }
 
-function transformObject(input) {
-   const output = {};
-
-   // Iterate over each key-value pair in the input object
-   Object.entries(input).forEach(([key, value]) => {
-      // Check if the key contains a slash
-      if (key.includes('/')) {
-         const keys = key.split('/'); // Split the key by '/'
-         let current = output;
-
-         // Iterate through the keys, creating nested objects as needed
-         keys.forEach((k, index) => {
-            if (index === keys.length - 1) {
-               current[k] = value; // Set the value at the last key
-            } else {
-               current[k] = current[k] || {}; // Create the nested object if it doesn't exist
-               current = current[k];
-            }
-         });
-      } else {
-         output[key] = value; // Copy the key-value pair directly if no slash is found
-      }
-   });
-
-   return output;
+enum FormValidationStateEnum {
+   Error = 'error',
+   Warning = 'warning',
+   Success = 'success',
+   Validating = 'validating',
+   Default = ''
 }
 
 export function useApiKeyFlowPayload({
@@ -60,7 +38,7 @@ export function useApiKeyFlowPayload({
 }: useApiKeyFlowPayloadProps): ApiKeyFlowPayloadType {
    const [isCreating, setIsCreating] = useState<boolean>(false);
    const [isTesting, setIsTesting] = useState<boolean>(false);
-   const [isIntValidated, setIsIntValidated] = useState<FormValidationState>(null)
+   const [formValidationState, setFormValidationState] = useState<FormValidationStateEnum>(FormValidationStateEnum.Default);
 
    const {
       organization,
@@ -177,7 +155,7 @@ export function useApiKeyFlowPayload({
             }
          });
          if (data?.data.some((item) => item.type === "SUCCESS")) {
-            setIsIntValidated("success");
+            setFormValidationState(FormValidationStateEnum.Success);
             messageApi.open({
                type: 'success',
                content: <>
@@ -186,7 +164,7 @@ export function useApiKeyFlowPayload({
             });
          }
          else if (data.data.some((item) => item.type === "FAILURE")) {
-            setIsIntValidated("error");
+            setFormValidationState(FormValidationStateEnum.Error);
             messageApi.open({
                type: 'error',
                content: <>
@@ -195,7 +173,7 @@ export function useApiKeyFlowPayload({
             });
          }
       } catch (error) {
-         setIsIntValidated("error")
+         setFormValidationState(FormValidationStateEnum.Error)
          const { message } = parseError(error?.response?.data)
          messageApi.open({
             type: 'error',
@@ -212,6 +190,6 @@ export function useApiKeyFlowPayload({
       onTestIntegration,
       onCreateIntegration,
       messageInstance,
-      isIntValidated
+      formValidationState,
    };
 }

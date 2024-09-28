@@ -14,7 +14,7 @@ type WindowsProps = {
          "name": string,
          "requiresUserConfirmation": boolean,
          "requiresCloseWindow": boolean
-      }
+      }[]
    },
    onProceed: (e: MouseEvent<HTMLButtonElement>) => void
    onBack: (e: MouseEvent<HTMLButtonElement>) => void
@@ -40,14 +40,18 @@ export const AttentionInfoWindows = (props: WindowsProps) => {
 
    return (
       <Flex vertical gap={'large'}>
-         <ProviderIndicator selectedService={selectedService} />
+         <ProviderIndicator onlyLogo selectedService={selectedService} />
          <Flex vertical gap={'small'} align="center">
             <Typography.Title style={{ marginBottom: 0 }} level={4}>{info?.title}</Typography.Title>
             <Typography.Text>{info?.subTitle}</Typography.Text>
             <Typography.Text type="secondary">{info?.description}</Typography.Text>
          </Flex>
          <Flex vertical gap={'small'}>
-            <Button type='primary' onClick={onProceed} {...onButtonProps} >{info?.options?.name}</Button>
+            {info?.options?.map(({ name = '' }, index) => {
+               return (
+                  <Button type='primary' onClick={onProceed} key={index} {...onButtonProps} >{name}</Button>
+               )
+            })}
             <Button type='default' onClick={onBack} {...backButtonProps} >Go back</Button>
          </Flex>
       </Flex>

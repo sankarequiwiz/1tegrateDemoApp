@@ -25,8 +25,16 @@ const ModalHeader = (props: ModalHeaderProps) => {
 
    return (
       <Flex style={{ width: '100%' }} justify='space-between'>
-         <Button type='text' icon={<ArrowLeftOutlined />} onClick={onBack}>Back</Button>
-         <Button type='text' onClick={onClose} icon={<CloseOutlined width={'.8em'} style={{ scale: '.8' }} />}  ></Button>
+         <Button
+            type='text'
+            icon={<ArrowLeftOutlined />}
+            onClick={onBack}
+         >Back</Button>
+         <Button type='text'
+            onClick={onClose}
+            icon={<CloseOutlined width={'.8em'} style={{ scale: '.8' }} />}
+         >
+         </Button>
       </Flex>
    )
 }
@@ -51,6 +59,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
 
    const onCancel = (e: MouseEvent<HTMLButtonElement>) => {
       if (typeof onCancelProp === 'function') onCancelProp(e);
+      setActiveKey('1')
    }
 
    const getServiceAccessType = async () => {
@@ -75,6 +84,8 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
 
    const onContinue = () => {
       setActiveKey('2')
+   }, resetTabKey = () => {
+      setActiveKey('1')
    }
 
    const onBack = (e: MouseEvent<HTMLButtonElement>) => {
@@ -89,11 +100,12 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
       serviceId && getServiceAccessType()
    }, [serviceId])
 
+
    return (
       <ServiceConfigTypeProvider
          value={{
             selectedService,
-            selectedServiceConfig: selectedConfig
+            selectedServiceConfig: selectedConfig,
          }}
       >
          <Modal
@@ -103,7 +115,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
             closeIcon={null}
             footer={false}
             closable={false}
-
+            afterClose={resetTabKey}
          >
             <ModalHeader
                onBack={onBack}
@@ -161,6 +173,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
                   {
                      label: 'config-windows',
                      key: '2',
+                     destroyInactiveTabPane: true,
                      children: (
                         <ConfigWindows />
                      )

@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, ModalProps, Result, Skeleton, Typography } from "antd";
+import { Button, Flex, Modal, ModalProps, Result, Skeleton, Space, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import services from "../../../../services";
@@ -64,6 +64,9 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
       setRedirectModalOpen(false)
       setAccessPointModalOpen(true);
    }
+   const onClose = () => {
+      setRedirectModalOpen(false)
+   }
 
    return (
       <Modal
@@ -71,18 +74,19 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
          footer={false}
          closeIcon={null}
       >
-            {loading ? (
-               <Skeleton />
-            ) : (
-               !isFailed ? (
-                  <Flex vertical gap={'middle'} align="center" justify="start">
-                     <ProviderIndicator onlyLogo selectedService={selectedService} />
-                     <Flex vertical gap={'small'} align="center">
-                        <Typography.Title level={4} style={{ marginBottom: 0 }}>Here is the link to redirect</Typography.Title>
-                        <Typography.Text type='secondary' style={{ textAlignLast: 'center' }}>
-                           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum! Quae expedita dolore ipsum vitae accusantium perferendis quis asperiores, excepturi praesentium ex possimus laboriosam inventore, vel enim?
-                        </Typography.Text>
-                     </Flex>
+         {loading ? (
+            <Skeleton />
+         ) : (
+            !isFailed ? (
+               <Flex vertical gap={'middle'} align="center" justify="start">
+                  <ProviderIndicator onlyLogo selectedService={selectedService} />
+                  <Flex vertical gap={'small'} align="center">
+                     <Typography.Title level={4} style={{ marginBottom: 0 }}>Here is the link to redirect</Typography.Title>
+                     <Typography.Text type='secondary' style={{ textAlignLast: 'center' }}>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum! Quae expedita dolore ipsum vitae accusantium perferendis quis asperiores, excepturi praesentium ex possimus laboriosam inventore, vel enim?
+                     </Typography.Text>
+                  </Flex>
+                  <Flex vertical gap={'small'} style={{ width: '100%' }}>
                      <Link to={redirectDetails?.formUrl}>
                         <Button
                            type="primary"
@@ -91,20 +95,27 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
                            Click to redirect to app
                         </Button>
                      </Link>
+                     <Button
+                        block
+                        onClick={onClose}
+                     >
+                        Close
+                     </Button>
                   </Flex>
-               ) : (
-                  <Result
-                     title='Something went wrong!'
-                     subTitle='Something went wrong with your authentication details'
-                     status={'error'}
-                     extra={
-                        <Button onClick={onTryAgain} type="primary" >
-                           Try again
-                        </Button>
-                     }
-                  />
-               )
-            )}
+               </Flex>
+            ) : (
+               <Result
+                  title='Something went wrong!'
+                  subTitle='Something went wrong with your authentication details'
+                  status={'error'}
+                  extra={
+                     <Button onClick={onTryAgain} type="primary" >
+                        Try again
+                     </Button>
+                  }
+               />
+            )
+         )}
       </Modal>
    )
 }

@@ -1,10 +1,11 @@
-import { Button, ButtonProps, Flex, Form, Input, ModalProps, Select, Space, Typography } from "antd"
+import { Button, ButtonProps, Flex, Form, Input, ModalProps, Select, Space, Tabs, Typography } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { InputFieldType } from "../constant";
 import { deploymentModel } from "../../../../common/deploymentModal";
 import API from '../../../../services';
 import { useApiKeyFlowPayload } from "../../../../hooks/useDeriveIntegrationPayload";
+import { AttentionInfoWindows } from "./attentionInfo";
 import { ProviderIndicator } from "./providerIndicator";
 
 const INPUT_FIELD_MAPPERS = {
@@ -42,9 +43,86 @@ const INPUT_FIELD_MAPPERS = {
 export const APIKeyFlow = () => {
 
    const {
+      selectedServiceConfig
+   } = useServiceConfigTypeProvider();
+
+   const attentionInfos = useMemo(() => {
+      return selectedServiceConfig?.apiKey?.authorizationProcessConfig?.attentionInfo?.processSteps ?? []
+   }, [selectedServiceConfig]);
+
+   const [activeKey, setActiveKey] = useState(1);
+
+   const onMoveWindow = () => {
+      console.log('move')
+   };
+   const onContinue = () => {
+      setActiveKey(2)
+   };
+   const onBackWindow = () => { };
+
+   const tabItems: any = useMemo(() => {
+      return attentionInfos?.map((item, index) => {
+         return {
+            label: null,
+            key: index,
+            children: (
+               <AttentionInfoWindows
+                  info={item}
+                  onProceed={() => {
+                     if (index < attentionInfos?.length - 1) {
+                        onMoveWindow()
+                     } else {
+                        // all looks good then go ahead and proceed with redirection process
+                        onContinue()
+                     }
+                  }}
+                  onBack={onBackWindow}
+                  backButtonProps={{
+                     style: {
+                        display: index === 0 ? 'none' : 'block'
+                     }
+                  }}
+               />
+            )
+         }
+      })
+   }, [attentionInfos])
+
+   return (
+      <Flex vertical gap={'small'}>
+         <Tabs
+            className="hide-header"
+            animated
+            activeKey={activeKey as any}
+            items={[
+               {
+                  label: null,
+                  key: 1,
+                  children: (
+                     <Tabs
+                        animated
+                        items={tabItems}
+                     />
+                  )
+               },
+               {
+                  label: null,
+                  key: 2,
+                  children: (
+                     <APIKeyFlowForm />
+                  )
+               }
+            ] as any}
+         />
+      </Flex>
+   )
+}
+
+export const APIKeyFlowForm = () => {
+
+   const {
       selectedService,
-      selectedServiceConfig,
-      formValidationState,
+      selectedServiceConfig
    } = useServiceConfigTypeProvider();
 
    const [form] = Form.useForm()
@@ -84,7 +162,8 @@ export const APIKeyFlow = () => {
       onTestIntegration,
       isTesting,
       isCreating,
-      messageInstance: [, contextHolder]
+      messageInstance: [, contextHolder],
+      formValidationState
    } = useApiKeyFlowPayload({
       selectedService,
       selectedServiceConfig
@@ -94,7 +173,7 @@ export const APIKeyFlow = () => {
    const onOk = (e: MouseEvent<HTMLButtonElement>) => {
       // typeof onOkProp === 'function' && onOkProp(e);
 
-         form.validateFields().then(onCreateIntegration).catch(() => { });
+      form.validateFields().then(onCreateIntegration).catch(() => { });
    },
       onCancel = (e: MouseEvent<HTMLButtonElement>) => {
          // typeof onCancelProp === 'function' && onCancelProp(e)
@@ -117,8 +196,7 @@ export const APIKeyFlow = () => {
             style={{ width: '100%' }}
          >
             <Flex vertical gap={'middle'}>
-               <ProviderIndicator selectedService={selectedService} />
-
+               <ProviderIndicator title='Enter the details for authentication' selectedService={selectedService} />
                <Flex vertical gap={'small'}>
                   <Form.Item
                      name={'flowType'}
@@ -129,7 +207,7 @@ export const APIKeyFlow = () => {
                   </Form.Item>
                   {fields.map((field, index) => {
 
-                     const {  label, name, required, type, property } = field,
+                     const { label, name, required, type, property } = field,
                         fieldType = type ?? InputFieldType.Text;
 
                      const fieldMapper = INPUT_FIELD_MAPPERS?.[fieldType],

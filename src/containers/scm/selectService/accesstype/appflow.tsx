@@ -75,11 +75,9 @@ export const APPKeyFlow = () => {
    }, [attentionInfos])
 
    useEffect(() => {
-
       if (!tabItems?.length) {
          onContinue()
       }
-
    }, [tabItems])
 
    return (
@@ -87,6 +85,7 @@ export const APPKeyFlow = () => {
          className="hide-header"
          items={tabItems}
          activeKey={activeKey as any}
+         animated
       />
    )
 }
