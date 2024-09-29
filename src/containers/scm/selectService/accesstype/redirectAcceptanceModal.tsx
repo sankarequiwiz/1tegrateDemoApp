@@ -5,6 +5,7 @@ import services from "../../../../services";
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { useAppProvider } from "../../../../context/AppProvider";
 import { ProviderIndicator } from "./providerIndicator";
+import { CloseOutlined } from "@ant-design/icons";
 
 type ConfirmationModalProps = {
 } & ModalProps
@@ -13,15 +14,21 @@ const getSuccessUrl = () => {
    let successUrl = new URL(window.location.href),
       params = new URLSearchParams(successUrl.search);
 
-   params.set('current', '1'); // Replace 'key' with your parameter name and 'value' with your desired value
-
+   params.set('current', '1');
    successUrl.search = params.toString();
 
-   return successUrl.href;
-}, getFailureUrl = () => {
-   const url = window.location.href;
-   return url;
-}
+   return encodeURI(successUrl.href);
+},
+   getFailureUrl = () => {
+      let failedUrl = new URL(window.location.href),
+         params = new URLSearchParams(failedUrl.search);
+
+      params.set('isIntegrationFailed', 'true');
+      failedUrl.search = params.toString();
+
+      return encodeURI(failedUrl.href);
+   },
+   OK_BUTTON_STYLES: React.CSSProperties = { background: 'green' };
 
 const mockResponse = { formUrl: "https://api.example.com/install" }
 
@@ -31,12 +38,14 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
       selectedService,
    } = useServiceConfigTypeProvider();
 
-   const { setRedirectModalOpen, setAccessPointModalOpen } = useAppProvider()
+   const {
+      setRedirectModalOpen,
+      setAccessPointModalOpen,
+      isIntegrationFailed,
+   } = useAppProvider()
 
    const [loading, setLoading] = useState<boolean>(true);
    const [redirectDetails, setRedirectionDetails] = useState(mockResponse);
-
-   const isFailed = false;
 
    const getRedirection = async () => {
 
@@ -77,13 +86,13 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
          {loading ? (
             <Skeleton />
          ) : (
-            !isFailed ? (
+            !isIntegrationFailed ? (
                <Flex vertical gap={'middle'} align="center" justify="start">
                   <ProviderIndicator onlyLogo selectedService={selectedService} />
                   <Flex vertical gap={'small'} align="center">
                      <Typography.Title level={4} style={{ marginBottom: 0 }}>Here is the link to redirect</Typography.Title>
                      <Typography.Text type='secondary' style={{ textAlignLast: 'center' }}>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum! Quae expedita dolore ipsum vitae accusantium perferendis quis asperiores, excepturi praesentium ex possimus laboriosam inventore, vel enim?
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum!
                      </Typography.Text>
                   </Flex>
                   <Flex vertical gap={'small'} style={{ width: '100%' }}>
@@ -91,13 +100,16 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
                         <Button
                            type="primary"
                            block
+                           style={OK_BUTTON_STYLES}
                         >
-                           Click to redirect to app
+                           Install app
                         </Button>
                      </Link>
                      <Button
                         block
                         onClick={onClose}
+                        type='link'
+                        icon={<CloseOutlined />}
                      >
                         Close
                      </Button>

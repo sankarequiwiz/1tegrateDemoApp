@@ -47,6 +47,10 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 	return fetch.post('/api/demo/integrations', payload);
 };
 
+export const getIntegrationById = async (id: string) => {
+	return fetch.post(`/api/demo/integrations/${id}`);
+};
+
 /* test integrations */
 export const testIntegrations = async (payload: { [key: string]: any }) => {
 	return fetch.post('/api/demo/integrations/validate', payload);

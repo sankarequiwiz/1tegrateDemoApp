@@ -1,4 +1,4 @@
-import React, { HTMLProps, useMemo } from 'react';
+import React, { HTMLProps, useEffect, useMemo } from 'react';
 
 import {
   ButtonProps,
@@ -17,6 +17,8 @@ import { OrganizationTypes, Payload } from './type';
 import { Errors, handleError } from '../../../utils/error';
 import utils from '../../../utils';
 import { List } from 'antd';
+import { useSearchParams } from 'react-router-dom';
+import services from '../../../services/index';
 
 const errorObj = new Errors();
 
@@ -27,6 +29,7 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
     current,
     selectedOrganization,
     integration,
+    setIntegration,
     domain } = React.useContext(AppContext);
 
   const [organization, setOrganization] = React.useState<
@@ -34,11 +37,25 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
   >([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const headers = {
-    integrationId: integration?.id,
-  };
+  const [searchParams] = useSearchParams();
+
+  const integrationId = searchParams.get('integrationId');
+
+  const getIntegrationById = async () => {
+    try {
+      const { data } = await services.services.getIntegrationById(integrationId);
+      setIntegration(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const getOrganization = async () => {
+
+    const headers = {
+      integrationId: integration?.id,
+    };
+
     try {
       setLoading(true);
       const resp = await API.services.getSCMOrganization(headers as any, domain);
@@ -59,7 +76,11 @@ const SelectOrganization = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivEle
 
   React.useEffect(() => {
     if (current === 1) getOrganization();
-  }, [current]);
+  }, [current, integration?.id]);
+
+  useEffect(() => {
+    integrationId  && getIntegrationById();
+  }, [integrationId])
 
   const onOkProps: ButtonProps = {
     disabled: !selectedOrganization,

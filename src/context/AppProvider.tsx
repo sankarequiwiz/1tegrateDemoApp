@@ -21,14 +21,19 @@ type ContextTypes = {
   selectedCommit?: string;
   appTitle?: string;
   selectedCollection?: string;
-  companykey?: string;
   redirectModalOpen?: boolean
   accessPointModalOpen?: boolean
+  integration?: ServiceTypes;
+  isIntegrationFailed?: boolean
 
+  // to
+  companykey?: string;
+  setCompanykey?: (companyKey: string) => void;
+
+  setIsIntegrationFailed?: (isFailed: boolean) => void;
   setAccessPointModalOpen?: (isOpen: boolean) => void
   setRedirectModalOpen?: (isOpen: boolean) => void
   setAppTitle?: (appTitle: string) => void;
-  setCompanykey?: (companyKey: string) => void;
   setUserName?: (userName: string) => void;
   setAccessKey?: (accessKey: string) => void;
   setSelectedCommit?: (selectedCommit: string) => void;
@@ -45,7 +50,6 @@ type ContextTypes = {
   setIntegration?: (serviceProfileTypes: ServiceTypes) => void;
   setSelectedCollection?: (collection: string) => void;
 
-  integration?: ServiceTypes;
 };
 
 type ProviderTypes = {
@@ -58,12 +62,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
   const [search, setSearch] = useSearchParams({
     current: '0',
     accessKey: '',
-    userName: 'Demo app User',
+    userName: '',
     organization: 'Demo app Company',
     appTitle: 'Demo app Title',
     domain: 'SCM',
     redirectModalOpen: 'false',
-    accessPointModalOpen: 'false'
+    accessPointModalOpen: 'false',
+    isIntegrationFailed: 'false',
   });
 
   const setIntegrationDetails = (arg) => {
@@ -129,14 +134,12 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
-
   const setSelectedArtifact = (arg) => {
     setSearch((prev) => {
       prev.set('selectedArtifact', arg);
       return prev;
     });
   };
-
 
   const setCurrentStep = (newCurrent: number) => {
     setSearch((prev) => {
@@ -205,6 +208,16 @@ export function AppProvider({ children, value }: ProviderTypes) {
     })
   }
 
+  const setIsIntegrationFailed = (isFailed: boolean) => {
+    setSearch((prev) => {
+      prev.set('isIntegrationFailed', isFailed?.toString());
+
+      return prev;
+    })
+  }
+
+  // http://localhost:6101/api/demo/services/7f0830d4-c917-49de-9a75-378a3737cd62/buildInstallationFormUrl?successUrl=http:%2F%2Flocalhost:5173%2F%3Fcurrent%3D1%26accessKey%3D3wsIKETURE0K7bcJR3AqPQTK7ziTiW4h%26userName%3DDemo%2Bapp%2BUser%26organization%3DDemo%2Bapp%2BCompany%26appTitle%3DDemo%2Bapp%2BTitle%26domain%3DSCM%26redirectModalOpen%3Dtrue%26accessPointModalOpen%3Dfalse%26isIntegrationFailed%3Dfalse%26service%3D7f0830d4-c917-49de-9a75-378a3737cd62&failureUrl=http:%2F%2Flocalhost:5173%2F%3Fcurrent%3D0%26accessKey%3D3wsIKETURE0K7bcJR3AqPQTK7ziTiW4h%26userName%3DDemo%2Bapp%2BUser%26organization%3DDemo%2Bapp%2BCompany%26appTitle%3DDemo%2Bapp%2BTitle%26domain%3DSCM%26redirectModalOpen%3Dtrue%26accessPointModalOpen%3Dfalse%26isIntegrationFailed%3Dfalse%26service%3D7f0830d4-c917-49de-9a75-378a3737cd62
+
   const contextValues: ContextTypes = {
     setAccessKey,
     setDomain,
@@ -225,7 +238,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setSelectedCollection,
     setRedirectModalOpen,
     setAccessPointModalOpen,
+    setIsIntegrationFailed,
 
+    isIntegrationFailed: JSON.parse(search.get('isIntegrationFailed')),
     redirectModalOpen: JSON.parse(search.get('redirectModalOpen')),
     accessPointModalOpen: JSON.parse(search.get('accessPointModalOpen')),
     organization: search.get('organization'),
