@@ -42,18 +42,18 @@ export const SelectService = React.forwardRef<
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  // function _compare(a: ObjType, b: ObjType) {
-  //   const bandA = a?.serviceProfile?.name.toUpperCase();
-  //   const bandB = b?.serviceProfile?.name.toUpperCase();
+  function compare(a: any, b: any) {
+    const bandA = a?.serviceProfile?.name.toUpperCase();
+    const bandB = b?.serviceProfile?.name.toUpperCase();
 
-  //   let comparison = 0;
-  //   if (bandA > bandB) {
-  //     comparison = 1;
-  //   } else if (bandA < bandB) {
-  //     comparison = -1;
-  //   }
-  //   return comparison;
-  // }
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = 1;
+    } else if (bandA < bandB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
 
   const getServices = async () => {
     setLoading(true);
@@ -65,7 +65,7 @@ export const SelectService = React.forwardRef<
       );
       if (resp && resp.data.data) {
         const data = resp.data.data;
-        // data?.sort(compare)
+        data?.sort(compare)
         setServices(data);
         setServicesError("")
       }

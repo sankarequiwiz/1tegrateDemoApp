@@ -2,6 +2,7 @@ import React, { LegacyRef } from "react";
 
 import { Button, Card, Typography, Divider } from "antd";
 import { CardProps } from "antd/es/card";
+import { ServiceTypes } from "./types";
 
 
 type CustomCardProps = {
@@ -13,7 +14,7 @@ type CustomCardProps = {
 export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: LegacyRef<HTMLDivElement>) => {
    const { item, onSelectProvider, selected, ...rest } = props;
 
-   const imageurl = item?.serviceProfile?.image?.small
+   const imageUrl = item?.serviceProfile?.image?.small
    return (
       <Card
          style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", maxWidth: "18rem !important" }}
@@ -24,7 +25,7 @@ export const ProviderCard = React.forwardRef((props: CustomCardProps, ref: Legac
       >
          <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
             <div>
-               <img src={imageurl} alt="ProviderLogo" />
+               <img src={imageUrl} alt="ProviderLogo" />
             </div>
             <div style={{marginTop:"0.2rem"}}>
                {item?.serviceProfile?.name && (

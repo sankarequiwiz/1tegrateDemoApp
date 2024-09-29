@@ -51,6 +51,7 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
                   return (
                      <Col
                         span={4}
+                        xxl={4}
                         lg={6}
                         md={8}
                         sm={12}
@@ -58,7 +59,7 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
                         key={index}
                      >
                         <ProviderCard
-                           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
+                           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", height: '100%' }}
                            bordered
                            selected={selectedIndex === index}
                            rootClassName="card"
