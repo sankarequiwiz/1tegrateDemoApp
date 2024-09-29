@@ -46,7 +46,7 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
 
       return (
          <div {...rest} ref={ref}>
-            <Row gutter={[20, 20]}>
+            <Row gutter={[20, 20]} >
                {items.map((item, index) => {
                   return (
                      <Col
