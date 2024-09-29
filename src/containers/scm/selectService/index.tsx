@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { HTMLProps, useState } from 'react';
+import React, { HTMLProps, useEffect, useState } from 'react';
 import API from '../../../services';
 import {
   ButtonProps,
@@ -38,6 +38,7 @@ export const SelectService = React.forwardRef<
     selectedService: selected,
     accessKey: key,
     domain,
+    setIntegration
   } = React.useContext(AppContext);
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -98,6 +99,10 @@ export const SelectService = React.forwardRef<
       })
     };
   }, []);
+
+  useEffect(() => {
+    setIntegration(null)
+  }, [])
 
   const onOkProps: ButtonProps = {
     disabled: !selected,
