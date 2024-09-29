@@ -51,6 +51,10 @@ export const TileList = React.forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
                   return (
                      <Col
                         span={4}
+                        lg={6}
+                        md={8}
+                        sm={12}
+                        xs={24}
                         key={index}
                      >
                         <ProviderCard

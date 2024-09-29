@@ -17,7 +17,7 @@ const getSuccessUrl = () => {
    params.set('current', '1');
    successUrl.search = params.toString();
 
-   return encodeURI(successUrl.href);
+   return successUrl.href;
 },
    getFailureUrl = () => {
       let failedUrl = new URL(window.location.href),
@@ -26,11 +26,11 @@ const getSuccessUrl = () => {
       params.set('isIntegrationFailed', 'true');
       failedUrl.search = params.toString();
 
-      return encodeURI(failedUrl.href);
+      return failedUrl.href
    },
    OK_BUTTON_STYLES: React.CSSProperties = { background: 'green' };
 
-const mockResponse = { formUrl: "https://api.example.com/install" }
+const mockResponse = { formUrl: "https://api.example.com/install" } // todo
 
 export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
 
@@ -41,7 +41,9 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
    const {
       setRedirectModalOpen,
       setAccessPointModalOpen,
+      setIsIntegrationFailed,
       isIntegrationFailed,
+      organization
    } = useAppProvider()
 
    const [loading, setLoading] = useState<boolean>(true);
@@ -72,10 +74,13 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
    const onTryAgain = () => {
       setRedirectModalOpen(false)
       setAccessPointModalOpen(true);
+      setIsIntegrationFailed(false)
    }
    const onClose = () => {
       setRedirectModalOpen(false)
    }
+
+   const providerName = selectedService?.serviceProfile?.name;
 
    return (
       <Modal
@@ -90,9 +95,11 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
                <Flex vertical gap={'middle'} align="center" justify="start">
                   <ProviderIndicator onlyLogo selectedService={selectedService} />
                   <Flex vertical gap={'small'} align="center">
-                     <Typography.Title level={4} style={{ marginBottom: 0 }}>Here is the link to redirect</Typography.Title>
-                     <Typography.Text type='secondary' style={{ textAlignLast: 'center' }}>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus maiores rerum sed nostrum!
+                     <Typography.Title level={4} style={{ marginBottom: 0 }}>
+                        Connect {providerName}
+                     </Typography.Title>
+                     <Typography.Text type='secondary' style={{ textAlign: 'center' }}>
+                        By installing the {providerName} app, {organization} can get access to your account
                      </Typography.Text>
                   </Flex>
                   <Flex vertical gap={'small'} style={{ width: '100%' }}>
@@ -102,7 +109,7 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
                            block
                            style={OK_BUTTON_STYLES}
                         >
-                           Install app
+                           Install App
                         </Button>
                      </Link>
                      <Button

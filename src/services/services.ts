@@ -48,7 +48,7 @@ export const createIntegrations = async (payload: CreateIntegrationType) => {
 };
 
 export const getIntegrationById = async (id: string) => {
-	return fetch.post(`/api/demo/integrations/${id}`);
+	return fetch.get(`/api/demo/integrations/${id}`);
 };
 
 /* test integrations */
