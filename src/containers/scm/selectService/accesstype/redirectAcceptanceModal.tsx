@@ -5,7 +5,8 @@ import services from "../../../../services";
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { useAppProvider } from "../../../../context/AppProvider";
 import { ProviderIndicator } from "./providerIndicator";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+
 
 type ConfirmationModalProps = {
 } & ModalProps
@@ -81,7 +82,7 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
    const onClose = () => {
       setRedirectModalOpen(false)
    }
-
+   
    const providerName = selectedService?.serviceProfile?.name;
 
    return (
@@ -106,36 +107,45 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
                />
             ) : (
                !isIntegrationFailed ? (
-                  <Flex vertical gap={'middle'} align="center" justify="start">
-                     <ProviderIndicator onlyLogo selectedService={selectedService} />
-                     <Flex vertical gap={'small'} align="center">
-                        <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                           Connect {providerName}
-                        </Typography.Title>
-                        <Typography.Text type='secondary' style={{ textAlign: 'center' }}>
-                           By installing the {providerName} app, {organization} can get access to your account
-                        </Typography.Text>
-                     </Flex>
-                     <Flex vertical gap={'small'} style={{ width: '100%' }}>
-                        <Link to={redirectDetails?.formUrl}>
+                  <div>
+                     <Button
+                           type='text'
+                           icon={<ArrowLeftOutlined />}
+                           onClick={onTryAgain}
+                        >Back</Button>
+                     <Flex vertical gap={'middle'} align="center" justify="start">
+                        <ProviderIndicator onlyLogo selectedService={selectedService} />
+                        <Flex vertical gap={'small'} align="center">
+                           <Typography.Title level={4} style={{ marginBottom: 0 }}>
+                              Connect {providerName}
+                           </Typography.Title>
+                           <Typography.Text type='secondary' style={{ textAlign: 'center' }}>
+                              By installing the {providerName} app, {organization} can get access to your account
+                           </Typography.Text>
+                        </Flex>
+                        <Flex vertical gap={'small'} style={{ width: '100%' }}>
+                           <Link to={redirectDetails?.formUrl}>
+                              <Button
+                                 type="primary"
+                                 block
+                                 style={OK_BUTTON_STYLES}
+                              >
+                                 Install App
+
+                              </Button>
+                           </Link>
                            <Button
-                              type="primary"
                               block
-                              style={OK_BUTTON_STYLES}
+                              onClick={onClose}
+                              type='link'
+                              icon={<CloseOutlined />}
                            >
-                              Install App
+                              Close
                            </Button>
-                        </Link>
-                        <Button
-                           block
-                           onClick={onClose}
-                           type='link'
-                           icon={<CloseOutlined />}
-                        >
-                           Close
-                        </Button>
+                        </Flex>
                      </Flex>
-                  </Flex>
+                  </div>
+
                ) : (
                   <Result
                      title='Something went wrong!'
