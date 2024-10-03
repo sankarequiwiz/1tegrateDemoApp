@@ -17,5 +17,6 @@ export const ConfigWindows = () => {
          <APIKeyFlow />
       )
    }
+
    return <APPKeyFlow />
 }

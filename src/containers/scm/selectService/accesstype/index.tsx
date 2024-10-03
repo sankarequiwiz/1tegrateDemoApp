@@ -60,12 +60,15 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
    const onCancel = (e: MouseEvent<HTMLButtonElement>) => {
       if (typeof onCancelProp === 'function') onCancelProp(e);
       setActiveKey('1')
+      setSelectedConfig(null)
+      setSelectedIndex(null)
    }
 
    const getServiceAccessType = async () => {
       try {
          const resp = await services.services.getServiceAccessType(selectedService?.id);
          const { data } = resp?.data;
+
          setAccessPoints(data)
       } catch (error) {
 

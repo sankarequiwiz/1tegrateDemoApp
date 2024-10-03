@@ -48,10 +48,10 @@ const getConfigContainer = (type: ServiceAccessTypeEnum, accessPoint: ServiceCon
          return accessPoint?.apiKey
 
       case ServiceAccessTypeEnum.CredentialFlow:
-         return accessPoint?.CredentialsDetails
+         return accessPoint?.credentialsDetails
 
       case ServiceAccessTypeEnum.OAuthPasswordFlow:
-         return accessPoint?.OAuthDetails
+         return accessPoint?.oAuthDetails
       default:
          return null;
    }
@@ -162,9 +162,11 @@ export const APIKeyFlowForm = () => {
    }, [selectedService])
 
    const fields = useMemo(() => {
-      const stepConfigs = selectedServiceConfig?.apiKey?.authorizationProcessConfig?.stepConfigs ?? []
+      const stepConfigs = getConfigContainer(selectedServiceConfig?.type, selectedServiceConfig)
+         ?.authorizationProcessConfig?.stepConfigs ?? []
 
       const flattedFieldTypeConfigs = [];
+
       stepConfigs?.forEach(({ fieldTypeConfigs }) => {
          flattedFieldTypeConfigs.push(...fieldTypeConfigs)
       })
