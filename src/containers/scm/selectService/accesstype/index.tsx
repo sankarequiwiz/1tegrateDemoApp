@@ -1,4 +1,4 @@
-import  { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { Button, Card, Flex, Modal, ModalProps, Radio, Tabs, Typography } from 'antd';
 import { ServiceConfigType, ServiceTypes } from '../types';
 import services from '../../../../services';
@@ -8,6 +8,7 @@ import { ProviderIndicator } from './providerIndicator';
 import { useAppProvider } from '../../../../context/AppProvider';
 import { RedirectAcceptanceModal } from './redirectAcceptanceModal';
 import { ArrowLeftOutlined, CloseOutlined } from '@ant-design/icons';
+import { ServiceAccessTypeStateEnum } from '../constant';
 
 
 type ServiceAccessTypeFormProps = {
@@ -19,7 +20,7 @@ type ModalHeaderProps = {
    onClose?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
-const ModalHeader = (props: ModalHeaderProps) => {
+export const ModalHeader = (props: ModalHeaderProps) => {
 
    const { onBack, onClose } = props;
 
@@ -68,8 +69,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
       try {
          const resp = await services.services.getServiceAccessType(selectedService?.id);
          const { data } = resp?.data;
-
-         setAccessPoints(data)
+         setAccessPoints(data.filter(i => i.state === ServiceAccessTypeStateEnum.Configured))
       } catch (error) {
 
       }
@@ -102,7 +102,6 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
    useEffect(() => {
       serviceId && getServiceAccessType()
    }, [serviceId])
-
 
    return (
       <ServiceConfigTypeProvider
