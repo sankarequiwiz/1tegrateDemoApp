@@ -24,7 +24,8 @@ type ContextTypes = {
   redirectModalOpen?: boolean
   accessPointModalOpen?: boolean
   integration?: ServiceTypes;
-  isIntegrationFailed?: boolean
+  isIntegrationFailed?: boolean;
+  selectedPR?:string;
 
   // to
   companykey?: string;
@@ -49,7 +50,7 @@ type ContextTypes = {
   setDomain?: React.Dispatch<React.SetStateAction<DomainTypes>>;
   setIntegration?: (serviceProfileTypes: ServiceTypes) => void;
   setSelectedCollection?: (collection: string) => void;
-
+  setSelectedPR?:(selectedPR:string) =>void
 };
 
 type ProviderTypes = {
@@ -168,6 +169,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
     });
   };
 
+  const setSelectedPR = (selectedPR: string) => {
+    setSearch((prev) => {
+      prev.set('selectedCommit', selectedPR.toString());
+      return prev;
+    });
+  };
+
   const setDomain = (domain: DomainTypes) => {
     setSearch((prev) => {
       return {
@@ -227,6 +235,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setSelectedService,
     setSelectedOrganization,
     setSelectedRepo,
+    setSelectedPR,
     setSelectedArtifact,
     setConclusion,
     setSelectedBranch,
@@ -250,6 +259,7 @@ export function AppProvider({ children, value }: ProviderTypes) {
     appTitle: search.get('appTitle'),
     selectedArtifact: search.get("selectedArtifact"),
     selectedCommit: search.get('selectedCommit'),
+    selectedPR:search.get('selectedPR'),
     selectedPullReq: search.get('selectedPullReq'),
     selectedBranch: search.get('selectedBranch'),
     conclusion: search.get('conclusion'),
