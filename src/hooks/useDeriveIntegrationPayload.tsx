@@ -130,7 +130,7 @@ export function useApiKeyFlowPayload({
             criteria: {
                and: [
                   {
-                     property: "/target/accessPoint/serviceProfile/id",
+                     property: "/target/accessPoint/service/id",
                      operator: "=",
                      values: [
                         selected?.serviceProfile.id
