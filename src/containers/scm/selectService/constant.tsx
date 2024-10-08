@@ -8,7 +8,7 @@ export enum ServiceAccessTypeEnum {
    APIKey = 'APIKEY_FLW',
    AppFlow = 'APP_FLW',
    CredentialFlow = 'CREDENTIALS_FLW',
-   OAuthPasswordFlow = 'OAUTH_FLW'
+   OAuthPasswordFlow = 'OAUTH_PASSWORD_FLW'
 }
 
 export enum InputFieldType {
