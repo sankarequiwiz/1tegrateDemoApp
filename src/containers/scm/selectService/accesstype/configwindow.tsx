@@ -19,6 +19,6 @@ export const ConfigWindows = () => {
    } else if (ServiceAccessTypeEnum.AppFlow === selectedServiceConfig?.type) {
       return <APPKeyFlow />
    } else {
-      return `No key match with ${selectedServiceConfig?.type}`
+      return `no key found with the ${selectedServiceConfig?.type}`
    }
 }
