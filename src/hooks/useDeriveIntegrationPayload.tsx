@@ -180,6 +180,7 @@ export function useApiKeyFlowPayload({
             type: 'error',
             content: message,
          });
+      } finally {
          setIsTesting(false);
       }
    }

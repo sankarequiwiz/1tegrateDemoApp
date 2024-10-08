@@ -153,26 +153,23 @@ export const SelectService = React.forwardRef<
                       showIcon
                     />
                   </div>
-                ) : (
-                  <div>
-                    <Alert
-                      message={<Typography.Title level={4}>Subscription or Services not Enabled</Typography.Title>}
-                      description={<div>
-                        <p>It appears that you currently do not have an active subscription or any services enabled on your account. To start using services, please visit the
-                          Customer Portal
-                          and navigate to the
-                          Services
-                          tab under "Setup Integrations". </p>
-                        <br />
-                        <p>
-                          If you don't have a subscription yet, you can request one by reaching out to <a href="mailto:sales@unizo.in"> Unizo representative </a> . They will assist you in setting up the appropriate subscription plan tailored to your needs.</p>
-                      </div>}
-                      type="warning"
-                      className="custom-alert custom-warning"
-                      showIcon
-                    />
+                ) : (<Alert
+                  message={<Typography.Title level={4}>Subscription or Services not Enabled</Typography.Title>}
+                  description={<div>
+                    <p>It appears that you currently do not have an active subscription or any services enabled on your account. To start using services, please visit the
+                      Customer Portal
+                      and navigate to the
+                      Services
+                      tab under "Setup Integrations". </p>
+                    <br />
+                    <p>
+                      If you don't have a subscription yet, you can request one by reaching out to <a href="mailto:sales@unizo.in"> Unizo representative </a> . They will assist you in setting up the appropriate subscription plan tailored to your needs.</p>
                   </div>
-                )
+                  }
+                  type="warning"
+                  className="custom-alert custom-warning"
+                  showIcon
+                />)
               )}
             </ div>
           ) : <Alert type="error" message={warningMsg} banner />
