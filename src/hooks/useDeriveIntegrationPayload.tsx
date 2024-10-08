@@ -133,7 +133,7 @@ export function useApiKeyFlowPayload({
                      property: "/target/accessPoint/service/id",
                      operator: "=",
                      values: [
-                        selected?.serviceProfile.id
+                        selected?.id
                      ]
                   },
                   {
