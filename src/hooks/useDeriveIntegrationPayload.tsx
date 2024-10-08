@@ -137,7 +137,7 @@ export function useApiKeyFlowPayload({
                      ]
                   },
                   {
-                     property: "/target/accessPoint/accessPointConfig/type",
+                     property: "/target/accessPoint/accessPointTypeConfig/type",
                      operator: "=",
                      values: [
                         flowType
