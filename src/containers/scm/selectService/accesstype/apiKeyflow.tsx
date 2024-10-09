@@ -51,7 +51,7 @@ const getConfigContainer = (type: ServiceAccessTypeEnum, accessPoint: ServiceCon
          return accessPoint?.credentialsDetails
 
       case ServiceAccessTypeEnum.OAuthPasswordFlow:
-         return accessPoint?.oAuthDetails
+         return accessPoint?.oAuthPasswordDetails
       default:
          return null;
    }
