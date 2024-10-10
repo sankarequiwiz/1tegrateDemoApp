@@ -11,15 +11,18 @@ import { ServiceConfigType } from "../types";
 
 const INPUT_FIELD_MAPPERS = {
    [InputFieldType.List]: {
-      getParseOption(list: Array<{ [key: string]: any }>) {
-         return list.map(({ code: value = null, description: label = null }) => (
-            { value, label }
-         ))
+      getParseOption(arg: Record<string, any>) {
+         const value = arg?.value?.possibleValues ?? [];
+         return arg?.name?.possibleValues
+            ?.map((label: string, index: number) => ({ label, value: value?.[index] }))
+            ?.filter(({ value }) => value)
       },
-      getField({ dataType, ...rest }: any) {
-         const options = this.getParseOption(dataType?.values ?? [])
+
+      getField({ items = [], ...rest }: any) {
+         const options = this.getParseOption(items?.[0]?.properties ?? [])
          return <Select {...rest} options={options} allowClear />
       },
+
       getValidations(validations: Array<{ [key: string]: any }>) {
          return validations?.map(({ required = false }) => ({
             required,
@@ -31,6 +34,7 @@ const INPUT_FIELD_MAPPERS = {
       getField: (props: any) => {
          return <Input {...props} allowClear />
       },
+
       getValidations(...args: Array<{ [key: string]: any }>) {
          const [validations] = args;
          return validations?.map(({ required = false }) => ({
