@@ -58,7 +58,8 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
          const { data } = await services.services.buildInstallationFormUrl(selectedService?.id, {
             params: {
                successUrl: getSuccessUrl(),
-               failureUrl: getFailureUrl()
+               failureUrl: getFailureUrl(),
+               subOrganizationName: organization
             }
          })
          setRedirectionDetails(data)
@@ -82,7 +83,7 @@ export const RedirectAcceptanceModal = (props: ConfirmationModalProps) => {
    const onClose = () => {
       setRedirectModalOpen(false)
    }
-   
+
    const providerName = selectedService?.serviceProfile?.name;
 
    return (

@@ -1,0 +1,18 @@
+ <svg
+    xmlns="http://www.w3.org/2000/svg"
+    enable-background="new 0 0 15 15"
+    height="35"
+    view-box="0 0 50 30"
+    width="35"
+  >
+    <path d="m0 0h32v32h-32z" fill="none" />
+    <path d="m14 4h4v4h-4z" fill="#ffffff" />
+    <path d="m4 4h4v4h-4z" fill="#ffffff" />
+    <path d="m24 4h4v4h-4z" fill="#ffffff" />
+    <path d="m14 14h4v4h-4z" fill="#ffffff" />
+    <path d="m4 14h4v4h-4z" fill="#ffffff" />
+    <path d="m24 14h4v4h-4z" fill="#ffffff" />
+    <path d="m14 24h4v4h-4z" fill="#ffffff" />
+    <path d="m4 24h4v4h-4z" fill="#ffffff" />
+    <path d="m24 24h4v4h-4z" fill="#ffffff" />
+  </svg>

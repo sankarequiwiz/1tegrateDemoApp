@@ -63,9 +63,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
   const [search, setSearch] = useSearchParams({
     current: '0',
     accessKey: '',
-    userName: '',
-    organization: 'Demo app Company',
-    appTitle: 'Demo app Title',
+    userName: 'Info Sec Engineer',
+    organization: 'Secure Bank, Inc',
+    appTitle: 'App Sec Saas',
     domain: 'SCM',
     redirectModalOpen: 'false',
     accessPointModalOpen: 'false',
