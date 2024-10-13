@@ -144,7 +144,7 @@ export function useApiKeyFlowPayload({
                   },
                   ...Object.entries(formData).map(([key, value]) => {
                      return {
-                        property: `/target/accessPoint/${key}`,
+                        property: `/target/accessPoint${key}`,
                         operator: "=",
                         values: [
                            value
