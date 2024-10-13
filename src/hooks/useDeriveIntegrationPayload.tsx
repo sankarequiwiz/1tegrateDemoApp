@@ -123,7 +123,6 @@ export function useApiKeyFlowPayload({
 
    const onTestIntegration = async (values) => {
       let { flowType, ...formData } = values;
-      const payload = derive(formData);
       try {
          setIsTesting(true);
          const { data } = await API.services.testIntegrations({
@@ -143,7 +142,7 @@ export function useApiKeyFlowPayload({
                         flowType
                      ]
                   },
-                  ...Object.entries(payload).map(([key, value]) => {
+                  ...Object.entries(formData).map(([key, value]) => {
                      return {
                         property: `/target/accessPoint/${key}`,
                         operator: "=",
