@@ -119,7 +119,7 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         key: '2',
       },
       {
-        title: 'Select Channels',
+        title: 'Select Channel',
         container: <SelectChannels />,
         key: '3',
       },
