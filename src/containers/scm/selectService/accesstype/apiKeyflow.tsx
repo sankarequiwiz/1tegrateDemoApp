@@ -2,7 +2,6 @@ import { Button, ButtonProps, Flex, Form, Input, ModalProps, Select, Space, Tabs
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
 import { MouseEvent, useEffect, useMemo, useState } from "react";
 import { InputFieldType, ServiceAccessTypeEnum } from "../constant";
-import API from '../../../../services';
 import { useApiKeyFlowPayload } from "../../../../hooks/useDeriveIntegrationPayload";
 import { AttentionInfoWindows } from "./attentionInfo";
 import { ProviderIndicator } from "./providerIndicator";
