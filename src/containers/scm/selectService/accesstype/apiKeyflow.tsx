@@ -194,7 +194,7 @@ export const APIKeyFlowForm = () => {
          id: selectedService?.serviceProfile?.id
       })
 
-   const isSelfManaged = true ?? getIsSelfManaged(selectedService)
+   const isSelfManaged = getIsSelfManaged(selectedService)
 
    const onOk = (_e: MouseEvent<HTMLButtonElement>) => {
       form.validateFields().then(onCreateIntegration).catch(() => { });
