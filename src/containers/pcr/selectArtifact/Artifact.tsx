@@ -103,7 +103,7 @@ export const Artifact = React.forwardRef<
     };
     try {
       await API.services.createWatch(payload, integration.id);
-      messageApi.success({ content: 'Watch created successfully' });
+      messageApi.success({ content: 'Bi-directional created successfully' });
     } catch (error) {
       console.log(error);
       const errorMessage = error?.response?.data, status = error?.response?.status;
@@ -120,7 +120,7 @@ export const Artifact = React.forwardRef<
 
   const items: MenuProps['items'] = [
     {
-      label: "Create Watch",
+      label: "Create Bi-directional",
       key: '0',
       style: { display: isWatchEnabled ? 'block' : 'none' },
       icon: <EyeOutlined />,

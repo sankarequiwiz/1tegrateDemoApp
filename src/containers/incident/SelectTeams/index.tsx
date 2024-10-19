@@ -111,11 +111,11 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
       };
       try {
          await API.services.createWatch(payload, integration.id);
-         messageApi.success({ content: 'Watch created successfully' });
+         messageApi.success({ content: 'Bi-directional created successfully' });
       } catch (error) {
          console.log(error);
          const errorMessage = error?.response?.data, status = error?.response?.status;
-         messageApi.error({ content: handleError(errorMessage, status) ?? 'Watch creation failed' });
+         messageApi.error({ content: handleError(errorMessage, status) ?? 'Bi-directional creation failed' });
       } finally {
          setLoading(false);
       }
