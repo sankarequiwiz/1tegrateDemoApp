@@ -75,29 +75,19 @@ const domain = [
     disabled: true,
   },
   {
+    value: 'Compliance',
+    label: 'Compliance',
+    disabled: true,
+  },
+  {
+    value: 'Privacy',
+    label: 'Privacy',
+    disabled: true,
+  },
+  {
     value: 'FILE STORAGE AND CONTENT MANAGEMENT',
     label: 'File storage & Content management',
     disabled: true,
-  },
-  {
-    value: 'CRM',
-    label: 'CRM',
-    disabled: true,
-  },
-  {
-    value: 'HR AND BENEFITS',
-    label: 'HR & Benefits',
-    disabled: true,
-  },
-  {
-    value: 'MARKETING',
-    label: 'Marketing',
-    disabled: true,
-  },
-  {
-    value: 'ACCOUNTING AND ERP',
-    disabled: true,
-    label: 'Accounting & ERP',
   }
 ];
 
