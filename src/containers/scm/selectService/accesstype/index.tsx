@@ -18,19 +18,22 @@ type ServiceAccessTypeFormProps = {
 type ModalHeaderProps = {
    onBack?: (e: MouseEvent<HTMLButtonElement>) => void
    onClose?: (e: MouseEvent<HTMLButtonElement>) => void
+   hideBack?: boolean
 }
 
 export const ModalHeader = (props: ModalHeaderProps) => {
 
-   const { onBack, onClose } = props;
+   const { onBack, onClose, hideBack = false } = props;
 
    return (
       <Flex style={{ width: '100%' }} justify='space-between'>
-         <Button
-            type='text'
-            icon={<ArrowLeftOutlined />}
-            onClick={onBack}
-         >Back</Button>
+         {!hideBack ? (
+            <Button
+               type='text'
+               icon={<ArrowLeftOutlined />}
+               onClick={onBack}
+            >Back</Button>
+         ) : <div></div>}
          <Button type='text'
             onClick={onClose}
             icon={<CloseOutlined width={'.8em'} style={{ scale: '.8' }} />}
@@ -122,6 +125,7 @@ export const ServiceAccessTypeForm = (props: ServiceAccessTypeFormProps) => {
             <ModalHeader
                onBack={onBack}
                onClose={onCancel}
+               hideBack={activeKey === '1'}
             />
             <Tabs
                activeKey={activeKey}
