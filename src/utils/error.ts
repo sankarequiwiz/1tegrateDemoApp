@@ -11,7 +11,7 @@ export function handleError(error: Array<{ [key: string]: any }> | { [key: strin
 }
 
 const errorMessages: { [key: string]: string } = {
-   'OTG-3200403': 'Watch dog configuration not found. Please create.!'
+   'OTG-3200403': 'Bi-directional configuration not found. Please create.!'
 };
 
 export class Errors {
