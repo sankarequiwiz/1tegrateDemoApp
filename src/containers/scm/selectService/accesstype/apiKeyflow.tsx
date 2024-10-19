@@ -1,13 +1,13 @@
 import { Button, ButtonProps, Flex, Form, Input, ModalProps, Select, Space, Tabs, Typography } from "antd"
 import { useServiceConfigTypeProvider } from "../../../../context/serviceConfig.context";
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
 import { InputFieldType, ServiceAccessTypeEnum } from "../constant";
-import { deploymentModel } from "../../../../common/deploymentModal";
 import API from '../../../../services';
 import { useApiKeyFlowPayload } from "../../../../hooks/useDeriveIntegrationPayload";
 import { AttentionInfoWindows } from "./attentionInfo";
 import { ProviderIndicator } from "./providerIndicator";
 import { ServiceConfigType } from "../types";
+import { useSelfManageWindow } from "../../../../hooks/useSelfManaged";
 
 const INPUT_FIELD_MAPPERS = {
    [InputFieldType.List]: {
@@ -159,11 +159,9 @@ export const APIKeyFlowForm = () => {
 
    const [form] = Form.useForm()
 
-   const [versions, setVersion] = useState([]);
-
-   const getIsSelfManaged = useCallback(() => {
-      return selectedService?.serviceProfile.deploymentModel?.type === deploymentModel.type.SELF_MANAGED;
-   }, [selectedService])
+   // const getIsSelfManaged = useCallback(() => {
+   //    return selectedService?.serviceProfile.deploymentModel?.type === deploymentModel.type.SELF_MANAGED;
+   // }, [selectedService])
 
    const fields = useMemo(() => {
       const stepConfigs = getConfigContainer(selectedServiceConfig?.type, selectedServiceConfig)
@@ -176,16 +174,6 @@ export const APIKeyFlowForm = () => {
       })
       return flattedFieldTypeConfigs
    }, [selectedServiceConfig]);
-
-   const getAllVersions = async () => {
-      try {
-         const smResp = await API.services.getSelfManaged(selectedService?.serviceProfile?.id);
-         setVersion(smResp?.data?.data ?? [])
-
-      } catch (error) {
-         console.log(error)
-      }
-   };
 
    const flwType = useMemo(() => {
       return selectedServiceConfig?.type ?? 'not_set';
@@ -201,25 +189,22 @@ export const APIKeyFlowForm = () => {
    } = useApiKeyFlowPayload({
       selectedService,
       selectedServiceConfig
-   });
+   }),
+      { getIsSelfManaged, versions = [] } = useSelfManageWindow({
+         id: selectedService?.serviceProfile?.id
+      })
 
+   const isSelfManaged = true ?? getIsSelfManaged(selectedService)
 
    const onOk = (_e: MouseEvent<HTMLButtonElement>) => {
-      // typeof onOkProp === 'function' && onOkProp(e);
-
       form.validateFields().then(onCreateIntegration).catch(() => { });
    },
       onCancel = (_e: MouseEvent<HTMLButtonElement>) => {
-         // typeof onCancelProp === 'function' && onCancelProp(e)
       };
 
    useEffect(() => {
       form.setFieldValue('flowType', flwType)
    }, [flwType]);
-
-   useEffect(() => {
-      getIsSelfManaged() ? getAllVersions() : null
-   }, [getIsSelfManaged()])
 
    return (
       <Flex>
@@ -265,7 +250,7 @@ export const APIKeyFlowForm = () => {
                      )
                   })}
 
-                  {getIsSelfManaged() && (
+                  {isSelfManaged ? (
                      <>
                         <Form.Item name="version" label={<Typography.Text strong>Please select your version</Typography.Text>} rules={[{ required: true }]}>
                            <Select
@@ -281,7 +266,7 @@ export const APIKeyFlowForm = () => {
                            />
                         </Form.Item>
                      </>
-                  )}
+                  ) : null}
                </Flex>
 
                <ModalFooter
