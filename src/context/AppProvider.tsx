@@ -26,10 +26,12 @@ type ContextTypes = {
   integration?: ServiceTypes;
   isIntegrationFailed?: boolean;
   selectedPR?:string;
+  integrationId?: string;
 
   // to
   companykey?: string;
   setCompanykey?: (companyKey: string) => void;
+  setIntegrationId?: (integrationId: string) => void;
 
   setIsIntegrationFailed?: (isFailed: boolean) => void;
   setAccessPointModalOpen?: (isOpen: boolean) => void
@@ -224,6 +226,13 @@ export function AppProvider({ children, value }: ProviderTypes) {
     })
   }
 
+  const setIntegrationId = (id: string) => {
+    setSearch((prev) => {
+      prev.set('integrationId', id);
+      return prev;
+    })
+  }
+
   // http://localhost:6101/api/demo/services/7f0830d4-c917-49de-9a75-378a3737cd62/buildInstallationFormUrl?successUrl=http:%2F%2Flocalhost:5173%2F%3Fcurrent%3D1%26accessKey%3D3wsIKETURE0K7bcJR3AqPQTK7ziTiW4h%26userName%3DDemo%2Bapp%2BUser%26organization%3DDemo%2Bapp%2BCompany%26appTitle%3DDemo%2Bapp%2BTitle%26domain%3DSCM%26redirectModalOpen%3Dtrue%26accessPointModalOpen%3Dfalse%26isIntegrationFailed%3Dfalse%26service%3D7f0830d4-c917-49de-9a75-378a3737cd62&failureUrl=http:%2F%2Flocalhost:5173%2F%3Fcurrent%3D0%26accessKey%3D3wsIKETURE0K7bcJR3AqPQTK7ziTiW4h%26userName%3DDemo%2Bapp%2BUser%26organization%3DDemo%2Bapp%2BCompany%26appTitle%3DDemo%2Bapp%2BTitle%26domain%3DSCM%26redirectModalOpen%3Dtrue%26accessPointModalOpen%3Dfalse%26isIntegrationFailed%3Dfalse%26service%3D7f0830d4-c917-49de-9a75-378a3737cd62
 
   const contextValues: ContextTypes = {
@@ -248,7 +257,9 @@ export function AppProvider({ children, value }: ProviderTypes) {
     setRedirectModalOpen,
     setAccessPointModalOpen,
     setIsIntegrationFailed,
+    setIntegrationId,
 
+    integrationId: search.get('integrationId'),
     isIntegrationFailed: JSON.parse(search.get('isIntegrationFailed')),
     redirectModalOpen: JSON.parse(search.get('redirectModalOpen')),
     accessPointModalOpen: JSON.parse(search.get('accessPointModalOpen')),

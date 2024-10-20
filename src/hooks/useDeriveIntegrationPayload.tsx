@@ -45,11 +45,11 @@ export function useApiKeyFlowPayload({
       setIntegration,
       setCurrentStep,
       current,
-      domain
+      domain,
+      setIntegrationId
    } = useContext(AppContext);
 
    const { selectedService } = useServiceConfigTypeProvider()
-
 
    const messageInstance = message.useMessage();
 
@@ -107,6 +107,7 @@ export function useApiKeyFlowPayload({
          const resp = await API.services.createIntegrations(formValues);
          const { data } = resp;
          setIntegration(data);
+         setIntegrationId(data?.id);
          setTimeout(() => {
             setCurrentStep(current + 1)
          }, 1000);
