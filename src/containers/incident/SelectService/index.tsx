@@ -99,8 +99,8 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
          description: `Watch for ${fullBodySelected.name} repository`,
          type: 'Webhook',
          resource: {
-            type: `${domain}_COLLECTIONS`,
-            collections: {
+            type: `${domain}_SERVICE`,
+            service: {
                id: selectedCollection
             },
             organization: {
@@ -108,6 +108,7 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
             },
          },
       };
+
       try {
          await API.services.createWatch(payload, integration.id);
          messageApi.success({ content: 'Bi-directional created successfully' });
@@ -122,7 +123,8 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
 
    const isWatchEnabled = useMemo(() => {
       const watch = new utils.watch.Watch(domain);
-      return watch.isAvailable({ level: 'collection' })
+
+      return watch.isAvailable({ level: 'service' })
    }, [domain]);
 
    const handleSelect = (selected: string) => {
