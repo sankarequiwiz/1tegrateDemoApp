@@ -149,8 +149,29 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         title: 'Select Incident',
         container: <SelectIncident />,
         key: '5',
-      },
-        
+      }, 
     ]
+    ,
+    SIEM:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+    ],
+    VULNERABILITY_MANAGEMENT:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+    ], 
+    COMPLIANCE:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+    ],
   };
 }
