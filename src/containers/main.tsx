@@ -5,7 +5,7 @@ import { FloatingActionComp } from '../components/AccessKeyInput';
 import { StepTypes, getStepItems } from '../common/stepper';
 import { AppContext } from '../context/AppProvider';
 import { Commits } from './scm/Commit';
-import { PullRequest } from './scm/PullRequest';
+import { PullRequest } from './scm/pullRequest/PullRequest';
 import { Branch } from './scm/Branch';
 
 export function Main() {

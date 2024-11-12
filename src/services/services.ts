@@ -206,7 +206,38 @@ export const metaDataConfig = async (orgId: string, collectionId: string, payloa
 	return await fetch.post(`/api/demo/ticketing/${orgId}/collections/${collectionId}/tickets/metadataConfig`, payload, { headers })
 }
 
+//pull Request
 
+export const createPullrequest = async (
+	payload: { [key: string]: any },
+	headers: { [key: string]: any },
+	orgId: string,
+	repoId: string
+) => {
+	return await fetch.post(`/api/demo/scm/organizations/${orgId}/repositories/${repoId}/pullRequests`, payload, { headers })
+}
+
+export const editPullrequest = async (
+	payload: { [key: string]: any },
+	headers: { [key: string]: any },
+	orgId: string,
+	repoId: string,
+	pullrequestId:string
+) => {
+	return await fetch.put(`/api/demo/scm/organizations/${orgId}/repositories/${repoId}/pullRequests/${pullrequestId}`, payload, { headers })
+}
+export const PRmetaDataConfig = async (orgId: string, repoId: string, payload: { [key: string]: any }, headers: { [key: string]: any }) => {
+	return await fetch.post(`/api/demo/scm/organizations/${orgId}/repositories/${repoId}/pullRequests/metadataConfig`, payload, { headers })
+}
+
+// export const PRmetaDataConfig = async (
+// 	payload: { [key: string]: any },
+// 	headers: { [key: string]: any },
+// 	orgId: string,
+// 	repoId: string
+// ) => {
+// 	return await fetch.post(`/api/demo/scm/organizations/${orgId}/repositories/${repoId}/pullRequests/metadataConfig`, payload, { headers })
+// }
 
 //pcr APi calls
 

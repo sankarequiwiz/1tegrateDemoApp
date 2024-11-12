@@ -62,12 +62,10 @@ const domain = [
   {
     value: 'VULNERABILITY MANAGEMENT',
     label: 'Vulnerability management',
-    disabled: true,
   },
   {
     value: 'SIEM',
     label: 'SIEM',
-    disabled: true,
   },
   {
     value: 'EDR AND XDR',
