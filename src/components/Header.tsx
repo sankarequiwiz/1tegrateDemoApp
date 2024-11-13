@@ -61,7 +61,7 @@ const domain = [
   },
   {
     label: 'Vulnerability management',
-    key: 'VULNERABILITY_MANAGEMENT',
+    key: 'VULNERABILITY',
   },
   {
     label: 'SIEM',

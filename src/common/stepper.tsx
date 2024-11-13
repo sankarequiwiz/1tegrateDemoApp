@@ -159,7 +159,7 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         key: '1',
       },
     ],
-    VULNERABILITY_MANAGEMENT:[
+    VULNERABILITY:[
       {
         title: 'Select Services',
         container: <SelectService />,
