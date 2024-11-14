@@ -42,6 +42,13 @@ type ServiceTypes = {
   type: string;
   id: string;
   state: string;
+  versions?: {
+    "type": "SP_VERSION",
+    "serviceProfileVersion": {
+      "id": string
+      "name": string
+    }
+  }[]
   serviceProfile: {
     href: string;
     type: string;

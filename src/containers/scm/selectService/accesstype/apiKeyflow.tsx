@@ -255,7 +255,12 @@ export const APIKeyFlowForm = () => {
                            <Select
                               placeholder="Please select your version"
                               allowClear
-                              options={versions?.map(({ id: value, name: label }) => ({ value, label }))}
+                              options={selectedService?.versions?.map(({ serviceProfileVersion }) => {
+                                 return {
+                                    value: serviceProfileVersion.id,
+                                    label: serviceProfileVersion.name
+                                 }
+                              })}
                            />
                         </Form.Item>
 
