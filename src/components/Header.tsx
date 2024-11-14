@@ -64,12 +64,12 @@ const domain = [
     key: 'VULNERABILITY',
   },
   {
-    label: 'SIEM',
-    key: 'SIEM',
-  },
-  {
     label: 'Compliance',
     key: 'COMPLIANCE',
+  },
+  {
+    label: 'SIEM',
+    key: 'SIEM',
   },
   {
     value: 'EDR AND XDR',
