@@ -15,7 +15,7 @@ import API from '../../services';
 
 import { DownloadOutlined } from '@ant-design/icons';
 import { Commits } from './Commit';
-import { PullRequest } from './PullRequest';
+import { PullRequest } from './pullRequest/PullRequest';
 
 export const Branch = React.forwardRef<
   HTMLDivElement,

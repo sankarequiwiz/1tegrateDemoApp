@@ -54,7 +54,7 @@ export function useApiKeyFlowPayload({
    const messageInstance = message.useMessage();
 
    const [messageApi] = messageInstance;
-
+console.log(organization,"appTitleappTitleappTitleappTitle")
    function derive(values) {
       const payload = {};
       Object.entries(values).forEach(([key, value]) => {
@@ -83,9 +83,12 @@ export function useApiKeyFlowPayload({
       let { flowType, ...formData } = values;
 
       const payload = derive(formData);
+      const namePart = selected?.serviceProfile?.name.substring(0, 2);
+      const subOrgPart = organization.substring(0, 4);
+      const epocdate=Date.now();
 
       let formValues: Payload = {
-         name: `${selected?.serviceProfile?.name} integration`,
+         name: `${namePart+"_"+subOrgPart+"_"+epocdate}`,
          type: domain,
          subOrganization: { name: organization },
          target: {
@@ -112,11 +115,19 @@ export function useApiKeyFlowPayload({
             setCurrentStep(current + 1)
          }, 1000);
       } catch (error) {
-         const { message } = parseError(error?.response?.data)
-         messageApi.open({
-            type: 'error',
-            content: message,
-         });
+         let errorMessage: string = 'Something went wrong';
+                  if (error.response.status === 400) {
+                     const data = error.response.data;
+                     if (data && Array.isArray(data) && data.length && data[0]?.details) {
+                        errorMessage = data[0]?.details;
+                     } else {
+                        errorMessage = data[0]?.errorMessage;
+                     }
+                  }
+                  messageApi.open({
+                     type: 'error',
+                     content: errorMessage,
+                  });
       } finally {
          setIsCreating(false);
       }

@@ -204,8 +204,12 @@ export const FormArea = React.forwardRef<
                   }
                })
 
+               const namePart = selected?.serviceProfile?.name.substring(0, 2);
+               const subOrgPart = organization.substring(0, 4);
+               const epocdate=Date.now();
+
                let formValues: Payload = {
-                  name: `${selected?.serviceProfile?.name} integration`,
+                  name: `${namePart+"_"+subOrgPart+"_"+epocdate}`,
                   type,
                   subOrganization: { name: organization },
                   target: {
