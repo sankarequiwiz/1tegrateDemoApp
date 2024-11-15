@@ -61,7 +61,7 @@ function FormComp(props: FormTypes) {
          let content = 'something went wrong!'
          if (Array.isArray(errorProp) && errorProp.length) {
             const [message] = errorProp;
-            content = message?.errorMessage || message?.message;
+            content = message?.details || message?.errorMessage;
          }
          messageApi.error({ content })
 
