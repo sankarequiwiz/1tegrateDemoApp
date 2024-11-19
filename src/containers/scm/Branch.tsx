@@ -120,7 +120,7 @@ const ListComp = ({ dataSource, getHeaders, ...props }: ListTypes) => {
           <List.Item
             actions={[
               <Button
-                onClick={() => downloadHandler(item?.id)}
+                onClick={() => downloadHandler(item?.name)}
                 icon={<DownloadOutlined />}
                 type="link"
                 key={1}
