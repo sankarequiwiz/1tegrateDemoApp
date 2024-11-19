@@ -37,18 +37,21 @@ export type AccessPointConfigsTypes = {
   ];
 };
 
+type ServiceProfileVersionType = {
+  id: string;
+  name: string;
+};
+
+type VersionType = {
+  type: string;
+  serviceProfileVersion: ServiceProfileVersionType;
+};
 type ServiceTypes = {
   href: string;
   type: string;
   id: string;
   state: string;
-  versions?: {
-    "type": "SP_VERSION",
-    "serviceProfileVersion": {
-      "id": string
-      "name": string
-    }
-  }[]
+  versions?: VersionType[];
   serviceProfile: {
     href: string;
     type: string;

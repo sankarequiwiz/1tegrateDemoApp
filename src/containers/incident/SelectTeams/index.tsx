@@ -142,7 +142,7 @@ const ListComp = ({ dataSource, loading: loadingProp }: ListTypes) => {
                      return (
                         <List.Item
                            actions={[
-                              (isWatchEnabled && isSelected) && <a onClick={handleCreateWatch} key={1} >Create Watch</a>
+                              (isWatchEnabled && isSelected) && <a onClick={handleCreateWatch} key={1} >Create Bi-directional</a>
                            ]}
                            onClick={() => {
                               handleSelect(item.id);

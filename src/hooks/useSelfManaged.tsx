@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
 import { ServiceTypes } from "../containers/scm/selectService/types";
-import API from '../services';
-
 import { Form as AntForm, Input, Select, Typography } from "antd";
 
 export const SELF_MANAGED_PROVIDERS = ['GitHub Enterprise', 'GitLab Self-Managed', 'Jira Server'];
@@ -31,30 +28,13 @@ const Form = ({ versions = [] }: FormProps) => {
    )
 }
 
-export const useSelfManageWindow = ({ id }) => {
-   const [versions, setVersion] = useState([]);
-
-   const getAllVersions = async () => {
-      try {
-         const smResp = await API.services.getSelfManaged(id);
-         setVersion(smResp?.data?.data ?? [])
-
-      } catch (error) {
-         console.log(error)
-      }
-   }
-
-   useEffect(() => {
-      getAllVersions()
-   }, [id])
-
+export const useSelfManageWindow = () => {
    return {
       getForm: () => (
          <Form versions={[]} />
       ),
       getIsSelfManaged: (service: ServiceTypes) => {
          return SELF_MANAGED_PROVIDERS.includes(service?.serviceProfile?.name)
-      },
-      versions: versions ?? []
+      }
    }
 }
