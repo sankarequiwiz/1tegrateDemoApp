@@ -349,3 +349,16 @@ export const getIncidentOpsigine = async (
 		{ headers }
 	);
 };
+
+
+//vulnerability Api calls
+
+
+export const getAllvulnerability = async (
+	headers: { [key: string]: string }
+) => {
+	return await fetch.get(
+		`/api/demo/vulnerability/test/vulnerabilities`,
+		{ headers }
+	);
+};
