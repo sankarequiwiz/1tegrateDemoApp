@@ -358,7 +358,7 @@ export const getAllvulnerability = async (
 	headers: { [key: string]: string }
 ) => {
 	return await fetch.get(
-		`/api/demo/vulnerability/test/vulnerabilities`,
+		`/api/demo/vms/test/vulnerabilities`,
 		{ headers }
 	);
 };

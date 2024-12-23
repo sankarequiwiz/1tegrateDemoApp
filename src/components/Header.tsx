@@ -61,7 +61,7 @@ const domain = [
   },
   {
     label: 'Vulnerability management',
-    key: 'VULNERABILITY',
+    key: 'VMS',
   },
   {
     label: 'Compliance',
