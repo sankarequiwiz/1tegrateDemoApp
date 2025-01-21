@@ -32,7 +32,12 @@ export const getServices = async (
 };
 
 export const getServiceAccessType = async (id: string) => {
-	return await fetch.get(`/api/demo/services/${id}/accessPoints?customerView=true`)
+	return await fetch.get(`/api/demo/services/${id}/accessPoints`, {
+		params: {
+			customerView: true,
+			isEnabled: true
+		}
+	})
 }
 
 export const buildInstallationFormUrl = async (serviceId: string, options: AxiosRequestConfig<any>) => {
