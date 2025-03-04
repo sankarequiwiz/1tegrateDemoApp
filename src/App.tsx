@@ -28,7 +28,7 @@ function Root() {
 					</AppProvider>
 				</StepProvider>
 			</WatchEventsProvider>
-		</BrowserRouter>
+		</BrowserRouter> 
 	);
 }
 
