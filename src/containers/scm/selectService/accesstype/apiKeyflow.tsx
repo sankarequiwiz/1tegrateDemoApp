@@ -189,9 +189,7 @@ export const APIKeyFlowForm = () => {
       selectedService,
       selectedServiceConfig
    }),
-      { getIsSelfManaged, versions = [] } = useSelfManageWindow({
-         id: selectedService?.serviceProfile?.id
-      })
+      { getIsSelfManaged} = useSelfManageWindow()
 
    const isSelfManaged = getIsSelfManaged(selectedService)
 
@@ -255,12 +253,10 @@ export const APIKeyFlowForm = () => {
                            <Select
                               placeholder="Please select your version"
                               allowClear
-                              options={selectedService?.versions?.map(({ serviceProfileVersion }) => {
-                                 return {
-                                    value: serviceProfileVersion.id,
-                                    label: serviceProfileVersion.name
-                                 }
-                              })}
+                              options={selectedService?.versions.map(({ serviceProfileVersion }) => ({
+                                 value: serviceProfileVersion?.id,
+                                 label: serviceProfileVersion?.name,
+                               }))}
                            />
                         </Form.Item>
 

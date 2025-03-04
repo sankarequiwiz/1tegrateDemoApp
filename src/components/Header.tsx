@@ -60,21 +60,20 @@ const domain = [
     key: 'INCIDENT',
   },
   {
-    value: 'VULNERABILITY MANAGEMENT',
     label: 'Vulnerability management',
+    key: 'VMS',
   },
   {
-    value: 'SIEM',
+    label: 'Compliance',
+    key: 'COMPLIANCE',
+  },
+  {
     label: 'SIEM',
+    key: 'SIEM',
   },
   {
     value: 'EDR AND XDR',
     label: 'EDR & XDR',
-    disabled: true,
-  },
-  {
-    value: 'Compliance',
-    label: 'Compliance',
     disabled: true,
   },
   {

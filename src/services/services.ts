@@ -32,7 +32,12 @@ export const getServices = async (
 };
 
 export const getServiceAccessType = async (id: string) => {
-	return await fetch.get(`/api/demo/services/${id}/accessPoints?customerView=true`)
+	return await fetch.get(`/api/demo/services/${id}/accessPoints`, {
+		params: {
+			customerView: true,
+			isEnabled: true
+		}
+	})
 }
 
 export const buildInstallationFormUrl = async (serviceId: string, options: AxiosRequestConfig<any>) => {
@@ -346,6 +351,19 @@ export const getIncidentOpsigine = async (
 ) => {
 	return await fetch.get(
 		`/api/demo/${withLowerCase(type)}/${organizationId}/services/${serviceId}/teams/${teamId}/incidents`,
+		{ headers }
+	);
+};
+
+
+//vulnerability Api calls
+
+
+export const getAllvulnerability = async (
+	headers: { [key: string]: string }
+) => {
+	return await fetch.get(
+		`/api/demo/vms/31220684/vulnerabilities`,
 		{ headers }
 	);
 };

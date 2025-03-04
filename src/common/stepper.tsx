@@ -12,6 +12,8 @@ import { SelectRepo } from '../containers/scm/selectRepo';
 import { SelectService } from '../containers/scm/selectService';
 import { SelectCollection } from '../containers/ticketing/SelectCollection';
 import { SelectTicket } from '../containers/ticketing/SelectTicket';
+import {SelectCollectionn} from '../containers/vulnerability/SelectCollectionn'
+import { SelectVulnerability } from '../containers/vulnerability/SelectVulnerability';
 
 export const conclusionOption = [
   {
@@ -149,8 +151,39 @@ export function getStepItems(_args: Array<StepTypes> = []): {
         title: 'Select Incident',
         container: <SelectIncident />,
         key: '5',
-      },
-        
+      }, 
     ]
+    ,
+    SIEM:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+    ],
+    VMS:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+      {
+        title: 'Select Collection',
+        container: <SelectCollectionn />,
+        key: '2',
+      },
+      {
+        title: 'Select Vulnerability',
+        container: <SelectVulnerability />,
+        key: '3',
+      },      
+    ], 
+    COMPLIANCE:[
+      {
+        title: 'Select Services',
+        container: <SelectService />,
+        key: '1',
+      },
+    ],
   };
 }

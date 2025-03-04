@@ -188,7 +188,7 @@ const AccessKeyForm = React.forwardRef(
           icon={<KeyOutlined />}
         />
         <Modal
-          title="Please enter Unizo Access key for your organization:"
+          title="Please enter Unizo API Key for your organization:"
           open={isOpen}
           okButtonProps={{ loading: isSetting }}
           onCancel={handleClose}
@@ -238,9 +238,9 @@ const AccessKeyForm = React.forwardRef(
                   <Form.Item
                     name={'accessKey'}
                     style={{ width: '100%' }}
-                    label={'Access Key'}
+                    label={'API Key'}
                   >
-                    <Input placeholder="Enter the access key" />
+                    <Input placeholder="Enter the API Key" />
                   </Form.Item>
                 </Form>
               </div>
