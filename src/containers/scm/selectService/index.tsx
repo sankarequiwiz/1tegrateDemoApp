@@ -21,7 +21,7 @@ import { TileList } from './TileList';
 type VoidFunction = () => void;
 
 const warningMsg =
-  'Warning: Access key not configured yet. Please configure the access key to proceed.';
+  'Warning: API Key not configured yet. Please configure the API Key to proceed.';
 export const SelectService = React.forwardRef<
   HTMLDivElement,
   HTMLProps<HTMLDivElement>
